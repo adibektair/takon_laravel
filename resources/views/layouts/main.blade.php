@@ -12,6 +12,8 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
     <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
+    <script src="{{asset('js/jquery.min.js')}}"></script>
+    <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
 
     <!-- Custom styles for this template -->
     <link href="{{asset('css/simple-sidebar.css')}}" rel="stylesheet">
@@ -43,8 +45,11 @@
             <div class="bg-light border-right" id="sidebar-wrapper">
                 <div class="sidebar-heading">Админ-панель</div>
                 <div class="list-group list-group-flush" >
-                    <a href="#" class="list-group-item list-group-item-action bg-light">Dashboard</a>
-                    <a href="#" class="list-group-item list-group-item-action bg-light">Shortcuts</a>
+                    @if(Route::has('partners_list'))
+                        <a href="{{ route('partners_list') }}" class="list-group-item list-group-item-action bg-light">Партнеры</a>
+                    @endif
+
+                    <a href="/companies" class="list-group-item list-group-item-action bg-light">Юр. лица</a>
                     <a href="#" class="list-group-item list-group-item-action bg-light">Overview</a>
                     <a href="#" class="list-group-item list-group-item-action bg-light">Events</a>
                     <a href="#" class="list-group-item list-group-item-action bg-light">Profile</a>
@@ -65,21 +70,12 @@
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
-                            <li class="nav-item active">
-                                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Link</a>
-                            </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Dropdown
+                                    {{ auth()->user()->name }}
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Something else here</a>
+                                    <a class="dropdown-item" href="/logout">Выйти</a>
                                 </div>
                             </li>
                         </ul>
@@ -97,8 +93,6 @@
 
 
         <!-- Bootstrap core JavaScript -->
-        <script src="{{asset('js/jquery.min.js')}}"></script>
-        <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
 
         <!-- Menu Toggle Script -->
         <script>
