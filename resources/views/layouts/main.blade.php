@@ -21,6 +21,12 @@
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 
+    <link  href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script defer src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+
+
     <!-- Styles -->
 </head>
 <body>
@@ -42,18 +48,16 @@
         <div class="d-flex" id="wrapper">
 
             <!-- Sidebar -->
-            <div class="bg-light border-right" id="sidebar-wrapper">
+            <div class="bg-dark text-light border-right" id="sidebar-wrapper">
                 <div class="sidebar-heading">Админ-панель</div>
                 <div class="list-group list-group-flush" >
                     @if(Route::has('partners_list'))
-                        <a href="{{ route('partners_list') }}" class="list-group-item list-group-item-action bg-light">Партнеры</a>
+                        <a href="{{ route('partners_list') }}" class="list-group-item list-group-item-action bg-dark text-light">Партнеры</a>
                     @endif
 
-                    <a href="/companies" class="list-group-item list-group-item-action bg-light">Юр. лица</a>
-                    <a href="#" class="list-group-item list-group-item-action bg-light">Overview</a>
-                    <a href="#" class="list-group-item list-group-item-action bg-light">Events</a>
-                    <a href="#" class="list-group-item list-group-item-action bg-light">Profile</a>
-                    <a href="#" class="list-group-item list-group-item-action bg-light">Status</a>
+                    <a href="/companies" class="list-group-item list-group-item-action bg-dark text-light">Юр. лица</a>
+                    <a href="/mobile_users" class="list-group-item list-group-item-action bg-dark text-light">Пользователи</a>
+
                 </div>
             </div>
             <!-- /#sidebar-wrapper -->

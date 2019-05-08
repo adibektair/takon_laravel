@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Company;
-use App\User;
+use App\MobileUser;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
-class CompanyController extends Controller
+class MobileUserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +14,7 @@ class CompanyController extends Controller
      */
     public function index()
     {
-
-        return view('companies/index');
+        //
     }
 
     /**
@@ -27,9 +24,7 @@ class CompanyController extends Controller
      */
     public function create()
     {
-
-        return view('companies/create');
-
+        //
     }
 
     /**
@@ -40,29 +35,16 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
-        $model = new Company();
-        $model->name = $request->name;
-        $model->phone = $request->phone;
-        $model->address = $request->address;
-        if($model->save()){
-            $user = new User;
-            $user->role_id = 3;
-            $user->name = 'Админ ' . $request->name;
-            $user->email = $request->login;
-            $user->password = Hash::make($request->password);
-            $user->save();
-        }
-
-        return view('companies/index');
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Company  $company
+     * @param  \App\MobileUser  $mobileUser
      * @return \Illuminate\Http\Response
      */
-    public function show(Company $company)
+    public function show(MobileUser $mobileUser)
     {
         //
     }
@@ -70,10 +52,10 @@ class CompanyController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Company  $company
+     * @param  \App\MobileUser  $mobileUser
      * @return \Illuminate\Http\Response
      */
-    public function edit(Company $company)
+    public function edit(MobileUser $mobileUser)
     {
         //
     }
@@ -82,10 +64,10 @@ class CompanyController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Company  $company
+     * @param  \App\MobileUser  $mobileUser
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Company $company)
+    public function update(Request $request, MobileUser $mobileUser)
     {
         //
     }
@@ -93,17 +75,16 @@ class CompanyController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Company  $company
+     * @param  \App\MobileUser  $mobileUser
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Company $company)
+    public function destroy(MobileUser $mobileUser)
     {
         //
     }
 
     public function all(){
-
-            $companies = Company::all();
-            return datatables($companies)->toJson();
+        $users = MobileUser::all();
+        return datatables($users)->toJson();
     }
 }

@@ -5,20 +5,11 @@
 
 
 @section('content')
-
-
     <div class="col-md-12 mt-2 mb-3 bg-transparent">
         <div class="float-left">
-            <h5>Партнеры</h5>
+            <h5>Пользователи</h5>
         </div>
     </div>
-
-    <div class="col-md-12 mt-2 mb-3">
-        <div class="float-right">
-            <a href="{{ route('add.partner') }}"><button class="btn btn-success">Добавить партнера</button></a>
-        </div>
-    </div>
-
 
     <br><br>
     <div class="col-md-12 mt-2">
@@ -29,7 +20,6 @@
                 <th class="text-center">#</th>
                 <th class="text-center">Имя</th>
                 <th class="text-center">Телефон</th>
-                <th class="text-center">Адрес</th>
                 <th class="text-center">Создан</th>
             </tr>
             </thead>
@@ -51,12 +41,11 @@
             $('#table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('all.partners') }}",
+                ajax: "{{ route('all.mobile_users') }}",
                 columns: [
                     { data: 'id', name: 'id' },
                     { data: 'name', name: 'name' },
                     { data: 'phone', name: 'phone' },
-                    { data: 'address', name: 'address'},
                     { data: 'created_at', name: 'created_at'},
 
 

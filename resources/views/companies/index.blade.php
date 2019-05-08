@@ -9,13 +9,13 @@
 
     <div class="col-md-12 mt-2 mb-3 bg-transparent">
         <div class="float-left">
-            <h5>Партнеры</h5>
+            <h5>Юр. лица </h5>
         </div>
     </div>
 
     <div class="col-md-12 mt-2 mb-3">
         <div class="float-right">
-            <a href="{{ route('add.partner') }}"><button class="btn btn-success">Добавить партнера</button></a>
+            <a href="{{ route('create.company') }}"><button class="btn btn-success">Добавить юр. лицо</button></a>
         </div>
     </div>
 
@@ -51,7 +51,7 @@
             $('#table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('all.partners') }}",
+                ajax: "{{ route('all.companies') }}",
                 columns: [
                     { data: 'id', name: 'id' },
                     { data: 'name', name: 'name' },

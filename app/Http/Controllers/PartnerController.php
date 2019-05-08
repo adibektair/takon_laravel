@@ -18,8 +18,7 @@ class PartnerController extends Controller
      */
     public function index()
     {
-        $partners = Partner::all();
-        return view('partners/partners')->with(['partners' => $partners]);
+        return view('partners/partners');
 
 //        return datatables(Partner::all())->toJson();
     }

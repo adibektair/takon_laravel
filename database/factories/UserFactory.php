@@ -32,3 +32,20 @@ $factory->define(App\Partner::class, function (Faker $faker) {
         'address' => $faker->address
     ];
 });
+
+
+$factory->define(App\Company::class, function (Faker $faker) {
+    return [
+        'name' => $faker->name,
+        'phone' => $faker->phoneNumber,
+        'address' => $faker->address
+    ];
+});
+
+
+$factory->define(App\MobileUser::class, function (Faker $faker) {
+    return [
+        'name' => $faker->name,
+        'phone' => $faker->phoneNumber
+    ];
+});
