@@ -37,3 +37,9 @@ Route::get('/mobile_users', function () {
     return view('mobile_users/index');
 });
 Route::get('/all-mobile-users', ['as' => 'all.mobile_users', 'uses' => 'MobileUserController@all']);
+
+// Employees
+Route::get('/employees', 'UserController@index');
+Route::get('/my-employees', ['as' => 'all.employees', 'uses' => 'UserController@all']);
+Route::get('/create-employee', ['as' => 'create.employee', 'uses' => 'UserController@create']);
+Route::post('/store-employee', ['as' => 'store.employee', 'uses' => 'UserController@store']);

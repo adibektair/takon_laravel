@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Laravel</title>
+    <title>Takon</title>
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
 
@@ -14,6 +14,10 @@
     <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
     <script src="{{asset('js/jquery.min.js')}}"></script>
     <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
+
+
+    @toastr_css
+    @toastr_js
 
     <!-- Custom styles for this template -->
     <link href="{{asset('css/simple-sidebar.css')}}" rel="stylesheet">
@@ -26,8 +30,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script defer src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 
-
-    <!-- Styles -->
 </head>
 <body>
 <div class="flex-center position-ref full-height">
@@ -50,14 +52,16 @@
             <!-- Sidebar -->
             <div class="bg-dark text-light border-right" id="sidebar-wrapper">
                 <div class="sidebar-heading">Админ-панель</div>
+
                 <div class="list-group list-group-flush" >
-                    @if(Route::has('partners_list'))
+                    @if(auth()->user()->role_id == 1)
                         <a href="{{ route('partners_list') }}" class="list-group-item list-group-item-action bg-dark text-light">Партнеры</a>
+                        <a href="/companies" class="list-group-item list-group-item-action bg-dark text-light">Юр. лица</a>
+                        <a href="/mobile_users" class="list-group-item list-group-item-action bg-dark text-light">Пользователи</a>
+                    @elseif(auth()->user()->role_id == 2)
+                        <a href="/employees" class="list-group-item list-group-item-action bg-dark text-light">Сотрудники</a>
+
                     @endif
-
-                    <a href="/companies" class="list-group-item list-group-item-action bg-dark text-light">Юр. лица</a>
-                    <a href="/mobile_users" class="list-group-item list-group-item-action bg-dark text-light">Пользователи</a>
-
                 </div>
             </div>
             <!-- /#sidebar-wrapper -->
@@ -67,6 +71,7 @@
 
                 <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
                     <button class="navbar-toggler-icon" id="menu-toggle"></button>
+
 
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
@@ -87,6 +92,9 @@
                 </nav>
 
                 <div class="container-fluid">
+
+                    @toastr_render
+
                     @yield('content')
                 </div>
             </div>

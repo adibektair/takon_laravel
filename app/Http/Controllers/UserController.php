@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Company;
 use App\User;
+use Dotenv\Validator;
+use Grimthorr\LaravelToast\Toast;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-class CompanyController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +17,7 @@ class CompanyController extends Controller
      */
     public function index()
     {
-
-        return view('companies/index');
+        return view('employees/index');
     }
 
     /**
@@ -27,9 +27,7 @@ class CompanyController extends Controller
      */
     public function create()
     {
-
-        return view('companies/create');
-
+        return view('employees/create');
     }
 
     /**
@@ -40,29 +38,32 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
-        $model = new Company();
-        $model->name = $request->name;
-        $model->phone = $request->phone;
-        $model->address = $request->address;
-        if($model->save()){
-            $user = new User;
-            $user->role_id = 3;
-            $user->name = 'Админ ' . $request->name;
-            $user->email = $request->login;
-            $user->password = Hash::make($request->password);
-            $user->save();
+        $user = new User();
+        $user->role_id = 4;
+        $user->partner_id = auth()->user()->partner_id;
+        $user->company_id = auth()->user()->company_id;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->name = $request->name;
+        if($user->save()){
+
+            toastr()->success('Сотрудник успешно добавлен!');
+            return view('employees/index');
+        }else{
+            abort(400);
         }
-        toastr()->success('Юр. лицо успешно добавлено!');
-        return view('companies/index');
+
+
+
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Company  $company
+     * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show(Company $company)
+    public function show(User $user)
     {
         //
     }
@@ -70,10 +71,10 @@ class CompanyController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Company  $company
+     * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function edit(Company $company)
+    public function edit(User $user)
     {
         //
     }
@@ -82,10 +83,10 @@ class CompanyController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Company  $company
+     * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Company $company)
+    public function update(Request $request, User $user)
     {
         //
     }
@@ -93,17 +94,19 @@ class CompanyController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Company  $company
+     * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Company $company)
+    public function destroy(User $user)
     {
         //
     }
 
     public function all(){
 
-            $companies = Company::all();
-            return datatables($companies)->toJson();
+        $users = User::where('partner_id', '=', auth()->user()->partner_id)->where('role_id', '=', 4)->get();
+
+        return datatables($users)->toJson();
+
     }
 }
