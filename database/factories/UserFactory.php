@@ -49,3 +49,14 @@ $factory->define(App\MobileUser::class, function (Faker $faker) {
         'phone' => $faker->phoneNumber
     ];
 });
+
+
+$factory->define(App\Service::class, function (Faker $faker) {
+    return [
+        'name' => $faker->title,
+        'partner_id' => 1,
+        'price' => 5000,
+        'amount' => 5,
+        'is_active' => 1
+    ];
+});

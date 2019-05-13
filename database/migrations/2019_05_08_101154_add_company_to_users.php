@@ -13,10 +13,10 @@ class AddCompanyToUsers extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->integer('partner_id')->nullable();
-            $table->integer('company_id')->nullable();
-        });
+            Schema::table('users', function (Blueprint $table) {
+                $table->integer('partner_id')->nullable();
+                $table->integer('company_id')->nullable();
+            });
     }
 
     /**

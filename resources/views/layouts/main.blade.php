@@ -60,6 +60,7 @@
                         <a href="/mobile_users" class="list-group-item list-group-item-action bg-dark text-light">Пользователи</a>
                     @elseif(auth()->user()->role_id == 2)
                         <a href="/employees" class="list-group-item list-group-item-action bg-dark text-light">Сотрудники</a>
+                        <a href="/services" class="list-group-item list-group-item-action bg-dark text-light">Товары и услуги</a>
 
                     @endif
                 </div>
@@ -84,7 +85,7 @@
                                     {{ auth()->user()->name }}
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="/logout">Выйти</a>
+                                    <a class="dropdown-item" href="/logout"> Выйти </a>
                                 </div>
                             </li>
                         </ul>
@@ -101,12 +102,7 @@
             <!-- /#page-content-wrapper -->
 
         </div>
-        <!-- /#wrapper -->
 
-
-        <!-- Bootstrap core JavaScript -->
-
-        <!-- Menu Toggle Script -->
         <script>
             $("#menu-toggle").click(function(e) {
                 e.preventDefault();
