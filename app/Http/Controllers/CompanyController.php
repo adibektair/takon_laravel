@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Company;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class CompanyController extends Controller
@@ -99,6 +100,16 @@ class CompanyController extends Controller
     public function destroy(Company $company)
     {
         //
+    }
+
+    public function getServices(){
+
+        $services = DB::table('companies_services')->where('company_id', '=', auth()->user()->company_id)
+            ->join('services', 'services.id', '=', 'companies_services.service_id')
+            ->join('partners', 'partners.id', '=', 'services.partner_id')
+            ->select('companies_services.*', 'partners.name as partner', 'services.name as service', 'services.price')
+            ->get();
+        return datatables($services)->toJson();
     }
 
     public function all(){

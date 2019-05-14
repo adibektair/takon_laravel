@@ -36,9 +36,14 @@ Route::group(['middleware' => ['authenticated']], function () {
 
 // Companies
     Route::get('/all-companies', ['as' => 'all.companies', 'uses' => 'CompanyController@all']);
+    Route::get('/get-services', ['as' => 'company.get.services', 'uses' => 'CompanyController@getServices']);
     Route::get('/companies', 'CompanyController@index');
     Route::get('/create-company', ['as' => 'create.company', 'uses' => 'CompanyController@create']);
     Route::post('/store-company', ['as' => 'store.company', 'uses' => 'CompanyController@store']);
+    Route::get('/company-services', function () {
+        return view('companies/services');
+    })->name('company.services');
+
 
 // Mobile Users
     Route::get('/mobile_users', function () {

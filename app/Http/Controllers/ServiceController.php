@@ -62,7 +62,7 @@ class ServiceController extends Controller
      *
      * @param  \App\Service  $service
      * @return \Illuminate\Http\Response
-     */
+     // sharuam jok
     public function edit(Service $service)
     {
         //
@@ -92,8 +92,13 @@ class ServiceController extends Controller
     }
 
     public function getMyServices(){
-        $servives = Service::where('partner_id', '=', auth()->user()->partner_id)->get();
-        return datatables($servives)->toJson();
+        if(auth()->user()->role_id == 2){
+            $servives = Service::where('partner_id', '=', auth()->user()->partner_id)->get();
+            return datatables($servives)->toJson();
+        }else{
+
+        }
+
     }
 
 

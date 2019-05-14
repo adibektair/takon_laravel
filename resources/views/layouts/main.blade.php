@@ -62,6 +62,9 @@
                         <a href="/employees" class="list-group-item list-group-item-action bg-dark text-light">Сотрудники</a>
                         <a href="/services" class="list-group-item list-group-item-action bg-dark text-light">Товары и услуги</a>
 
+                    @elseif(auth()->user()->role_id == 3)
+                        <a href="{{ route('company.services') }}" class="list-group-item list-group-item-action bg-dark text-light">Товары и услуги</a>
+
                     @endif
                 </div>
             </div>
