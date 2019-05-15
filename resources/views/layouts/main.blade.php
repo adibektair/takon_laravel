@@ -49,6 +49,13 @@
     <div class="content">
         <div class="d-flex" id="wrapper">
 
+
+            <?php
+
+                // Find amount of new orders
+                $amount = \Illuminate\Support\Facades\DB::table('orders')->where('status', '=', 1)->count();
+
+            ?>
             <!-- Sidebar -->
             <div class="bg-dark text-light border-right" id="sidebar-wrapper">
                 <div class="sidebar-heading">Админ-панель</div>
@@ -58,7 +65,11 @@
                         <a href="{{ route('partners_list') }}" class="list-group-item list-group-item-action bg-dark text-light">Партнеры</a>
                         <a href="/companies" class="list-group-item list-group-item-action bg-dark text-light">Юр. лица</a>
                         <a href="/mobile_users" class="list-group-item list-group-item-action bg-dark text-light">Пользователи</a>
+                        <a href="/orders" class="list-group-item list-group-item-action bg-dark text-light">Заявки   <span class="badge-primary rounded pb-1 pt-1 pr-1 pl-1"><?=$amount?></span> </a>
+
                     @elseif(auth()->user()->role_id == 2)
+
+                        <a href="/profile" class="list-group-item list-group-item-action bg-dark text-light">Профиль</a>
                         <a href="/employees" class="list-group-item list-group-item-action bg-dark text-light">Сотрудники</a>
                         <a href="/services" class="list-group-item list-group-item-action bg-dark text-light">Товары и услуги</a>
 

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Partner;
+use App\Service;
 use App\User;
+use App\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -49,6 +51,7 @@ class PartnerController extends Controller
         if($model->save()){
             $user = new User;
             $user->role_id = 2;
+            $user->partner_id = $model->id;
             $user->name = 'Админ ' . $request->name;
             $user->email = $request->login;
             $user->password = Hash::make($request->password);
@@ -60,6 +63,8 @@ class PartnerController extends Controller
         return view('partners/partners')->with(['partners' => $partners]);
 
     }
+
+
 
     /**
      * Display the specified resource.
@@ -78,9 +83,19 @@ class PartnerController extends Controller
      * @param  \App\Partner  $partner
      * @return \Illuminate\Http\Response
      */
-    public function edit(Partner $partner)
+    public function save(Request $request)
     {
-        //
+        $model = Partner::where('id', '=', $request->id)->first();
+        $model->name = $request->name;
+        $model->phone = $request->address;
+        $model->address = $request->address;
+        $imageName = $model->name . '.' . request()->avatar->getClientOriginalExtension();
+        request()->avatar->move(public_path('avatars'), $imageName);
+        $model->image_path = $imageName;
+        $model->save();
+        toastr()->success('Профиль успешно обновлен');
+        return view('profile/index');
+
     }
 
     /**
@@ -106,7 +121,38 @@ class PartnerController extends Controller
         //
     }
 
+    public function getServicesPage(Request $request){
+
+        $partner = Partner::where('id', '=', $request->id)->first();
+
+        return view('partners/services')->with(['id' => $request->id, 'name' => $partner->name]); //
+    }
+
+    public function buyCurrentService(Request $request) {
+        $service = Service::where('id', '=', $request->id)->first();
+        return view('companies/form')->with(['service' => $service]);
+    }
+
+    public function buyService(Request $request) {
+        $service = Service::where('id', '=', $request->id)->first();
+        $amount = $request->amount;
+        $cost = $amount * $service->price;
+        $order = new Order();
+        $order->amount = $amount;
+        $order->user_id = auth()->user()->id;
+        $order->service_id = $service->id;
+        $order->cost = $cost;
+        $order->save();
+        toastr()->success('Ваша заявка успешно добавлена!');
+        return redirect()->route('company.services');
+    }
+
+
+    public function getPartnersServices(Request $request){
+        return datatables(Service::where('partner_id', '=', $request->id)->get())->toJson();
+    }
+
     public function getPartners(){
-        return datatables(Partner::all())->toJson();
+                return datatables(Partner::all())->toJson();
     }
 }

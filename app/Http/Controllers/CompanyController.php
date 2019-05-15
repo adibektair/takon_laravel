@@ -48,6 +48,7 @@ class CompanyController extends Controller
         if($model->save()){
             $user = new User;
             $user->role_id = 3;
+            $user->company_id = $model->id;
             $user->name = 'Админ ' . $request->name;
             $user->email = $request->login;
             $user->password = Hash::make($request->password);

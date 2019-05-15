@@ -61,7 +61,6 @@
                     },
                     {"mData": {},
                         "mRender": function (data, type, row) {
-
                             return '<label class="text-semibold">'+ data.partner + '</label>';
                         }
                     },
@@ -78,7 +77,6 @@
                     },
                     {"mData": {},
                         "mRender": function (data, type, row) {
-
                             return '<label class="text-semibold">'+ data.created_at + '</label>';
                         }
                     },
