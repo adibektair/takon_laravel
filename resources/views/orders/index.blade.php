@@ -19,6 +19,7 @@
                 <th class="text-center">Товар/Услуга</th>
                 <th class="text-center">Количество и сумма</th>
                 <th class="text-center">Дата создания</th>
+                <th class="text-center">Cтатус</th>
             </tr>
             </thead>
             <tbody>
@@ -65,6 +66,18 @@
                         }
                     },
                     { data: 'created_at', name: 'created_at'},
+                    {"mData": {},
+                        "mRender": function (data, type, row) {
+                        if(data.status == 1){
+                            return '<a href="/orders/view?id='+ data.id +'"><button class="btn btn-success">Управлять</button></a>';
+                        }else if(data.status == 2){
+                            return '<label class="text-semibold">Отклонено</label>';
+                        }else{
+                            return '<label class="text-semibold">Подтверждено</label>';
+                        }
+
+                        }
+                    },
                 ]
             });
         });

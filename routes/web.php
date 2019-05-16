@@ -79,6 +79,7 @@ Route::group(['middleware' => ['authenticated']], function () {
         return view('orders/index');
     });
     Route::get('/all-orders', ['as' => 'all.orders', 'uses' => 'OrderController@all']);
+    Route::post('/save-orders', ['as' => 'save.order', 'uses' => 'OrderController@save']);
 
     // TODO: Create middleware for superadmin user
 
@@ -89,6 +90,7 @@ Route::group(['middleware' => ['authenticated']], function () {
 
         return view('profile/index');
     })->middleware('role');
+    Route::get('/orders/view', ['as' => 'orders.view', 'uses' => 'OrderController@show']);
 
 
 });

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\CompaniesService;
+use App\Company;
 use App\Order;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -45,9 +48,10 @@ class OrderController extends Controller
      * @param  \App\Order  $order
      * @return \Illuminate\Http\Response
      */
-    public function show(Order $order)
+    public function show(Request $request)
     {
-        //
+        $order = Order::where('id', '=', $request->id)->first();
+        return view('orders/view')->with(['order' => $order]);
     }
 
     /**
@@ -94,5 +98,24 @@ class OrderController extends Controller
             ->orderBy('orders.status', 'asc');
 
         return datatables($orders)->toJson();
+    }
+
+    public function save(Request $request){
+        $order = Order::where('id', '=', $request->id)->first();
+        $order->status = $request->confirm;
+        $order->reject_reason = $request->reason;
+        if($order->save()){
+            $user = User::where('id', '=', $order->user_id)->first();
+            $company = Company::where('id', '=', $user->company_id)->first();
+            $c_service = new CompaniesService();
+            $c_service->service_id = $order->service_id;
+            $c_service->company_id = $company->id;
+            $c_service->amount = $order->amount;
+            $c_service->save();
+            return view('orders/index');
+        }else{
+            abort(501);
+        }
+
     }
 }

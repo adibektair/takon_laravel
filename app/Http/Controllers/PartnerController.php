@@ -87,11 +87,13 @@ class PartnerController extends Controller
     {
         $model = Partner::where('id', '=', $request->id)->first();
         $model->name = $request->name;
-        $model->phone = $request->address;
+        $model->phone = $request->phone;
         $model->address = $request->address;
-        $imageName = $model->name . '.' . request()->avatar->getClientOriginalExtension();
-        request()->avatar->move(public_path('avatars'), $imageName);
-        $model->image_path = $imageName;
+        if(request()->avatar){
+            $imageName = $model->name . '.' . request()->avatar->getClientOriginalExtension();
+            request()->avatar->move(public_path('avatars'), $imageName);
+            $model->image_path = $imageName;
+        }
         $model->save();
         toastr()->success('Профиль успешно обновлен');
         return view('profile/index');
