@@ -54,6 +54,7 @@
 
                 // Find amount of new orders
                 $amount = \Illuminate\Support\Facades\DB::table('orders')->where('status', '=', 1)->count();
+                $servicesCount = \Illuminate\Support\Facades\DB::table('services')->where('status', '=', 1)->count();
 
             ?>
             <!-- Sidebar -->
@@ -65,7 +66,8 @@
                         <a href="{{ route('partners_list') }}" class="list-group-item list-group-item-action bg-dark text-light">Партнеры</a>
                         <a href="/companies" class="list-group-item list-group-item-action bg-dark text-light">Юр. лица</a>
                         <a href="/mobile_users" class="list-group-item list-group-item-action bg-dark text-light">Пользователи</a>
-                        <a href="/orders" class="list-group-item list-group-item-action bg-dark text-light">Заявки   <span class="badge-primary rounded pb-1 pt-1 pr-1 pl-1"><?=$amount?></span> </a>
+                        <a href="/orders" class="list-group-item list-group-item-action bg-dark text-light">Заявки (транзакции) <?php if($amount > 0){?> <span class="badge-primary rounded pb-1 pt-1 pr-1 pl-1"><?=$amount?></span> <?php } ?>  </a>
+                        <a href="{{ route('services.moderation') }}" class="list-group-item list-group-item-action bg-dark text-light">Заявки (товары/услуги) <?php if($servicesCount > 0){?> <span class="badge-primary rounded pb-1 pt-1 pr-1 pl-1"><?=$servicesCount?></span> <?php } ?>  </a>
 
                     @elseif(auth()->user()->role_id == 2)
 
@@ -75,6 +77,7 @@
 
                     @elseif(auth()->user()->role_id == 3)
                         <a href="{{ route('company.services') }}" class="list-group-item list-group-item-action bg-dark text-light">Товары и услуги</a>
+                        <a href="/mobile_users" class="list-group-item list-group-item-action bg-dark text-light">Пользователи</a>
 
                     @endif
                 </div>
@@ -92,8 +95,65 @@
                         <span class="navbar-toggler-icon"></span>
                     </button>
 
+
+
+                    <?php
+
+                        $count = 0;
+                    if(auth()->user()->role_id == 2){
+                        $count = \Illuminate\Support\Facades\DB::table('notifications')
+                            ->where('reciever_partner_id', '=', auth()->user()->partner_id)
+                            ->where('read', '=', 0)->count();
+                        
+                        $nots = \Illuminate\Support\Facades\DB::table('notifications')
+                            ->where('reciever_partner_id', '=', auth()->user()->partner_id)
+                            ->where('read', '=', 0)->get();
+
+                    }else{
+                        $count = \Illuminate\Support\Facades\DB::table('notifications')
+                            ->where('reciever_company_id', '=', auth()->user()->company_id)
+                            ->where('read', '=', 0)->count();
+                        
+                        $nots =  \Illuminate\Support\Facades\DB::table('notifications')
+                            ->where('reciever_company_id', '=', auth()->user()->company_id)
+                            ->where('read', '=', 0)->get();
+                    }
+
+                    ?>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+
+
+                        <ul class="navbar-nav ml-auto mt-2 mt-lg-1 pr-4">
+
+                            @if(auth()->user()->role_id == 2 || auth()->user()->role_id == 3)
+                                <div class="btn-group pr-4">
+                                    <button class="btn  btn-info">Уведомления</button>
+                                    <button class="btn btn-outline-info dropdown-toggle" data-toggle="dropdown">
+                                        <span class="badge-light rounded-circle pb-1 pt-1 pr-1 pl-1"><?=$count ?></span>
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        
+                                        <?php
+                                        foreach ($nots as $not){
+                                            ?>
+                                            <li>
+                                                <div class="p-2" style="width: 350px">
+                                                    <label class="text-<?=$not->status?>"><?=$not->title?></label>
+                                                    <br>
+                                                    <label  class="text-secondary"><?=$not->message?></label>
+
+                                                </div>
+                                                <hr>
+                                            </li>
+                                        <?php
+                                        }
+                                        ?>
+
+                                    </ul>
+                                </div>
+                            @endif
+
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {{ auth()->user()->name }}

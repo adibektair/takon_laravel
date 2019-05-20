@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Notification;
 use App\Partner;
 use App\Service;
 use App\User;
@@ -145,13 +146,19 @@ class PartnerController extends Controller
         $order->service_id = $service->id;
         $order->cost = $cost;
         $order->save();
-        toastr()->success('Ваша заявка успешно добавлена!');
+        $message = new Notification();
+        $message->status = 'info';
+        $message->title = 'У Вас появилась новая заяка!';
+        $message->message = 'Ваш товар/услугу ' . $service->name .' желает приобрести юр. лицо в количестве - ' . $amount;
+        $message->reciever_partner_id = $service->partner_id;
+        $message->save();
+        toastr()->info('Ваша заявка была отправлена на модерацию');
         return redirect()->route('company.services');
     }
 
 
     public function getPartnersServices(Request $request){
-        return datatables(Service::where('partner_id', '=', $request->id)->get())->toJson();
+        return datatables(Service::where('partner_id', '=', $request->id)->where('status', '=', 3)->get())->toJson();
     }
 
     public function getPartners(){

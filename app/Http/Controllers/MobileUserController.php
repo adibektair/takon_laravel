@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\MobileUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\DataTables;
 
 class MobileUserController extends Controller
 {
@@ -78,13 +80,31 @@ class MobileUserController extends Controller
      * @param  \App\MobileUser  $mobileUser
      * @return \Illuminate\Http\Response
      */
-    public function destroy(MobileUser $mobileUser)
+    public function send(Request $request)
     {
-        //
+        $ids = $request->ids;
+        $array = explode(',', $ids);
+
+        return view('mobile_users/send')->with(['ids' => $ids]);
+    }
+
+    public function getUsersByIds(Request $request){
+        $ids = $request->ids;
+        $array = explode(',', $ids);
+        $users = DB::table('mobile_users')->whereIn('id', $array)->get();
+
+        $s = DataTables::of($users)->make();
+        return $s;
     }
 
     public function all(){
-        $users = MobileUser::all();
-        return datatables($users)->toJson();
+//        $users = MobileUser::all();
+        $users = DB::table('mobile_users')->get();
+//        dd($users);
+        $s = DataTables::of($users)->addColumn('checkbox', function ($user) {
+//                return '<input type="checkbox" id="'.$user->id.'" name="someCheckbox" />';
+            return '<button class="btn btn-info" data-name="'.$user->name.'" id="'.$user->id.'">Выбрать</button';
+            })->make();
+        return $s;
     }
 }

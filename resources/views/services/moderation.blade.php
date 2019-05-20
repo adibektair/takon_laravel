@@ -3,7 +3,7 @@
 @section('content')
     <div class="col-md-12 mt-2 mb-3 bg-transparent">
         <div class="float-left">
-            <h5>Заявки</h5>
+            <h5>Заявки на создание товаров/услуг</h5>
         </div>
     </div>
 
@@ -14,12 +14,13 @@
             <thead>
             <tr>
                 <th class="text-center">#</th>
-                <th class="text-center">Покупатель</th>
-                <th class="text-center">Партнер(продавец)</th>
+                <th class="text-center">Партнер</th>
                 <th class="text-center">Товар/Услуга</th>
-                <th class="text-center">Количество и сумма</th>
+                <th class="text-center">Количество</th>
+                <th class="text-center">Цена</th>
                 <th class="text-center">Дата создания</th>
-                <th class="text-center">Cтатус</th>
+                <th class="text-center">Управлять</th>
+
             </tr>
             </thead>
             <tbody>
@@ -44,38 +45,35 @@
             $('#table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('all.orders') }}",
+                ajax: "{{ route('moderation.services') }}",
                 columns: [
                     { data: 'id', name: 'id' },
 
                     {"mData": {},
                         "mRender": function (data, type, row) {
-                            return '<label class="text-semibold">'+ data.username + ' ('+ data.userphone +')</label>';
+                            return '<label class="text-semibold">'+ data.partner + ' ('+ data.phone +')</label>';
                         }
                     },
                     {"mData": {},
                         "mRender": function (data, type, row) {
-                            return '<label class="text-semibold">'+ data.partner + ' ('+ data.partner_phone +')</label>';
+                            return '<label class="text-semibold">'+ data.name + '</label>';
                         }
                     },
 
-                    { data: 'service', name: 'service'},
+
                     {"mData": {},
                         "mRender": function (data, type, row) {
-                            return '<label class="text-semibold">'+ data.amount + ' на сумму '+ data.cost +' тенге</label>';
+                            return '<label class="text-semibold">'+ data.amount + ' </label>';
                         }
                     },
-                    { data: 'created_at', name: 'created_at'},
                     {"mData": {},
                         "mRender": function (data, type, row) {
-                        if(data.status == 1){
-                            return '<a href="/orders/view?id='+ data.id +'"><button     class="btn btn-success">Управлять</button></a>';
-                        }else if(data.status == 2){
-                            return '<label class="text-semibold">Отклонено</label>';
-                        }else{
-                            return '<label class="text-semibold">Подтверждено</label>';
+                            return '<label class="text-semibold">'+ data.price + ' тенге </label>';
                         }
-
+                    },                    { data: 'created_at', name: 'created_at'},
+                    {"mData": {},
+                        "mRender": function (data, type, row) {
+                            return '<a href="/services/view?id='+ data.id +'"><button class="btn btn-success">Управлять</button></a>';
                         }
                     },
                 ]

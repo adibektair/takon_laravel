@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\CompaniesService;
 use App\Company;
+use App\MobileUser;
+use App\Service;
 use App\User;
+use App\UsersService;
+use Grimthorr\LaravelToast\Toast;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
 
 class CompanyController extends Controller
 {
@@ -101,6 +107,42 @@ class CompanyController extends Controller
     public function destroy(Company $company)
     {
         //
+    }
+    public function sendTakons(Request $request){
+
+        $service_ids = $request->service_id;
+        $user_ids = $request->id;
+        $r_s = array();
+        foreach ($service_ids as $key => $id){
+            if(array_key_exists($id, $r_s)){
+                $r_s[$id] += $request->amount[$key];
+            }else{
+                $r_s[$id] = $request->amount[$key];
+            }
+        }
+        foreach ($r_s as $key => $value){
+            $service = CompaniesService::where('id', '=', $key)->first();
+            if($service->amount < $value){
+                 toast()->error('У Вас недостаточно таконов для данной операции!');
+                 return view('mobile_users/index');
+            }
+        }
+
+
+        foreach ($user_ids as $k => $v){
+            // TODO: Stats
+            $c_service = CompaniesService::where('id', '=', $service_ids[$k])->first();
+            $m_service = new UsersService();
+            $m_service->mobile_user_id = $v;
+            $m_service->service_id = $c_service->service_id;
+            $m_service->amount = $request->amount[$k];
+            $m_service->save();
+            $c_service->amount -= $request->amount[$k];
+            $c_service->save();
+        }
+        toastr()->success('Спасибо! Вы успешно отправили таконы своим пользователям!');
+        return redirect()->route('company.services');
+
     }
 
     public function getServices(){

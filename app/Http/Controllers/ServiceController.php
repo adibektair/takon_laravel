@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Notification;
 use App\Service;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ServiceController extends Controller
 {
@@ -41,7 +43,7 @@ class ServiceController extends Controller
         $model->price = $request->price;
         $model->partner_id = auth()->user()->partner_id;
         $model->save();
-        toastr()->success('Товар или услуга успешно добавлены!');
+        toastr()->info('Товар или услуга были отправлены на модерацию');
         return view('services/index');
 
     }
@@ -52,9 +54,10 @@ class ServiceController extends Controller
      * @param  \App\Service  $service
      * @return \Illuminate\Http\Response
      */
-    public function show(Service $service)
+    public function show(Request $request)
     {
-        //
+        $service = Service::where('id', '=', $request->id)->first();
+        return view('services/view')->with(['service' => $service]);
     }
 
     /**
@@ -92,14 +95,45 @@ class ServiceController extends Controller
     }
 
     public function getMyServices(){
-        if(auth()->user()->role_id == 2){
-            $servives = Service::where('partner_id', '=', auth()->user()->partner_id)->get();
+            $servives = Service::where('partner_id', '=', auth()->user()->partner_id)->where('status', '=', 3)->get();
             return datatables($servives)->toJson();
-        }else{
+    }
 
+    public function moderationList(){
+        $list = DB::table('services')->where('status', '=', 1)
+            ->join('partners', 'partners.id', '=', 'services.partner_id')
+            ->select('services.*', 'partners.name as partner', 'partners.phone')
+            ->get();
+
+        return datatables($list)->toJson();
+    }
+
+    public function moderate(Request $request){
+        $service = Service::where('id', '=', $request->id)->first();
+        $service->status = $request->confirm;
+        if($service->save()){
+            toastr()->success('Успешно!');
+
+            $message = new Notification();
+
+            if($request->confirm == 3){
+                $message->status = 'success';
+                $message->title = 'Товар или услуга успешно были добавлены в систему';
+                $message->message = $service->name . ' был(а) успешно добавлен(а) в систему!';
+                $message->reciever_partner_id = $service->partner_id;
+            }else{
+                $message->status = 'error';
+                $message->title = 'Товар или услуга не прошли модерацию';
+                $message->message = $service->name . ' не был(а) добавлен(а) в систему по причине - ' . $request->reason;
+                $message->reciever_partner_id = $service->partner_id;
+            }
+            $message->save();
+            return view('services/moderation');
+
+        }else{
+            abort(501);
         }
 
     }
-
 
 }

@@ -11,6 +11,8 @@
 |
 */
 
+use Illuminate\Support\Facades\Route;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -41,6 +43,9 @@ Route::group(['middleware' => ['authenticated']], function () {
     Route::get('/companies', 'CompanyController@index');
     Route::get('/create-company', ['as' => 'create.company', 'uses' => 'CompanyController@create']);
     Route::post('/store-company', ['as' => 'store.company', 'uses' => 'CompanyController@store']);
+    Route::post('/send', ['as' => 'send', 'uses' => 'MobileUserController@send']);
+    Route::get('/get-by-ids', ['as' => 'get.by.ids', 'uses' => 'MobileUserController@getUsersByIds']);
+    Route::post('/send-takons', ['as' => 'send.takons', 'uses' => 'CompanyController@sendTakons']);
     Route::get('/company-services', function () {
         return view('companies/services');
     })->name('company.services');
@@ -69,17 +74,28 @@ Route::group(['middleware' => ['authenticated']], function () {
 
 
 // Services
-    Route::get('/services', 'ServiceController@index')->middleware('role');;
+    Route::get('/services', 'ServiceController@index')->middleware('role');
     Route::get('/my-services', ['as' => 'all.my_services', 'uses' => 'ServiceController@getMyServices']);
     Route::get('/create-service', ['as' => 'create.service', 'uses' => 'ServiceController@create'])->middleware('role');
     Route::post('/store-service', ['as' => 'store.service', 'uses' => 'ServiceController@store'])->middleware('role');
+    Route::get('/services/moderation', function () {
+        return view('services/moderation');
+    })->name('services.moderation')->middleware('is_superadmin');
+    Route::get('/services/view', ['as' => 'services.view', 'uses' => 'ServiceController@show']);
+    Route::get('/moderation-services', ['as' => 'moderation.services', 'uses' => 'ServiceController@moderationList'])
+        ->middleware('is_superadmin');
+    Route::post('/moderate-service', ['as' => 'moderate.service', 'uses' => 'ServiceController@moderate'])
+        ->middleware('is_superadmin');
 
-// Orders
+
+    // Orders
     Route::get('/orders', function () {
         return view('orders/index');
     });
     Route::get('/all-orders', ['as' => 'all.orders', 'uses' => 'OrderController@all']);
     Route::post('/save-orders', ['as' => 'save.order', 'uses' => 'OrderController@save']);
+    Route::get('/orders/view', ['as' => 'orders.view', 'uses' => 'OrderController@show']);
+
 
     // TODO: Create middleware for superadmin user
 
@@ -90,7 +106,6 @@ Route::group(['middleware' => ['authenticated']], function () {
 
         return view('profile/index');
     })->middleware('role');
-    Route::get('/orders/view', ['as' => 'orders.view', 'uses' => 'OrderController@show']);
 
 
 });

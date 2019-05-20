@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\CompaniesService;
 use App\Company;
+use App\Notification;
 use App\Order;
+use App\Service;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -104,16 +106,51 @@ class OrderController extends Controller
         $order = Order::where('id', '=', $request->id)->first();
         $order->status = $request->confirm;
         $order->reject_reason = $request->reason;
+
+        $user = User::where('id', '=', $order->user_id)->first();
+        $company = Company::where('id', '=', $user->company_id)->first();
+
+        $service = Service::where('id', '=', $order->service_id)->first();
         if($order->save()){
-            $user = User::where('id', '=', $order->user_id)->first();
-            $company = Company::where('id', '=', $user->company_id)->first();
-            $c_service = new CompaniesService();
-            $c_service->service_id = $order->service_id;
-            $c_service->company_id = $company->id;
-            $c_service->amount = $order->amount;
-            $c_service->save();
+            $message = new Notification();
+            $message1 = new Notification();
+            if($request->confirm == 3){
+
+
+                $c_service = new CompaniesService();
+                $c_service->service_id = $order->service_id;
+                $c_service->company_id = $company->id;
+                $c_service->amount = $order->amount;
+                $c_service->save();
+
+                $message->status = 'success';
+                $message->title = 'Товар или услуга успешно были успешно приобретены';
+                $message->message = $service->name . ' был(а) успешно приобретен(а)';
+                $message->reciever_company_id = $company->id;
+
+                $message1->status = 'success';
+                $message1->title = 'Товар или услуга успешно были успешно проданы';
+                $message1->message = $service->name . ' был(а) успешно продан(а)';
+                $message1->reciever_partner_id = $service->partner_id;
+            }else{
+
+                $message->status = 'error';
+                $message->title = 'Транзакция не прошла модерацию';
+                $message->message = $service->name . ' не был(а) приобретен(а) по причине - ' . $request->reason;
+                $message->reciever_company_id  = $company->id;
+
+                $message1->status = 'error';
+                $message1->title = 'Транзакция не прошла модерацию';
+                $message1->message = $service->name . ' не был(а) продан(а) по причине - ' . $request->reason;
+                $message1->reciever_partner_id = $service->partner_id;
+            }
+
+            $message->save();
+            $message1->save();
+
             return view('orders/index');
         }else{
+            // TODO: add Internal server error page
             abort(501);
         }
 
