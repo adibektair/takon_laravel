@@ -7,7 +7,7 @@
 @section('content')
     <div class="col-md-12 mt-2 mb-3 bg-transparent">
         <div class="float-left">
-            <h5>Товары и услуги</h5>
+            <h5>Товарыи услуги</h5>
         </div>
     </div>
 
@@ -28,8 +28,7 @@
                 <th class="text-center">Название</th>
                 <th class="text-center">Цена за единицу</th>
                 <th class="text-center">Количество</th>
-                <th class="text-center">Статус</th>
-                <th class="text-center">Cоздан</th>
+                <th class="text-center">Поделиться</th>
             </tr>
             </thead>
             <tbody>
@@ -56,9 +55,13 @@
                     { data: 'name', name: 'name' },
                     { data: 'price', name: 'price' },
                     { data: 'amount', name: 'amount' },
-                    { data: 'is_active', name: 'is_active' },
-                    { data: 'created_at', name: 'created_at'},
+                    { data: 'checkbox', name: 'checkbox' },
 
+                    // {"data": {},
+                    //     "mRender": function (data, type, row) {
+                    //         return '<a href="/partner-share-services?id='+ data.id + '"><button class="btn btn-success">Поделиться</button></a>';
+                    //     }
+                    // }
 
                 ]
             });

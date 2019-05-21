@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\CompaniesService;
 use App\Company;
 use App\MobileUser;
+use App\Notification;
 use App\Service;
 use App\User;
 use App\UsersService;
@@ -13,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
+use Yajra\DataTables\DataTables;
 
 class CompanyController extends Controller
 {
@@ -134,6 +136,7 @@ class CompanyController extends Controller
             $c_service = CompaniesService::where('id', '=', $service_ids[$k])->first();
             $m_service = new UsersService();
             $m_service->mobile_user_id = $v;
+            $m_service->company_id = auth()->user()->company_id;
             $m_service->service_id = $c_service->service_id;
             $m_service->amount = $request->amount[$k];
             $m_service->save();
@@ -152,7 +155,106 @@ class CompanyController extends Controller
             ->join('partners', 'partners.id', '=', 'services.partner_id')
             ->select('companies_services.*', 'partners.name as partner', 'services.name as service', 'services.price')
             ->get();
-        return datatables($services)->toJson();
+
+        $s = DataTables::of($services)->addColumn('checkbox', function ($service) {
+            return '<a href="/share-services?id=' . $service->id .'"><button class="btn btn-success">Поделиться</button></a>';
+        })->make();
+        return $s;
+    }
+
+    // Share takons with other companies
+    public function shareServices(Request $request){
+        $id = $request->id;
+        $company_service = CompaniesService::where('id', '=', $id)->first();
+        $service = Service::where('id', '=', $company_service->service_id)->first();
+        return view('companies/share')->with(['com_ser' => $company_service, 'service' => $service]);
+    }
+
+    public function share(Request $request){
+        // TODO: Stats
+        $com_ser = CompaniesService::where('id', '=', $request->id)->first();
+        $service = Service::where('id', '=', $com_ser->service_id)->first();
+        $company = Company::where('id', '=', auth()->user()->company_id)->first();
+        $reciever = Company::where('id', '=', $request->company_id)->first();
+        if($com_ser->amount < $request->amount){
+            toastr()->error('Ошибка. У Вас недостаточно таконов для данной операции');
+            return redirect()->back();
+        }
+        $com_ser->amount -= $request->amount;
+        $com_ser->save();
+        // TODO: deadline check
+        $rec_ser = CompaniesService::where('service_id', '=', $com_ser->service_id)->where('company_id', '=', $request->company_id)->first();
+        if($rec_ser){
+            $rec_ser->amount += $request->amount;
+        }else{
+            $rec_ser = new CompaniesService();
+            $rec_ser->service_id = $com_ser->service_id;
+            $rec_ser->amount = $request->amount;
+            $rec_ser->company_id = $request->company_id;
+        }
+        $rec_ser->save();
+        toastr()->success('Спасибо. Ваши таконы были успешно переданы');
+        $not = new Notification();
+        $not->make('info', 'Внимание!', 'Вам было отправлено ' . $request->amount . ' таконов товара/услуги ' . $service->name . ' от компании ' . $company->name,
+            null, $request->company_id, false);
+
+
+        $not1 = new Notification();
+        $not1->make('info', 'Внимание!',  $request->amount . ' таконов товара/услуги ' . $service->name . ' от компании ' . $company->name . ' были отправлены ' . $reciever->name,
+            null, $request->company_id, true);
+
+        return view('companies/services');
+    }
+
+    public function getReturn(){
+        $users = DB::table('users_services')
+            ->where('company_id', auth()->user()->company_id)
+            ->join('services', 'services.id', '=', 'users_services.service_id')
+            ->join('mobile_users', 'mobile_users.id', '=', 'users_services.mobile_user_id')
+            ->select('users_services.*', 'mobile_users.phone', 'services.name as service')->get();
+
+        return Datatables::of($users)
+            ->addColumn('return', function($user){
+                return '<a href="/return-takon?id=' . $user->id . '"><button class="btn btn-success">Возврат</button></a>';
+            })
+            ->rawColumns(['return'])
+            ->make(true);
+    }
+
+    public function finish(Request $request){
+        // TODO: add deadline comparison here
+
+        $us = UsersService::where('id', $request->id)->first();
+        $user = MobileUser::where('id', $us->mobile_user_id)->first();
+        $service = Service::where('id', $us->service_id)->first();
+        $company = Company::where('id', auth()->user()->company_id)->first();
+        if($us->amount < $request->amount){
+            toastr()->error('Введите корректные данные');
+            return \redirect()->back();
+        }
+
+        $us->amount -= $request->amount;
+        $us->save();
+
+        $cs = CompaniesService::where('service_id', $service->id)->where('company_id', $company->id)->first();
+        if($cs){
+            $cs->amount += $request->amount;
+        }else{
+            toastr()->error('Произошла непредвиденная ошибка, обратитесь к администратору приложения');
+            return \redirect()->back();
+        }
+        $cs->save();
+
+        toastr()->success('Таконы успешно возвращены');
+        return view('companies/return');
+
+    }
+
+    public function returnTakon(Request $request){
+        $us = UsersService::where('id', $request->id)->first();
+        $user = MobileUser::where('id', $us->mobile_user_id)->first();
+        $service = Service::where('id', $us->service_id)->first();
+        return view('companies/finish-return')->with(['us' => $us, 'user' => $user, 'service' => $service]);
     }
 
     public function all(){

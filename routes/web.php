@@ -36,6 +36,10 @@ Route::group(['middleware' => ['authenticated']], function () {
     Route::get('/add-partner', ['as' => 'add.partner', 'uses' => 'PartnerController@create']);
     Route::post('/store-partner', ['as' => 'store.partner', 'uses' => 'PartnerController@store']);
     Route::post('/edit-partner', ['as' => 'edit.partner', 'uses' => 'PartnerController@save']);
+    Route::get('/partner-share-services', ['as' => 'share.services', 'uses' => 'PartnerController@shareServices']);
+    Route::post('/partner-share', ['as' => 'partner.share', 'uses' => 'PartnerController@share']);
+
+
 
 // Companies
     Route::get('/all-companies', ['as' => 'all.companies', 'uses' => 'CompanyController@all']);
@@ -46,18 +50,28 @@ Route::group(['middleware' => ['authenticated']], function () {
     Route::post('/send', ['as' => 'send', 'uses' => 'MobileUserController@send']);
     Route::get('/get-by-ids', ['as' => 'get.by.ids', 'uses' => 'MobileUserController@getUsersByIds']);
     Route::post('/send-takons', ['as' => 'send.takons', 'uses' => 'CompanyController@sendTakons']);
+
     Route::get('/company-services', function () {
         return view('companies/services');
     })->name('company.services');
+
     Route::get('/buy-service', function () {
         return view('companies/buy');
     })->name('buy.service')->middleware('is_company_admin');
     Route::get('/partners-services', ['uses' => 'PartnerController@getServicesPage']);
     Route::get('/get-partners-services', ['uses' => 'PartnerController@getPartnersServices']);
-
+    Route::get('/share-services', ['as' => 'share.services', 'uses' => 'CompanyController@shareServices']);
 
     Route::get('/buy-current-service', ['as' => 'buy.current.service',  'uses' => 'PartnerController@buyCurrentService'])->middleware('is_company_admin');
     Route::post('/buy', ['as' => 'buy',  'uses' => 'PartnerController@buyService'])->middleware('is_company_admin');
+    Route::post('/share', ['as' => 'share',  'uses' => 'CompanyController@share'])->middleware('is_company_admin');
+    Route::get('/return', function () {
+        return view('companies/return');
+    });
+    Route::get('/get-return', ['as' => 'get.return', 'uses' => 'CompanyController@getReturn']);
+    Route::get('/return-takon', ['as' => 'return.takon', 'uses' => 'CompanyController@returnTakon']);
+    Route::post('/finish', ['as' => 'finish.return',  'uses' => 'CompanyController@finish'])->middleware('is_company_admin');
+
 
 
 // Mobile Users

@@ -10,6 +10,7 @@ use App\Service;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\DataTables;
 
 class OrderController extends Controller
 {
@@ -98,6 +99,26 @@ class OrderController extends Controller
             ->join('partners', 'partners.id', '=', 'services.partner_id')
             ->select('users.name as username', 'companies.phone as userphone', 'partners.name as partner', 'partners.phone as partner_phone', 'services.name as service', 'orders.*')
             ->orderBy('orders.status', 'asc');
+
+
+
+
+            return Datatables::of($orders)
+                ->addColumn('status', function($order){
+                    if($order->status == 1){
+                        return '<a href="/orders/view?id=' . $order->id . '"><button class="btn btn-success">Управлять</button></a>';
+                    }elseif ($order->status == 2){
+                        return '<label class="text-semibold">Отклонено</label>';
+                    }else{
+                        return '<label class="text-semibold">Подтверждено</label>';
+                    }
+                })
+                ->addColumn('summ', function ($order){
+                    return '<label>'. $order->amount  . ' (' .$order->cost. ' тенге)</label>';
+                })
+                ->rawColumns(['status', 'summ'])
+                ->make(true);
+
 
         return datatables($orders)->toJson();
     }

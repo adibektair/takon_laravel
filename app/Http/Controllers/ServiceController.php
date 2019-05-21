@@ -6,6 +6,8 @@ use App\Notification;
 use App\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+//use Yajra\DataTables\Facades\DataTables;
+use Yajra\DataTables\DataTables;
 
 class ServiceController extends Controller
 {
@@ -95,8 +97,18 @@ class ServiceController extends Controller
     }
 
     public function getMyServices(){
-            $servives = Service::where('partner_id', '=', auth()->user()->partner_id)->where('status', '=', 3)->get();
-            return datatables($servives)->toJson();
+
+        $servives = DB::table('services')
+            ->where('partner_id', '=', auth()->user()->partner_id)
+            ->where('status', '=', 3)
+            ->get();
+
+        $s = DataTables::of($servives)->addColumn('checkbox', function ($service) {
+            return '<a href="/partner-share-services?id=' . $service->id . '"><button class="btn btn-success">Поделиться</button></a>';
+        })->make();
+
+
+        return $s;
     }
 
     public function moderationList(){

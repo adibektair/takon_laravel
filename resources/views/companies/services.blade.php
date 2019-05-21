@@ -25,6 +25,8 @@
                     <th class="text-center">Цена за единицу</th>
                     <th class="text-center">Количество</th>
                     <th class="text-center">Дата приобретения</th>
+                    <th class="text-center">Поделиться</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -40,52 +42,34 @@
 
         }
     </style>
+
     <script>
         $(document).ready(function () {
             $('#table').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: "{{ route('company.get.services') }}",
-
-                aoColumns: [
-                    {"mData": {},
-                        "mRender": function (data, type, row) {
-                            return '<label class="text-semibold">'+ data.id + '</label>';
-                        }
-                    },
-
-                    {"mData": {},
-                        "mRender": function (data, type, row) {
-                            return '<label class="text-semibold">'+ data.service + '</label>';
-                        }
-                    },
-                    {"mData": {},
-                        "mRender": function (data, type, row) {
-                            return '<label class="text-semibold">'+ data.partner + '</label>';
-                        }
-                    },
-                    {"mData": {},
-                        "mRender": function (data, type, row) {
-                            return '<label class="text-semibold">'+ data.price + '</label>';
-                        }
-                    },
-
-                    {"mData": {},
-                        "mRender": function (data, type, row) {
-                            return '<label class="text-semibold">'+ data.amount + '</label>';
-                        }
-                    },
-                    {"mData": {},
-                        "mRender": function (data, type, row) {
-                            return '<label class="text-semibold">'+ data.created_at + '</label>';
-                        }
-                    },
+                columns: [
+                    { data: 'id', name: 'id' },
+                    { data: 'service', name: 'service' },
+                    { data: 'partner', name: 'partner' },
+                    { data: 'price', name: 'price'},
+                    { data: 'amount', name: 'amount'},
+                    { data: 'created_at', name: 'created_at'},
+                    { data: 'checkbox', name: 'checkbox'},
+                    // {
+                    //     "mData": {},
+                    //     "mRender": function (data, type, row) {
+                    //
+                    //         return '<a href="/share-services?id='+ data.id + '"><button class="btn btn-success">Поделиться</button></a>';
+                    //     }
+                    // },
                 ],
-
             });
         });
 
 
     </script>
+
 
 @endsection

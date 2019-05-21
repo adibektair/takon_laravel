@@ -50,12 +50,7 @@
                     { data: 'phone', name: 'phone' },
                     { data: 'address', name: 'address'},
                     { data: 'created_at', name: 'created_at'},
-                    {"mData": {},
-                        "mRender": function (data, type, row) {
-
-                            return '<a href="/partners-services?id='+ data.id + '"><button class="btn btn-success">Посмотреть товары и услуги</button></a>';
-                        }
-                    },
+                    { data: 'buy', name: 'buy'}
                 ]
             });
         });

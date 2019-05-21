@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\CompaniesService;
+use App\Company;
 use App\Notification;
 use App\Partner;
 use App\Service;
@@ -9,6 +11,7 @@ use App\User;
 use App\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Yajra\DataTables\DataTables;
 
 
 class PartnerController extends Controller
@@ -156,12 +159,66 @@ class PartnerController extends Controller
         return redirect()->route('company.services');
     }
 
+    public function shareServices(Request $request){
+        $id = $request->id;
+        $service = Service::where('id', '=', $id)->first();
+        return view('partners/share')->with(['service' => $service]);
+    }
+
+    public function share(Request $request){
+        $partner = Partner::where('id', '=', auth()->user()->partner_id)->first();
+        $service = Service::where('id', '=', $request->id)->first();
+        $reciever = Company::where('id', '=', $request->company_id)->first();
+
+        // TODO: add moderation
+        // TODO: deadline check
+        $rec_ser = CompaniesService::where('service_id', '=', $request->id)->where('company_id', '=', $request->company_id)->first();
+        if($rec_ser){
+            $rec_ser->amount += $request->amount;
+        }else{
+            $rec_ser = new CompaniesService();
+            $rec_ser->service_id = $request->id;
+            $rec_ser->amount = $request->amount;
+            $rec_ser->company_id = $request->company_id;
+        }
+        $rec_ser->save();
+
+
+        toastr()->success('Спасибо. Ваши таконы были успешно переданы');
+        $not = new Notification();
+        $not->make('info', 'Внимание!', 'Вам было отправлено ' . $request->amount . ' таконов товара/услуги ' . $service->name . ' от компании ' . $partner->name,
+            null, $request->company_id, false);
+
+        // TODO: add superadmin notification view
+        $not1 = new Notification();
+        $not1->make('info', 'Внимание!',  $request->amount . ' таконов товара/услуги ' . $service->name . ' от партнера' . $partner->name . ' были отправлены ' . $reciever->name,
+            null, $request->company_id, true);
+        return view('services/index');
+
+    }
+
 
     public function getPartnersServices(Request $request){
-        return datatables(Service::where('partner_id', '=', $request->id)->where('status', '=', 3)->get())->toJson();
+
+        $services = Service::where('partner_id', '=', $request->id)->where('status', '=', 3)->get();
+        return Datatables::of($services)
+            ->addColumn('service', function($service){
+                return '<a href="/buy-current-service?id='.  $service->id . '"><button class="btn btn-success">Приобрести</button></a>';
+            })
+            ->rawColumns(['service'])
+            ->make(true);
+
+//        return datatables()->toJson();
     }
 
     public function getPartners(){
-                return datatables(Partner::all())->toJson();
+        $partners = Partner::all();
+        return Datatables::of($partners)
+            ->addColumn('buy', function($partner){
+                return '<a href="/partners-services?id=' . $partner->id .'"><button class="btn btn-success">Посмотреть товары и услуги</button></a>';
+            })
+            ->rawColumns(['buy'])
+            ->make(true);
+//        return datatables()->toJson();
     }
 }

@@ -78,6 +78,7 @@
                     @elseif(auth()->user()->role_id == 3)
                         <a href="{{ route('company.services') }}" class="list-group-item list-group-item-action bg-dark text-light">Товары и услуги</a>
                         <a href="/mobile_users" class="list-group-item list-group-item-action bg-dark text-light">Пользователи</a>
+                        <a href="/return" class="list-group-item list-group-item-action bg-dark text-light">Возврат таконов</a>
 
                     @endif
                 </div>
@@ -107,16 +108,27 @@
                         
                         $nots = \Illuminate\Support\Facades\DB::table('notifications')
                             ->where('reciever_partner_id', '=', auth()->user()->partner_id)
-                            ->where('read', '=', 0)->get();
+                            ->where('read', '=', 0)->orderBy('id', 'desc')->get();
 
-                    }else{
+                    }
+                    else if(auth()->user()->role_id == 1){
+                        $count = \Illuminate\Support\Facades\DB::table('notifications')
+                            ->where('main', '=', true)
+                            ->where('read', '=', 0)->count();
+
+                        $nots = \Illuminate\Support\Facades\DB::table('notifications')
+                            ->where('main', '=', true)
+                            ->where('read', '=', 0)->orderBy('id', 'desc')->get();
+
+                    }
+                    else{
                         $count = \Illuminate\Support\Facades\DB::table('notifications')
                             ->where('reciever_company_id', '=', auth()->user()->company_id)
                             ->where('read', '=', 0)->count();
                         
                         $nots =  \Illuminate\Support\Facades\DB::table('notifications')
                             ->where('reciever_company_id', '=', auth()->user()->company_id)
-                            ->where('read', '=', 0)->get();
+                            ->where('read', '=', 0)->orderBy('id', 'desc')->get();
                     }
 
                     ?>
@@ -125,7 +137,7 @@
 
                         <ul class="navbar-nav ml-auto mt-2 mt-lg-1 pr-4">
 
-                            @if(auth()->user()->role_id == 2 || auth()->user()->role_id == 3)
+                            @if(auth()->user()->role_id == 2 || auth()->user()->role_id == 3 || auth()->user()->role_id == 1)
                                 <div class="btn-group pr-4">
                                     <button class="btn  btn-info">Уведомления</button>
                                     <button class="btn btn-outline-info dropdown-toggle" data-toggle="dropdown">

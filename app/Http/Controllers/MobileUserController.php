@@ -102,7 +102,6 @@ class MobileUserController extends Controller
         $users = DB::table('mobile_users')->get();
 //        dd($users);
         $s = DataTables::of($users)->addColumn('checkbox', function ($user) {
-//                return '<input type="checkbox" id="'.$user->id.'" name="someCheckbox" />';
             return '<button class="btn btn-info" data-name="'.$user->name.'" id="'.$user->id.'">Выбрать</button';
             })->make();
         return $s;
