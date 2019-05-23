@@ -18,7 +18,7 @@
                 <th class="text-center">Товар/Услуга</th>
                 <th class="text-center">Количество</th>
                 <th class="text-center">Цена</th>
-                <th class="text-center">Дата создания</th>
+                <th class="text-center">Срок в днях</th>
                 <th class="text-center">Управлять</th>
 
             </tr>
@@ -48,34 +48,13 @@
                 ajax: "{{ route('moderation.services') }}",
                 columns: [
                     { data: 'id', name: 'id' },
+                    { data: 'partner', name: 'partner' },
+                    { data: 'name', name: 'name' },
+                    { data: 'amount', name: 'amount' },
+                    { data: 'price', name: 'price' },
+                    { data: 'deadline', name: 'deadline'},
+                    { data: 'moderate', name: 'moderate' },
 
-                    {"mData": {},
-                        "mRender": function (data, type, row) {
-                            return '<label class="text-semibold">'+ data.partner + ' ('+ data.phone +')</label>';
-                        }
-                    },
-                    {"mData": {},
-                        "mRender": function (data, type, row) {
-                            return '<label class="text-semibold">'+ data.name + '</label>';
-                        }
-                    },
-
-
-                    {"mData": {},
-                        "mRender": function (data, type, row) {
-                            return '<label class="text-semibold">'+ data.amount + ' </label>';
-                        }
-                    },
-                    {"mData": {},
-                        "mRender": function (data, type, row) {
-                            return '<label class="text-semibold">'+ data.price + ' тенге </label>';
-                        }
-                    },                    { data: 'created_at', name: 'created_at'},
-                    {"mData": {},
-                        "mRender": function (data, type, row) {
-                            return '<a href="/services/view?id='+ data.id +'"><button class="btn btn-success">Управлять</button></a>';
-                        }
-                    },
                 ]
             });
         });

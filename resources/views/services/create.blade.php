@@ -26,8 +26,9 @@
             <label class="text-semibold">Цена за единицу(в тенге)</label>
             <input type="number" required name="price" placeholder="Цена" class="form-control">
             <br>
-            <label class="text-semibold">Количество</label>
-            <input required type="number" name="amount" placeholder="Количество" class="form-control">
+            <label class="text-semibold">Cрок действия (в днях)</label>
+            <input required type="number" name="deadline" placeholder="Количество" class="form-control">
+
             <br>
             <hr>
 

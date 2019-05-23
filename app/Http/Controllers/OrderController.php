@@ -142,6 +142,7 @@ class OrderController extends Controller
                 $c_service->service_id = $order->service_id;
                 $c_service->company_id = $company->id;
                 $c_service->amount = $order->amount;
+                $c_service->deadline = strtotime("+" . $service->deadline ." day", strtotime("now"));
                 $c_service->save();
 
                 $message->status = 'success';

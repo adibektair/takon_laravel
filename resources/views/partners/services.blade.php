@@ -16,7 +16,7 @@
                     <th class="text-center">#</th>
                     <th class="text-center">Название</th>
                     <th class="text-center">Цена за единицу</th>
-                    <th class="text-center">Количество в наличии</th>
+                    <th class="text-center">Срок в днях</th>
                     <th>Приобрести</th>
                 </tr>
             </thead>
@@ -47,7 +47,7 @@
                     { data: 'id', name: 'id' },
                     { data: 'name', name: 'name' },
                     { data: 'price', name: 'price' },
-                    { data: 'amount', name: 'amount' },
+                    { data: 'deadline', name: 'deadline' },
                     { data: 'service', name: 'service' },
 
 

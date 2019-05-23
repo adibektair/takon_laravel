@@ -30,10 +30,8 @@
 
         <div class="form-group">
             <label>Срок дейтсвия</label>
-            <?php
-            // TODO: Add deadline for takon
-            ?>
-            <input type="text" value="" class="form-control" disabled>
+
+            <input type="text" value="{{ $service->deadline }}" class="form-control" disabled>
         </div>
 
         <div class="form-group">

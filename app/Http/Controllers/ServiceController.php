@@ -41,7 +41,7 @@ class ServiceController extends Controller
     {
         $model = new Service();
         $model->name = $request->name;
-        $model->amount = $request->amount;
+        $model->deadline = $request->deadline;
         $model->price = $request->price;
         $model->partner_id = auth()->user()->partner_id;
         $model->save();
@@ -116,6 +116,13 @@ class ServiceController extends Controller
             ->join('partners', 'partners.id', '=', 'services.partner_id')
             ->select('services.*', 'partners.name as partner', 'partners.phone')
             ->get();
+
+        return Datatables::of($list)
+            ->addColumn('moderate', function($partner){
+                return '<a href="/services/view?id=' . + $partner->id . '"><button class="btn btn-success">Управлять</button></a>';
+            })
+            ->rawColumns(['moderate'])
+            ->make(true);
 
         return datatables($list)->toJson();
     }

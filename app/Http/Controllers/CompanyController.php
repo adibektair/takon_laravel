@@ -139,6 +139,7 @@ class CompanyController extends Controller
             $m_service->company_id = auth()->user()->company_id;
             $m_service->service_id = $c_service->service_id;
             $m_service->amount = $request->amount[$k];
+            $m_service->deadline = $c_service->deadline;
             $m_service->save();
             $c_service->amount -= $request->amount[$k];
             $c_service->save();
@@ -182,8 +183,11 @@ class CompanyController extends Controller
         }
         $com_ser->amount -= $request->amount;
         $com_ser->save();
-        // TODO: deadline check
-        $rec_ser = CompaniesService::where('service_id', '=', $com_ser->service_id)->where('company_id', '=', $request->company_id)->first();
+
+        $rec_ser = CompaniesService::where('service_id', '=', $com_ser->service_id)
+            ->where('company_id', '=', $request->company_id)
+            ->where('deadline', $com_ser->deadline)
+            ->first();
         if($rec_ser){
             $rec_ser->amount += $request->amount;
         }else{
@@ -236,7 +240,10 @@ class CompanyController extends Controller
         $us->amount -= $request->amount;
         $us->save();
 
-        $cs = CompaniesService::where('service_id', $service->id)->where('company_id', $company->id)->first();
+        $cs = CompaniesService::where('service_id', $service->id)
+            ->where('company_id', $company->id)
+            ->where('deadline', $us->deadline)
+            ->first();
         if($cs){
             $cs->amount += $request->amount;
         }else{

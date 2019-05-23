@@ -21,7 +21,7 @@
             @csrf
             <label class="text-semibold">Цена за единицу: <?=$service->price?></label>
             <br>
-            <label class="text-semibold">В наличии: <?=$service->amount?></label>
+            <label class="text-semibold">Срок в днях: <?=$service->deadline?></label>
             <br>
             <input type="hidden" value="<?=$service->id?>" name="id" >
             <label class="text-semibold">Введите количество</label>
