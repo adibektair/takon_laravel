@@ -41,10 +41,10 @@ class ApiController extends Controller
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             $server_output = curl_exec($ch);
             curl_close ($ch);
-            return $this->makeResponse(200, 'success', true, null);
+            return $this->makeResponse(200, true, ['message' => 'success']);
         }
 
-        return $this->makeResponse(400, 'phone missing', false, null);
+        return $this->makeResponse(400,  false, ['message' => 'success']);
     }
 
 
@@ -68,9 +68,9 @@ class ApiController extends Controller
                 }
                 $user->save();
 
-                return $this->makeResponse(200, "success", true, ["token" => $token]);
+                return $this->makeResponse(200,  true, ["token" => $token]);
             }else{
-                return $this->makeResponse(401, "fail", true, ["token" => $token]);
+                return $this->makeResponse(401,  false, ["message" => 'wrong code']);
             }
         }
         return $this->makeResponse(400, "no code or phone", false, ['msg' => 'phone or code missing']);
@@ -79,7 +79,8 @@ class ApiController extends Controller
 
 
 
-    public function makeResponse(int $code, String $message, Bool $success, Array $other){
-        return \response()->json(['message' => $message, 'success' => $success, $other])->setStatusCode($code);
+    public function makeResponse(int $code, Bool $success, Array $other){
+        $json = array_merge($other, ['success' => $success]);
+        return \response()->json($json)->setStatusCode($code);
     }
 }
