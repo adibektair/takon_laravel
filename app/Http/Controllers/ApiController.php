@@ -77,6 +77,10 @@ class ApiController extends Controller
     }
 
 
+    public function getSubscriptions(Request $request){
+        
+    }
+
 
 
     public function makeResponse(int $code, Bool $success, Array $other){
