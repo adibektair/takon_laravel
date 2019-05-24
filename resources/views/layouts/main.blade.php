@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,7 +16,6 @@
     <script src="{{asset('js/jquery.min.js')}}"></script>
     <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
 
-
     @toastr_css
     @toastr_js
 
@@ -29,9 +29,10 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script defer src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-
 </head>
+
 <body>
+
 <div class="flex-center position-ref full-height">
     @if (Route::has('login'))
         <div class="float-right">
