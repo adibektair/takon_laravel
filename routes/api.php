@@ -19,3 +19,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('/m_register', ['uses' => 'ApiController@auth']);
 Route::post('/m_login', ['uses' => 'ApiController@checkCode']);
+//getSubscriptions
+Route::post('/getsubscriptions', ['uses' => 'ApiController@getSubscriptions']);

@@ -5,6 +5,7 @@ use App\Code;
 use App\MobileUser;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use phpDocumentor\Reflection\Types\Boolean;
 use phpDocumentor\Reflection\Types\Integer;
@@ -73,12 +74,23 @@ class ApiController extends Controller
                 return $this->makeResponse(401,  false, ["message" => 'wrong code']);
             }
         }
-        return $this->makeResponse(400, "no code or phone", false, ['msg' => 'phone or code missing']);
+        return $this->makeResponse(400, false, ['msg' => 'phone or code missing']);
     }
 
 
     public function getSubscriptions(Request $request){
-        
+        $user = MobileUser::where('token', $request->token)->first();
+        if($user){
+             $res = DB::table('users_subscriptions')
+                 ->where('mobile_user_id', $user->id)
+                ->join('partners', 'partners.id', '=', 'users_subscriptions.partner_id')
+                ->select('partners.*')
+                ->get();
+             return $this->makeResponse(200, true, ['partners' => $res]);
+
+        }
+        return $this->makeResponse(400, false, ['msg' => 'phone or code missing']);
+
     }
 
 
