@@ -4,7 +4,13 @@
     <bookmark url="file://$PROJECT_DIR$/app/Http/Controllers/OrderController.php" line="144" mnemonic="1" />
   </component>
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="b8099edb-74ed-48ab-8b26-6c0476d36d3b" name="Default Changelist" comment="Added models and migrations" />
+=======
+    <list default="true" id="b8099edb-74ed-48ab-8b26-6c0476d36d3b" name="Default Changelist" comment="Added models and migrations">
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ApiController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ApiController.php" afterDir="false" />
+    </list>
+>>>>>>> 9e773b603aec9ec3b36ab3a9d5b49b2bcb56ca1a
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -13,6 +19,9 @@
   </component>
   <component name="ComposerSettings" doNotAsk="true" synchronizationState="SYNCHRONIZE">
     <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
+    <execution>
+      <executable />
+    </execution>
   </component>
   <component name="DatabaseView">
     <option name="SHOW_INTERMEDIATE" value="true" />
@@ -28,25 +37,39 @@
     <expand>
       <path>
         <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="takon_db@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="MySQL - takon_db@localhost" type="feb32156:DbDataSourceImpl" />
       </path>
       <path>
         <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="takon_db@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="MySQL - takon_db@localhost" type="feb32156:DbDataSourceImpl" />
         <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
       </path>
       <path>
         <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="takon_db@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="MySQL - takon_db@localhost" type="feb32156:DbDataSourceImpl" />
         <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
         <item name="takon_db: schema" type="76f4a085:MysqlImplModel$Schema" />
       </path>
       <path>
         <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="takon_db@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="MySQL - takon_db@localhost" type="feb32156:DbDataSourceImpl" />
         <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
         <item name="takon_db: schema" type="76f4a085:MysqlImplModel$Schema" />
         <item name="codes: table" type="285a2a93:MysqlImplModel$Table" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="MySQL - takon_db@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="takon_db: schema" type="76f4a085:MysqlImplModel$Schema" />
+        <item name="mobile_users: table" type="285a2a93:MysqlImplModel$Table" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="MySQL - takon_db@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="takon_db: schema" type="76f4a085:MysqlImplModel$Schema" />
+        <item name="users: table" type="285a2a93:MysqlImplModel$Table" />
       </path>
     </expand>
     <select />
@@ -56,38 +79,62 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="true" current-in-tab="false">
-        <entry file="remoteDeploymentFS://&lt;791af520-1440-4f43-b312-bf7fde712c9e&gt;/backend/models/TarificationSettings.php">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.env">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="20" lean-forward="true" selection-start-line="20" selection-end-line="20" />
+            <state relative-caret-position="330">
+              <caret line="22" column="19" selection-start-line="22" selection-start-column="19" selection-end-line="22" selection-end-column="19" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="true" current-in-tab="false">
-        <entry file="remoteDeploymentFS://&lt;791af520-1440-4f43-b312-bf7fde712c9e&gt;/backend/views/tables/order_settings/index.php">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/80a360df-d528-42a1-810e-88513756ccae/console.sql">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="3" column="27" selection-start-line="3" selection-end-line="4" />
+            <state>
+              <caret column="48" selection-start-column="48" selection-end-column="48" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="true" current-in-tab="false">
-        <entry file="remoteDeploymentFS://&lt;791af520-1440-4f43-b312-bf7fde712c9e&gt;/backend/controllers/SiteController.php">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/views/layouts/main.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="5" column="28" selection-start-line="5" selection-end-line="6" />
+            <state relative-caret-position="450">
+              <caret line="30" column="84" selection-start-line="30" selection-start-column="84" selection-end-line="30" selection-end-column="84" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="true" current-in-tab="true">
-        <entry file="remoteDeploymentFS://&lt;791af520-1440-4f43-b312-bf7fde712c9e&gt;/backend/controllers/AccountController.php">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/CompanyController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="407">
-              <caret line="764" column="13" lean-forward="true" selection-start-line="764" selection-start-column="13" selection-end-line="764" selection-end-column="13" />
+            <state relative-caret-position="950">
+              <caret line="245" column="22" selection-start-line="245" selection-start-column="22" selection-end-line="245" selection-end-column="22" />
+              <folding>
+                <element signature="e#40#65#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/ApiController.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="236">
+              <caret line="43" column="67" selection-start-line="43" selection-start-column="67" selection-end-line="43" selection-end-column="67" />
+              <folding>
+                <element signature="e#39#52#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/routes/api.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="315">
+              <caret line="21" selection-start-line="21" selection-end-line="21" />
             </state>
           </provider>
         </entry>
@@ -130,8 +177,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="&lt;bd861ee9-8d00-4e56-a59c-5fd1352a54c6&gt;/diplom.rossonero.kz/backend/models/GroupsTeachers.php" />
-        <option value="&lt;bd861ee9-8d00-4e56-a59c-5fd1352a54c6&gt;/diplom.rossonero.kz/backend/controllers/UsersController.php" />
         <option value="&lt;bd861ee9-8d00-4e56-a59c-5fd1352a54c6&gt;/diplom.rossonero.kz/backend/views/tables/users/form-user.php" />
         <option value="&lt;bd861ee9-8d00-4e56-a59c-5fd1352a54c6&gt;/diploma.rossonero.kz/backend/web/files/js/mytables/users/index.js" />
         <option value="&lt;bd861ee9-8d00-4e56-a59c-5fd1352a54c6&gt;/diploma.rossonero.kz/backend/views/tables/users/form-user.php" />
@@ -148,7 +193,6 @@
         <option value="$PROJECT_DIR$/resources/views/companies/services.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/orders/index.blade.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_05_21_045745_add_company_id_to_users_services.php" />
-        <option value="$PROJECT_DIR$/resources/views/layouts/main.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/companies/index.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/companies/finish-return.blade.php" />
         <option value="$PROJECT_DIR$/routes/web.php" />
@@ -175,12 +219,15 @@
         <option value="$PROJECT_DIR$/public/.htaccess" />
         <option value="$PROJECT_DIR$/database/migrations/2019_05_23_050336_create_codes_table.php" />
         <option value="$PROJECT_DIR$/composer.json" />
-        <option value="$PROJECT_DIR$/routes/api.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/ApiController.php" />
         <option value="&lt;791af520-1440-4f43-b312-bf7fde712c9e&gt;/backend/models/TarificationSettings.php" />
         <option value="&lt;791af520-1440-4f43-b312-bf7fde712c9e&gt;/backend/views/tables/order_settings/index.php" />
         <option value="&lt;791af520-1440-4f43-b312-bf7fde712c9e&gt;/backend/controllers/SiteController.php" />
         <option value="&lt;791af520-1440-4f43-b312-bf7fde712c9e&gt;/backend/controllers/AccountController.php" />
+        <option value="$PROJECT_DIR$/.env" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/80a360df-d528-42a1-810e-88513756ccae/console.sql" />
+        <option value="$PROJECT_DIR$/resources/views/layouts/main.blade.php" />
+        <option value="$PROJECT_DIR$/routes/api.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/ApiController.php" />
       </list>
     </option>
   </component>
@@ -282,9 +329,9 @@
     </include_path>
   </component>
   <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
-    <option name="x" value="29" />
-    <option name="y" value="-1" />
-    <option name="width" value="1891" />
+    <option name="x" value="323" />
+    <option name="y" value="253" />
+    <option name="width" value="1360" />
     <option name="height" value="540" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -293,61 +340,79 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
-              <item name="Takon-laravel" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Takon-laravel" type="462c0819:PsiDirectoryNode" />
+              <item name="takon_laravel" type="b2602c69:ProjectViewProjectNode" />
+              <item name="takon_laravel" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="Takon-laravel" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Takon-laravel" type="462c0819:PsiDirectoryNode" />
+              <item name="takon_laravel" type="b2602c69:ProjectViewProjectNode" />
+              <item name="takon_laravel" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="Takon-laravel" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Takon-laravel" type="462c0819:PsiDirectoryNode" />
+              <item name="takon_laravel" type="b2602c69:ProjectViewProjectNode" />
+              <item name="takon_laravel" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
               <item name="Http" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="Takon-laravel" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Takon-laravel" type="462c0819:PsiDirectoryNode" />
+              <item name="takon_laravel" type="b2602c69:ProjectViewProjectNode" />
+              <item name="takon_laravel" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
               <item name="Http" type="462c0819:PsiDirectoryNode" />
               <item name="Controllers" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="Takon-laravel" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Takon-laravel" type="462c0819:PsiDirectoryNode" />
+              <item name="takon_laravel" type="b2602c69:ProjectViewProjectNode" />
+              <item name="takon_laravel" type="462c0819:PsiDirectoryNode" />
               <item name="database" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="Takon-laravel" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Takon-laravel" type="462c0819:PsiDirectoryNode" />
+              <item name="takon_laravel" type="b2602c69:ProjectViewProjectNode" />
+              <item name="takon_laravel" type="462c0819:PsiDirectoryNode" />
               <item name="database" type="462c0819:PsiDirectoryNode" />
               <item name="migrations" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="Takon-laravel" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Takon-laravel" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
+              <item name="takon_laravel" type="b2602c69:ProjectViewProjectNode" />
+              <item name="takon_laravel" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="Takon-laravel" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Takon-laravel" type="462c0819:PsiDirectoryNode" />
+              <item name="takon_laravel" type="b2602c69:ProjectViewProjectNode" />
+              <item name="takon_laravel" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="takon_laravel" type="b2602c69:ProjectViewProjectNode" />
+              <item name="takon_laravel" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="layouts" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="takon_laravel" type="b2602c69:ProjectViewProjectNode" />
+              <item name="takon_laravel" type="462c0819:PsiDirectoryNode" />
               <item name="routes" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="takon_laravel" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="bcb0276e:PhpExternalLibrariesNodePatcher$PatchedExternalLibrariesNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="DatabaseDriversLRU" value="mysql" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="true" />
     <property name="WebServerToolWindowPanel.toolwindow.highlight.mappings" value="true" />
     <property name="WebServerToolWindowPanel.toolwindow.highlight.symlinks" value="true" />
@@ -422,12 +487,21 @@
       <workItem from="1558322176121" duration="3745000" />
       <workItem from="1558326168495" duration="26536000" />
       <workItem from="1558582978024" duration="7644000" />
+<<<<<<< HEAD
       <workItem from="1558673391624" duration="3280000" />
+=======
+      <workItem from="1558673391624" duration="2686000" />
+      <workItem from="1558699357680" duration="4101000" />
+>>>>>>> 9e773b603aec9ec3b36ab3a9d5b49b2bcb56ca1a
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
+<<<<<<< HEAD
     <option name="totallyTimeSpent" value="140580000" />
+=======
+    <option name="totallyTimeSpent" value="144087000" />
+>>>>>>> 9e773b603aec9ec3b36ab3a9d5b49b2bcb56ca1a
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -442,7 +516,7 @@
     <frame x="0" y="-28" width="1920" height="1108" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.7719665" weight="0.23745997" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.7719665" visible="true" weight="0.23745997" />
       <window_info id="Structure" order="1" sideWeight="0.22803347" side_tool="true" weight="0.23577236" />
       <window_info id="npm" order="2" sideWeight="0.22803347" side_tool="true" weight="0.23577236" />
       <window_info id="Favorites" order="3" sideWeight="0.22803347" side_tool="true" weight="0.23577236" />
@@ -455,7 +529,7 @@
       <window_info anchor="bottom" id="TODO" order="6" weight="0.23733863" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.3294979" />
-      <window_info anchor="bottom" id="Database Changes" order="9" weight="0.3294979" />
+      <window_info anchor="bottom" id="Database Changes" order="9" weight="0.32902583" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" weight="0.3294979" />
       <window_info anchor="bottom" id="Terminal" order="11" weight="0.3294979" />
       <window_info anchor="bottom" id="File Transfer" order="12" visible="true" weight="0.32902583" />
@@ -463,8 +537,8 @@
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info active="true" anchor="right" id="Remote Host" order="3" visible="true" weight="0.22198506" />
-      <window_info anchor="right" id="Database" order="4" weight="0.16435432" />
+      <window_info anchor="right" id="Remote Host" order="3" weight="0.22198506" />
+      <window_info anchor="right" id="Database" order="4" visible="true" weight="0.16435432" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -475,44 +549,6 @@
     <option name="LAST_COMMIT_MESSAGE" value="Added models and migrations" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_05_16_062439_add_read_to_notifications.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="29" selection-start-line="29" selection-end-line="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/MobileUser.php">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="das://80a360df-d528-42a1-810e-88513756ccae/schema/takon_db/table/users_services">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/mobile_users/send.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="975">
-          <caret line="65" column="82" selection-start-line="65" selection-start-column="82" selection-end-line="65" selection-end-column="82" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/companies/create.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="26" column="75" selection-end-line="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Controller.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="16" selection-start-line="16" selection-end-line="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/database/migrations/2019_05_20_062520_add_superadmin_to_notifications.php" />
     <entry file="file://$PROJECT_DIR$/database/migrations/2019_05_20_062433_add_superadmin_to_notifications.php" />
     <entry file="file://$PROJECT_DIR$/app/Notification.php">
@@ -594,7 +630,7 @@
     <entry file="das://80a360df-d528-42a1-810e-88513756ccae/schema/takon_db/table/notifications">
       <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
         <state>
-          <filtering enabled="true" />
+          <filtering />
         </state>
       </provider>
     </entry>
@@ -695,14 +731,14 @@
     <entry file="das://80a360df-d528-42a1-810e-88513756ccae/schema/takon_db/table/companies_services">
       <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
         <state>
-          <filtering enabled="true" />
+          <filtering />
         </state>
       </provider>
     </entry>
     <entry file="das://80a360df-d528-42a1-810e-88513756ccae/schema/takon_db/table/companies">
       <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
         <state>
-          <filtering enabled="true" />
+          <filtering />
         </state>
       </provider>
     </entry>
@@ -754,20 +790,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/CompanyController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3495">
-          <caret line="245" column="22" selection-start-line="245" selection-start-column="22" selection-end-line="245" selection-end-column="22" />
-          <folding>
-            <element signature="e#40#65#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="das://80a360df-d528-42a1-810e-88513756ccae/schema/takon_db/table/partners">
       <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
         <state>
-          <filtering enabled="true" />
+          <filtering />
         </state>
       </provider>
     </entry>
@@ -775,13 +801,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="390">
           <caret line="28" column="43" selection-start-line="28" selection-start-column="43" selection-end-line="28" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/layouts/main.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="143" column="77" selection-start-line="143" selection-end-line="144" />
         </state>
       </provider>
     </entry>
@@ -806,13 +825,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/api.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="19" selection-start-line="19" selection-end-line="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/.htaccess">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="300">
@@ -827,10 +839,74 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/0a5ceca9-16d9-498d-8439-8b31e0db21b7/console.sql">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="das://80a360df-d528-42a1-810e-88513756ccae/schema/takon_db/table/users.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" column="13" selection-start-line="1" selection-start-column="13" selection-end-line="1" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.env">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="22" column="19" selection-start-line="22" selection-start-column="19" selection-end-line="22" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/80a360df-d528-42a1-810e-88513756ccae/console.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="48" selection-start-column="48" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/layouts/main.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="30" column="84" selection-start-line="30" selection-start-column="84" selection-end-line="30" selection-end-column="84" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/CompanyController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="950">
+          <caret line="245" column="22" selection-start-line="245" selection-start-column="22" selection-end-line="245" selection-end-column="22" />
+          <folding>
+            <element signature="e#40#65#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://80a360df-d528-42a1-810e-88513756ccae/schema/takon_db/table/mobile_users">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state projectRestartId="246b480b-241e-434b-9126-ad7c57393079">
+          <filtering>
+            <filter text="" />
+          </filtering>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_05_23_112128_add_token_to_mobile_users.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/api.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="21" selection-start-line="21" selection-end-line="21" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/ApiController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="279">
-          <caret line="45" column="5" selection-start-line="45" selection-start-column="5" selection-end-line="45" selection-end-column="5" />
+        <state relative-caret-position="236">
+          <caret line="43" column="67" selection-start-line="43" selection-start-column="67" selection-end-line="43" selection-end-column="67" />
           <folding>
             <element signature="e#39#52#0#PHP" expanded="true" />
           </folding>

@@ -5,6 +5,7 @@ use App\Code;
 use App\MobileUser;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Str;
 use phpDocumentor\Reflection\Types\Boolean;
 use phpDocumentor\Reflection\Types\Integer;
 
@@ -40,10 +41,10 @@ class ApiController extends Controller
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             $server_output = curl_exec($ch);
             curl_close ($ch);
-            return $this->makeResponse(200, 'success', true);
+            return $this->makeResponse(200, true, ['message' => 'success']);
         }
 
-        return $this->makeResponse(400, 'phone missing', false);
+        return $this->makeResponse(400,  false, ['message' => 'success']);
     }
 
 
@@ -54,23 +55,32 @@ class ApiController extends Controller
         $password = $request->password;
         if($phone AND $password){
             $code = Code::where('phone', $phone)->where('code', $password)->first();
-            $user = MobileUser::where('phone', $phone)->first();
-            if($user){
 
-            }
             if($code){
-                return $this->makeResponse();
+                $token = Str::random(42);
+                $user = MobileUser::where('phone', $phone)->first();
+                if($user){
+                    $user->token = $token;
+                }else{
+                    $user = new MobileUser();
+                    $user->token = $token;
+                    $user->phone = $phone;
+                }
+                $user->save();
+
+                return $this->makeResponse(200,  true, ["token" => $token]);
             }else{
-                return $this->makeResponse();
+                return $this->makeResponse(401,  false, ["message" => 'wrong code']);
             }
         }
-        return $this->makeResponse();
+        return $this->makeResponse(400, "no code or phone", false, ['msg' => 'phone or code missing']);
     }
 
 
 
 
-    public function makeResponse(Integer $code, String $message, Boolean $success, Array $other){
-        return \response()->json(['message' => $message, 'success' => $success, $other])->setStatusCode($code);
+    public function makeResponse(int $code, Bool $success, Array $other){
+        $json = array_merge($other, ['success' => $success]);
+        return \response()->json($json)->setStatusCode($code);
     }
 }
