@@ -4,9 +4,13 @@
     <bookmark url="file://$PROJECT_DIR$/app/Http/Controllers/OrderController.php" line="144" mnemonic="1" />
   </component>
   <component name="ChangeListManager">
+<<<<<<< HEAD
+    <list default="true" id="b8099edb-74ed-48ab-8b26-6c0476d36d3b" name="Default Changelist" comment="Added models and migrations" />
+=======
     <list default="true" id="b8099edb-74ed-48ab-8b26-6c0476d36d3b" name="Default Changelist" comment="Added models and migrations">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
     </list>
+>>>>>>> 9e773b603aec9ec3b36ab3a9d5b49b2bcb56ca1a
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -510,14 +514,38 @@
       <workItem from="1558322176121" duration="3745000" />
       <workItem from="1558326168495" duration="26536000" />
       <workItem from="1558582978024" duration="7644000" />
+<<<<<<< HEAD
+      <workItem from="1558673391624" duration="3280000" />
+=======
       <workItem from="1558673391624" duration="2686000" />
+<<<<<<< HEAD
+      <workItem from="1558699357680" duration="4101000" />
+>>>>>>> 9e773b603aec9ec3b36ab3a9d5b49b2bcb56ca1a
+=======
       <workItem from="1558699357680" duration="4962000" />
+<<<<<<< HEAD
       <workItem from="1558704685497" duration="1709000" />
+=======
+      <workItem from="1558704685497" duration="1596000" />
+>>>>>>> master
+>>>>>>> master
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
+<<<<<<< HEAD
     <option name="totallyTimeSpent" value="146657000" />
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+    <option name="totallyTimeSpent" value="140580000" />
+=======
+    <option name="totallyTimeSpent" value="144087000" />
+>>>>>>> 9e773b603aec9ec3b36ab3a9d5b49b2bcb56ca1a
+=======
+    <option name="totallyTimeSpent" value="146544000" />
+>>>>>>> master
+>>>>>>> master
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
