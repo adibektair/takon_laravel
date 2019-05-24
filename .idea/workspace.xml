@@ -4,12 +4,7 @@
     <bookmark url="file://$PROJECT_DIR$/app/Http/Controllers/OrderController.php" line="144" mnemonic="1" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b8099edb-74ed-48ab-8b26-6c0476d36d3b" name="Default Changelist" comment="Added models and migrations">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/80a360df-d528-42a1-810e-88513756ccae.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/80a360df-d528-42a1-810e-88513756ccae.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
-    </list>
+    <list default="true" id="b8099edb-74ed-48ab-8b26-6c0476d36d3b" name="Default Changelist" comment="Added models and migrations" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -427,12 +422,12 @@
       <workItem from="1558322176121" duration="3745000" />
       <workItem from="1558326168495" duration="26536000" />
       <workItem from="1558582978024" duration="7644000" />
-      <workItem from="1558673391624" duration="2686000" />
+      <workItem from="1558673391624" duration="3280000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="139986000" />
+    <option name="totallyTimeSpent" value="140580000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
