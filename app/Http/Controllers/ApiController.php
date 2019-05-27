@@ -40,7 +40,7 @@ class ApiController extends Controller
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            $server_output = curl_exec($ch);
+           // $server_output = curl_exec($ch);
             curl_close ($ch);
             return $this->makeResponse(200, true, ['message' => 'success']);
         }
@@ -58,8 +58,10 @@ class ApiController extends Controller
             $code = Code::where('phone', $phone)->where('code', $password)->first();
 
             if($code){
-                $token = Str::random(42);
+
                 $user = MobileUser::where('phone', $phone)->first();
+//                $token = Str::random(42);
+                 $token = base64_encode($user);
                 if($user){
                     $user->token = $token;
                 }else{
