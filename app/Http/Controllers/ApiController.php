@@ -81,7 +81,11 @@ class ApiController extends Controller
 
 
     public function getSubscriptions(Request $request){
-        $user = MobileUser::where('token', $request->token)->first();
+
+        $token = $request->header('Authorization');
+        $token = explode(" ", $token);
+dd($token);
+        $user = MobileUser::where('token', $token[1])->first();
         if($user){
              $res = DB::table('users_subscriptions')
                  ->where('mobile_user_id', $user->id)
