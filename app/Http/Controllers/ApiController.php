@@ -84,7 +84,6 @@ class ApiController extends Controller
 
         $token = $request->header('Authorization');
         $token = explode(" ", $token);
-dd($token);
         $user = MobileUser::where('token', $token[1])->first();
         if($user){
              $res = DB::table('users_subscriptions')
