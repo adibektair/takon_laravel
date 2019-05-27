@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Code;
 use App\MobileUser;
 use App\Partner;
+use App\Service;
 use App\UsersSubscriptions;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -139,6 +140,16 @@ class ApiController extends Controller
         }
         return $this->makeResponse(401, false, ['msg' => 'phone or code missing']);
 
+    }
+
+    public function getServices(Request $request){
+        $token = $request->token;
+        $user = MobileUser::where('token', $token)->first();
+        if($user){
+            $partner = Service::where('partner_id', $request->partner_id)->get();
+            return $this->makeResponse(200, true, ['services' => $partner]);
+        }
+        return $this->makeResponse(401, false, ['msg' => 'phone or code missing']);
     }
 
 
