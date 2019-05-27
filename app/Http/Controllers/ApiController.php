@@ -113,7 +113,7 @@ class ApiController extends Controller
             }
 
             $res = DB::table('partners')
-                ->whereNotIn('partner_id', $id)
+                ->whereNotIn('id', $id)
                 ->select('partners.*')
                 ->get();
             return $this->makeResponse(200, true, ['partners' => $res]);
