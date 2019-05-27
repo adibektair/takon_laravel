@@ -22,3 +22,5 @@ Route::post('/m_login', ['uses' => 'ApiController@checkCode']);
 //getSubscriptions
 Route::post('/getsubscriptions', ['uses' => 'ApiController@getSubscriptions']);
 Route::post('/getorganizations', ['uses' => 'ApiController@getPartners']);
+Route::post('/addsubscription', ['uses' => 'ApiController@subscribe']);
+
