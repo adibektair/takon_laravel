@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use App\Code;
 use App\MobileUser;
+use App\Partner;
+use App\UsersSubscriptions;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -81,9 +83,6 @@ class ApiController extends Controller
 
 
     public function getSubscriptions(Request $request){
-
-//        $token = $request->header('Authorization');
-//        $token = explode(" ", $token);
         $token = $request->token;
         $user = MobileUser::where('token', $token)->first();
         if($user){
@@ -93,6 +92,49 @@ class ApiController extends Controller
                 ->select('partners.*')
                 ->get();
              return $this->makeResponse(200, true, ['partners' => $res]);
+
+        }
+        return $this->makeResponse(401, false, ['msg' => 'phone or code missing']);
+
+    }
+
+
+    public function getPartners(Request $request){
+        $token = $request->token;
+        $user = MobileUser::where('token', $token)->first();
+
+        if($user){
+            $ids = DB::table('users_subscriptions')
+                ->where('mobile_user_id', $user->id)
+                ->get();
+            $id = [];
+            foreach ($ids as $i){
+                array_push($id, $i->partner_id);
+            }
+
+            $res = DB::table('partners')
+                ->whereNotIn('partner_id', $id)
+                ->select('partners.*')
+                ->get();
+            return $this->makeResponse(200, true, ['partners' => $res]);
+
+        }
+        return $this->makeResponse(401, false, ['msg' => 'phone or code missing']);
+
+    }
+
+    public function subscribe(Request $request){
+        $token = $request->token;
+        $user = MobileUser::where('token', $token)->first();
+        if($user){
+
+            $partner = Partner::where('id', $request->partner_id)->first();
+            $us = new UsersSubscriptions();
+            $us->mobile_user_id = $user->id;
+            $us->partner_id = $partner->id;
+            $us->save();
+
+            return $this->makeResponse(200, true, ['msg' => 'success']);
 
         }
         return $this->makeResponse(401, false, ['msg' => 'phone or code missing']);
