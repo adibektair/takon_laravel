@@ -85,7 +85,7 @@ class ApiController extends Controller
 //        $token = $request->header('Authorization');
 //        $token = explode(" ", $token);
         $token = $request->token;
-        $user = MobileUser::where('token', $token[1])->first();
+        $user = MobileUser::where('token', $token)->first();
         if($user){
              $res = DB::table('users_subscriptions')
                  ->where('mobile_user_id', $user->id)
@@ -95,7 +95,7 @@ class ApiController extends Controller
              return $this->makeResponse(200, true, ['partners' => $res]);
 
         }
-        return $this->makeResponse(400, false, ['msg' => 'phone or code missing']);
+        return $this->makeResponse(401, false, ['msg' => 'phone or code missing']);
 
     }
 
