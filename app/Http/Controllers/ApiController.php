@@ -152,8 +152,8 @@ class ApiController extends Controller
                 ->where('services.status', 3)
                 ->where('users_services.mobile_user_id', $user->id)
                 ->select('services.id', 'services.price', 'services.name', 'services.created_at')
-                ->sum('users_services.amount')
-                ->get();
+                ->get()->sum('users_services.amount');
+
             return $this->makeResponse(200, true, ['services' => $partner]);
         }
         return $this->makeResponse(401, false, ['msg' => 'phone or code missing']);
