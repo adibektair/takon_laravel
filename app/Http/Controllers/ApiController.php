@@ -150,7 +150,8 @@ class ApiController extends Controller
                 ->where('partner_id', $request->partner_id)
                 ->join('users_services', 'users_services.service_id', '=', 'services.id')
                 ->where('users_services.mobile_user_id', $user->id)
-                ->select('services.*', 'sum(DISTINCT users_services.amount) as usersAmount')
+                ->select('services.*')
+                ->sum('DISTINCT users_services.amount as usersAmount')
                 ->get();
             return $this->makeResponse(200, true, ['services' => $partner]);
         }
