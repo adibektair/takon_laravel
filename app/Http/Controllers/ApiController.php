@@ -162,6 +162,25 @@ class ApiController extends Controller
     }
 
 
+    public function getUsersServices(Request $request){
+        $token = $request->token;
+        $service_id = $request->service_id;
+        $user = MobileUser::where('token', $token)->first();
+        if($user){
+            $services = DB::table('users_services')
+                ->join('companies', 'companies.id', '=', 'users_services.company_id')
+                ->join('services', 'services.id', '=', 'users_services.service_id')
+                ->where('service_id', $service_id)
+                ->select('companies.name as company', 'services.*')
+                ->get();
+
+
+            return $this->makeResponse(200, true, ['services' => $services]);
+        }
+        return $this->makeResponse(401, false, ['msg' => 'phone or code missing']);
+    }
+
+
 
     public function makeResponse(int $code, Bool $success, Array $other){
         $json = array_merge($other, ['success' => $success]);
