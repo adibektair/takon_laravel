@@ -5,6 +5,7 @@ use App\Code;
 use App\MobileUser;
 use App\Partner;
 use App\Service;
+use App\UsersService;
 use App\UsersSubscriptions;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -181,6 +182,41 @@ class ApiController extends Controller
             return $this->makeResponse(200, true, ['services' => $services]);
         }
         return $this->makeResponse(401, false, ['msg' => 'phone or code missing']);
+    }
+
+    public function sendTakon(Request $request){
+        $id = $request->takon_id;
+        $token = $request->token;
+        $amount = $request->amount;
+        $phone = $request->phone;
+        $user = MobileUser::where('token', $token)->first();
+        if($user){
+
+            $reciever = MobileUser::where('phone', $phone)->first();
+            $us = UsersService::where('id', $id)->first();
+            $service = Service::where('id', $us->service_id)->first();
+            if($reciever){
+                if($us->amount < $amount){
+                    return $this->makeResponse(400, false, ['msg' => 'Недостаточно таконов']);
+                }
+                $model = new UsersService();
+                $model->mobile_user_id = $reciever->id;
+                $model->amount = $amount;
+                $model->service_id = $service->id;
+                $model->company_id = $us->company_id;
+                $model->deadline = $us->deadline;
+                $model->save();
+                // TODO: Stats
+                return $this->makeResponse(200, true, ['msg' => 'Таконы успешно переданы']);
+
+            }
+            else{
+                return $this->makeResponse(400, true, ['msg' => 'user not found']);
+
+            }
+        }
+        return $this->makeResponse(401, false, ['msg' => 'unauthorized']);
+
     }
 
 
