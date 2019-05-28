@@ -26,5 +26,6 @@ Route::post('/addsubscription', ['uses' => 'ApiController@subscribe']);
 Route::post('/getservices', ['uses' => 'ApiController@getServices']);
 Route::post('/gettakons', ['uses' => 'ApiController@getUsersServices']);
 Route::post('/send_takon', ['uses' => 'ApiController@sendTakon']);
+Route::post('/qrgenerate', ['uses' => 'ApiController@generateQR']);
 
 //getUsersServices

@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 use App\Code;
 use App\MobileUser;
 use App\Partner;
+use App\QrCode;
 use App\Service;
 use App\UsersService;
 use App\UsersSubscriptions;
+use Couchbase\UserSettings;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -64,8 +66,8 @@ class ApiController extends Controller
             if($code){
 
                 $user = MobileUser::where('phone', $phone)->first();
-//                $token = Str::random(42);
-                 $token = base64_encode($user);
+                $token = Str::random(42);
+//                 $token = base64_encode($user);
                 if($user){
                     $user->token = $token;
                 }else{
@@ -183,6 +185,30 @@ class ApiController extends Controller
             return $this->makeResponse(200, true, ['services' => $services]);
         }
         return $this->makeResponse(401, false, ['msg' => 'phone or code missing']);
+    }
+
+    public function generateQR(Request $request){
+        $token = $request->token;
+        $id = $request->takon_id;
+        $amount = $request->amount;
+        $user = MobileUser::where('token', $token)->first();
+        if($user){
+
+            $us = UsersService::where('id', $id)->first();
+            if($us->amount < $amount){
+                return $this->makeResponse(400, false, ['msg' => 'Недостаточно таконов']);
+            }
+            $string =  Str::random(65);
+            $model = new QrCode();
+            $model->users_service_id = $us->id;
+            $model->amount = $amount;
+            $model->hash = $string;
+            $model->save();
+            return $this->makeResponse(200, true, ['msg' => $string]);
+
+        }
+        return $this->makeResponse(401, false, ['msg' => 'phone or code missing']);
+
     }
 
     public function sendTakon(Request $request){
