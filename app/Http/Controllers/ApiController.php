@@ -172,7 +172,9 @@ class ApiController extends Controller
                 ->join('services', 'services.id', '=', 'users_services.service_id')
                 ->join('companies_services', 'companies_services.company_id', '=', 'companies.id')
                 ->where('users_services.service_id', $service_id)
-                ->select('companies.name as company', 'services.*', 'companies_services.deadline')
+                ->select('companies.name as company', 'services.*', 'users_services.amount', 'companies_services.deadline')
+                ->selectRaw('DISTINCT users_services.id')
+                ->groupBy('users_services.id')
                 ->get();
 
 
