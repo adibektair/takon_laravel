@@ -24,4 +24,5 @@ Route::post('/getsubscriptions', ['uses' => 'ApiController@getSubscriptions']);
 Route::post('/getorganizations', ['uses' => 'ApiController@getPartners']);
 Route::post('/addsubscription', ['uses' => 'ApiController@subscribe']);
 Route::post('/getservices', ['uses' => 'ApiController@getServices']);
-
+Route::post('/gettakons', ['uses' => 'ApiController@getUsersServices']);
+//getUsersServices
