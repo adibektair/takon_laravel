@@ -149,9 +149,10 @@ class ApiController extends Controller
             $partner = DB::table('services')
                 ->where('partner_id', $request->partner_id)
                 ->join('users_services', 'users_services.service_id', '=', 'services.id')
+                ->where('services.status', 3)
                 ->where('users_services.mobile_user_id', $user->id)
-                ->select('services.*')
-                ->sum('DISTINCT users_services.amount as usersAmount')
+                ->select('services.id', 'services.price', 'services.name', 'services.created_at')
+                ->sum('DISTINCT users_services.amount')
                 ->get();
             return $this->makeResponse(200, true, ['services' => $partner]);
         }
