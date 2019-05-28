@@ -152,7 +152,8 @@ class ApiController extends Controller
                 ->where('services.status', 3)
                 ->where('users_services.mobile_user_id', $user->id)
                 ->select('services.id', 'services.price', 'services.name', 'services.created_at')
-                ->selectRaw('SUM(users_services.amount)')
+                ->selectRaw('SUM(DISTINCT users_services.amount) AS usersAmount')
+                ->groupBy('services.id')
                 ->get();
 
             return $this->makeResponse(200, true, ['services' => $partner]);
