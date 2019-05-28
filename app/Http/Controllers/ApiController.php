@@ -146,7 +146,12 @@ class ApiController extends Controller
         $token = $request->token;
         $user = MobileUser::where('token', $token)->first();
         if($user){
-            $partner = Service::where('partner_id', $request->partner_id)->get();
+            $partner = DB::table('services')
+                ->where('partner_id', $request->partner_id)
+                ->join('users_services', 'users_services.service_id', '=', 'services.id')
+                ->where('users_services.mobile_user_id', $user->id)
+                ->select('services.*', 'sum(DISTINCT users_services.amount) as usersAmount')
+                ->get();
             return $this->makeResponse(200, true, ['services' => $partner]);
         }
         return $this->makeResponse(401, false, ['msg' => 'phone or code missing']);
