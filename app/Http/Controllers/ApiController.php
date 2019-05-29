@@ -151,9 +151,14 @@ class ApiController extends Controller
         if($user){
             $partner = DB::table('services')
                 ->where('partner_id', $request->partner_id)
-                ->join('users_services', 'users_services.service_id', '=', 'services.id')
+                ->leftJoin('users_services', function($leftJoin)use($user)
+                {
+                $leftJoin->on('users_services.service_id', '=', 'services.id')
+                    ->where('users_services.mobile_user_id', $user->id);
+                })
+//                ->leftJoin('users_services', 'users_services.service_id', '=', 'services.id')
                 ->where('services.status', 3)
-                ->where('users_services.mobile_user_id', $user->id)
+//                ->where('users_services.mobile_user_id', $user->id)
                 ->select('services.id', 'services.price', 'services.name', 'services.created_at')
                 ->selectRaw('SUM(DISTINCT users_services.amount) AS usersAmount')
                 ->groupBy('services.id', 'services.price', 'services.name', 'services.created_at')
@@ -204,6 +209,48 @@ class ApiController extends Controller
             $model->amount = $amount;
             $model->hash = $string;
             $model->save();
+            return $this->makeResponse(200, true, ['msg' => $string]);
+
+        }
+        return $this->makeResponse(401, false, ['msg' => 'phone or code missing']);
+
+    }
+
+    public function scanQR(Request $request){
+        $token = $request->token;
+        $string = $request->qrstring;
+
+        $user = MobileUser::where('token', $token)->first();
+        if($user){
+
+            $qr = QrCode::where('hash', $string)->first();
+            if(!$qr){
+                return $this->makeResponse(400, false, ['msg' => 'Недостаточно таконов']);
+            }
+
+            $us = UsersService::where('id', $qr->users_service_id)->first();
+            if($qr->amount > $us->amount){
+                return $this->makeResponse(400, false, ['msg' => 'Недостаточно таконов']);
+            }
+            $usr = UsersService::where('service_id', $us->service_id)
+                ->where('mobile_user_id', $user->id)
+                ->where('deadline', $us->deadline)
+                ->where('company_id', $us->company_id)
+                ->first();
+            if($usr){
+                $usr->amount += $qr->amount;
+            }else{
+                $usr = new UsersService();
+                $usr->mobile_user_id = $user->id;
+                $usr->service_id = $us->service_id;
+                $usr->amount = $qr->amount;
+                $usr->company_id = $us->company_id;
+                $usr->deadline = $us->deadline;
+            }
+            $usr->save();
+            $us->amount -= $qr->amount;
+            $qr->delete();
+
             return $this->makeResponse(200, true, ['msg' => $string]);
 
         }
