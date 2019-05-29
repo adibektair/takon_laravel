@@ -6,12 +6,14 @@ use App\MobileUser;
 use App\Partner;
 use App\QrCode;
 use App\Service;
+use App\User;
 use App\UsersService;
 use App\UsersSubscriptions;
 use Couchbase\UserSettings;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use phpDocumentor\Reflection\Types\Boolean;
 use phpDocumentor\Reflection\Types\Integer;
@@ -299,6 +301,43 @@ class ApiController extends Controller
     }
 
 
+
+    public function logIn(Request $request){
+        $email = $request->email;
+        $password = $request->password;
+        $user = User::where('email', $email)
+            ->where('password', Hash::make($password))
+            ->first();
+        if($user){
+            $token = Str::random(42);
+            $user->token = $token;
+            $user->save();
+            return $this->makeResponse(200, true, ['token' => $token]);
+        }
+        return $this->makeResponse(401, false, ['message'=>'Данные для авторизации неверны', 'error' => 'incorrect auth data']);
+    }
+
+    public function scanCashierQR(Request $request){
+        $string = $request->qrstring;
+        $token = $request->token;
+        $user = User::where('token', $token)->first();
+        if($user){
+            $model = QrCode::where('hash', $string)->first();
+            if ($model){
+                $us = UsersService::where('id', $model->users_service_id)->first();
+                if($us->amount < $model->amount){
+                    return $this->makeResponse(400, false, ['message'=>'Недостаточно средств']);
+                }
+                $us->amount -= $model->amount;
+                $us->save();
+                $model->delete();
+                // TODO: Stats
+                return $this->makeResponse(200, true, ['message'=>'Успешно!']);
+            }
+            return $this->makeResponse(400, false, ['message'=>'QR не найден']);
+        }
+        return $this->makeResponse(401, false, ['message'=>'Данные для авторизации неверны', 'error' => 'incorrect auth data']);
+    }
 
     public function makeResponse(int $code, Bool $success, Array $other){
         $json = array_merge($other, ['success' => $success]);

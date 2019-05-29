@@ -28,5 +28,6 @@ Route::post('/gettakons', ['uses' => 'ApiController@getUsersServices']);
 Route::post('/send_takon', ['uses' => 'ApiController@sendTakon']);
 Route::post('/qrgenerate', ['uses' => 'ApiController@generateQR']);
 Route::post('/qr_scan_for_presenting', ['uses' => 'ApiController@scanQR']);
+Route::post('/login', ['uses' => 'ApiController@logIn']);
 
 //getUsersServices
