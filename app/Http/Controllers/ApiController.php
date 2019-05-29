@@ -249,6 +249,7 @@ class ApiController extends Controller
             }
             $usr->save();
             $us->amount -= $qr->amount;
+            $us->save();
             $qr->delete();
 
             return $this->makeResponse(200, true, ['msg' => $string]);
