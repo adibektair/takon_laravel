@@ -43,7 +43,7 @@ class UserController extends Controller
         $user->partner_id = auth()->user()->partner_id;
         $user->company_id = auth()->user()->company_id;
         $user->email = $request->email;
-        $user->password = Hash::make($request->password);
+        $user->password = md5($request->password);
         $user->name = $request->name;
         if($user->save()){
 

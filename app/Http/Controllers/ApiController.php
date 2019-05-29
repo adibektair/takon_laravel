@@ -308,7 +308,7 @@ class ApiController extends Controller
         $password = $request->password;
 
         $user = User::where('email', $email)
-            ->where('password', Hash::make($password))
+            ->where('password', md5($request->password))
             ->first();
         if($user){
             $token = Str::random(42);
