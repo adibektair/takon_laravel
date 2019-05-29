@@ -280,6 +280,10 @@ class ApiController extends Controller
                 $model->company_id = $us->company_id;
                 $model->deadline = $us->deadline;
                 $model->save();
+
+                $us->amount -= $amount;
+                $us->save();
+
                 // TODO: Stats
                 return $this->makeResponse(200, true, ['msg' => 'Таконы успешно переданы']);
 
