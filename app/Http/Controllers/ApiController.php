@@ -316,7 +316,7 @@ class ApiController extends Controller
             $user->save();
             return $this->makeResponse(200, true, ['token' => $token]);
         }
-        return $this->makeResponse(401, false, ['hash' => $password,'message'=>'Данные для авторизации неверны', 'error' => 'incorrect auth data']);
+        return $this->makeResponse(401, false, ['hash' => Hash::make($password),'message'=>'Данные для авторизации неверны', 'error' => 'incorrect auth data']);
     }
 
     public function scanCashierQR(Request $request){
