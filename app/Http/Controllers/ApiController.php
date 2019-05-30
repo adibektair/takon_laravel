@@ -6,6 +6,7 @@ use App\MobileUser;
 use App\Partner;
 use App\QrCode;
 use App\Service;
+use App\Transaction;
 use App\User;
 use App\UsersService;
 use App\UsersSubscriptions;
@@ -249,7 +250,18 @@ class ApiController extends Controller
                 $usr->company_id = $us->company_id;
                 $usr->deadline = $us->deadline;
             }
-            $usr->save();
+
+            if($usr->save()){
+                $service = Service::where('id', $us->serivce_id)->first();
+                $model = new Transaction();
+                $model->type = 1;
+                $model->service_id = $service->id;
+                $model->u_s_id = $us->mobile_user_id;
+                $model->u_r_id = $user->id;
+                $model->price = $service->price;
+                $model->amount = $qr->amount;
+                $model->save();
+            }
             $us->amount -= $qr->amount;
             $us->save();
             $qr->delete();
@@ -285,9 +297,17 @@ class ApiController extends Controller
                 $model->save();
 
                 $us->amount -= $amount;
-                $us->save();
+                if($us->save()){
+                    $model = new Transaction();
+                    $model->type = 1;
+                    $model->service_id = $service->id;
+                    $model->u_s_id = $user->id;
+                    $model->u_r_id = $reciever->id;
+                    $model->price = $service->price;
+                    $model->amount = $amount;
+                    $model->save();
+                }
 
-                // TODO: Stats
                 return $this->makeResponse(200, true, ['msg' => 'Таконы успешно переданы']);
 
             }
@@ -331,9 +351,20 @@ class ApiController extends Controller
                     return $this->makeResponse(400, false, ['message'=>'Недостаточно средств']);
                 }
                 $us->amount -= $model->amount;
-                $us->save();
+                if($us->save()){
+                    $service = Service::where('id', $us->service_id)->first();
+                    $stat = new Transaction();
+                    $stat->type = 3;
+                    $stat->service_id = $us->service_id;
+                    $stat->u_s_id = $us->mobile_user_id;
+                    $stat->u_r_id = $user->id;
+                    $stat->price = $service->price;
+                    $stat->amount = $model->amount;
+                    $stat->save();
+                }
+
                 $model->delete();
-                // TODO: Stats
+
                 return $this->makeResponse(200, true, ['message'=>'Успешно!']);
             }
             return $this->makeResponse(400, false, ['message'=>'QR не найден']);

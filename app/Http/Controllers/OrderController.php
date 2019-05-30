@@ -7,6 +7,7 @@ use App\Company;
 use App\Notification;
 use App\Order;
 use App\Service;
+use App\Transaction;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -143,7 +144,16 @@ class OrderController extends Controller
                 $c_service->company_id = $company->id;
                 $c_service->amount = $order->amount;
                 $c_service->deadline = strtotime("+" . $service->deadline ." day", strtotime("now"));
-                $c_service->save();
+                if($c_service->save()){
+                    $model = new Transaction();
+                    $model->service_id = $service->id;
+                    $model->type = 2;
+                    $model->p_s_id = $service->partner_id;
+                    $model->c_r_id = $company->id;
+                    $model->price = $service->price;
+                    $model->amount = $order->amount;
+                    $model->save();
+                }
 
                 $message->status = 'success';
                 $message->title = 'Товар или услуга успешно были успешно приобретены';

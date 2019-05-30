@@ -7,6 +7,7 @@ use App\Company;
 use App\MobileUser;
 use App\Notification;
 use App\Service;
+use App\Transaction;
 use App\User;
 use App\UsersService;
 use Grimthorr\LaravelToast\Toast;
@@ -132,7 +133,7 @@ class CompanyController extends Controller
 
 
         foreach ($user_ids as $k => $v){
-            // TODO: Stats
+
             $c_service = CompaniesService::where('id', '=', $service_ids[$k])->first();
             $m_service = new UsersService();
             $m_service->mobile_user_id = $v;
@@ -140,7 +141,17 @@ class CompanyController extends Controller
             $m_service->service_id = $c_service->service_id;
             $m_service->amount = $request->amount[$k];
             $m_service->deadline = $c_service->deadline;
-            $m_service->save();
+            if($m_service->save()){
+                $exactly_service = Service::where('id', '=', $c_service->service_id)->first();
+                $model = new Transaction();
+                $model->type = 1;
+                $model->service_id = $c_service->service_id;
+                $model->c_s_id = auth()->user()->company_id;
+                $model->u_r_id = $v;
+                $model->price = $exactly_service->price;
+                $model->amount = $request->amount[$k];
+                $model->save();
+            }
             $c_service->amount -= $request->amount[$k];
             $c_service->save();
         }
@@ -172,7 +183,6 @@ class CompanyController extends Controller
     }
 
     public function share(Request $request){
-        // TODO: Stats
         $com_ser = CompaniesService::where('id', '=', $request->id)->first();
         $service = Service::where('id', '=', $com_ser->service_id)->first();
         $company = Company::where('id', '=', auth()->user()->company_id)->first();
@@ -196,7 +206,17 @@ class CompanyController extends Controller
             $rec_ser->amount = $request->amount;
             $rec_ser->company_id = $request->company_id;
         }
-        $rec_ser->save();
+
+        if($rec_ser->save()){
+            $model = new Transaction();
+            $model->type = 4;
+            $model->service_id = $service->id;
+            $model->c_s_id = auth()->user()->company_id;
+            $model->c_r_id = $reciever->id;
+            $model->price = $service->price;
+            $model->amount = $request->amount;
+            $model->save();
+        }
         toastr()->success('Спасибо. Ваши таконы были успешно переданы');
         $not = new Notification();
         $not->make('info', 'Внимание!', 'Вам было отправлено ' . $request->amount . ' таконов товара/услуги ' . $service->name . ' от компании ' . $company->name,

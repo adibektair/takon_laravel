@@ -7,6 +7,7 @@ use App\Company;
 use App\Notification;
 use App\Partner;
 use App\Service;
+use App\Transaction;
 use App\User;
 use App\Order;
 use Illuminate\Http\Request;
@@ -181,7 +182,16 @@ class PartnerController extends Controller
             $rec_ser->amount = $request->amount;
             $rec_ser->company_id = $request->company_id;
         }
-        $rec_ser->save();
+        if($rec_ser->save()){
+            $model = new Transaction();
+            $model->type = 4;
+            $model->service_id = $service->id;
+            $model->p_s_id = $partner->id;
+            $model->c_r_id = $reciever->id;
+            $model->price = $service->price;
+            $model->amount = $request->amount;
+            $model->save();
+        }
 
 
         toastr()->success('Спасибо. Ваши таконы были успешно переданы');
