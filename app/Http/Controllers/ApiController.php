@@ -252,7 +252,7 @@ class ApiController extends Controller
             }
 
             if($usr->save()){
-                $service = Service::where('id', $us->serivce_id)->first();
+                $service = Service::where('id', $us->service_id)->first();
                 $model = new Transaction();
                 $model->type = 1;
                 $model->service_id = $service->id;
