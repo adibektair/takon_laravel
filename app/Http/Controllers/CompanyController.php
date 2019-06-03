@@ -141,9 +141,21 @@ class CompanyController extends Controller
             $m_service->service_id = $c_service->service_id;
             $m_service->amount = $request->amount[$k];
             $m_service->deadline = $c_service->deadline;
+
             if($m_service->save()){
+
                 $exactly_service = Service::where('id', '=', $c_service->service_id)->first();
+                $parent = Transaction::where('service_id', $exactly_service->id)
+                    ->where('c_r_id', auth()->user()->company_id)
+                    ->orderBy('created_at', 'desc')->first();
+
                 $model = new Transaction();
+                if ($parent->parent_id){
+                    $model->parent_id = $parent->parent_id;
+                }else{
+                    $model->parent_id = $parent->id;
+                }
+                $model->users_service_id = $m_service->id;
                 $model->type = 1;
                 $model->service_id = $c_service->service_id;
                 $model->c_s_id = auth()->user()->company_id;
@@ -208,8 +220,17 @@ class CompanyController extends Controller
         }
 
         if($rec_ser->save()){
+            $parent = Transaction::where('service_id', $service->id)
+                ->where('c_r_id', auth()->user()->company_id)
+                ->orderBy('created_at', 'desc')->first();
+
+
             $model = new Transaction();
-            $model->type = 4;
+            if ($parent->parent_id){
+                $model->parent_id = $parent->parent_id;
+            }else{
+                $model->parent_id = $parent->id;
+            }            $model->type = 4;
             $model->service_id = $service->id;
             $model->c_s_id = auth()->user()->company_id;
             $model->c_r_id = $reciever->id;

@@ -111,6 +111,12 @@ Route::group(['middleware' => ['authenticated']], function () {
     Route::get('/orders/view', ['as' => 'orders.view', 'uses' => 'OrderController@show']);
 
 
+
+    // Transactions
+        // admin
+    Route::get('/transactions', 'TransactionController@index')->name('transactions.admin');
+    Route::get('/transactions/admin/all', 'TransactionController@adminAll')->name('transactions.admin.all');
+
     // TODO: Create middleware for superadmin user
 
 

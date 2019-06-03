@@ -69,6 +69,7 @@
                         <a href="/mobile_users" class="list-group-item list-group-item-action bg-dark text-light">Пользователи</a>
                         <a href="/orders" class="list-group-item list-group-item-action bg-dark text-light">Заявки (транзакции) <?php if($amount > 0){?> <span class="badge-primary rounded pb-1 pt-1 pr-1 pl-1"><?=$amount?></span> <?php } ?>  </a>
                         <a href="{{ route('services.moderation') }}" class="list-group-item list-group-item-action bg-dark text-light">Заявки (товары/услуги) <?php if($servicesCount > 0){?> <span class="badge-primary rounded pb-1 pt-1 pr-1 pl-1"><?=$servicesCount?></span> <?php } ?>  </a>
+                        <a href="{{ route('transactions.admin') }}" class="list-group-item list-group-item-action bg-dark text-light">Транзакции  </a>
 
                     @elseif(auth()->user()->role_id == 2)
 
