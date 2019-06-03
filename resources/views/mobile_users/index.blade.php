@@ -10,7 +10,9 @@
         <div class="float-left">
             <h5>Пользователи</h5>
             <h6>Выберите пользователей, которым хотите  отправить таконы</h6>
-
+            <br>
+{{--            <button class="btn btn-outline-info">Избранное</button>--}}
+{{--            <br><br><br>--}}
         </div>
 
     </div>

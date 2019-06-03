@@ -27,7 +27,7 @@ $users = DB::table('mobile_users')->whereIn('id', $array)->get();
             <thead>
             <tr>
                 <th>#</th>
-                <th>Имя</th>
+                <th>Пользователь</th>
                 <th>Товар или услуга</th>
                 <th>Количество таконов <input type="number" placeholder="По умолчанию" id="default"></th>
             </tr>
@@ -44,7 +44,7 @@ $users = DB::table('mobile_users')->whereIn('id', $array)->get();
 
                     <tr>
                         <th>{{ $user->id }}</th>
-                        <th>{{ $user->name }}</th>
+                        <th>{{ $user->phone }}</th>
                         <th>
                             <select name="service_id[<?=$rand?>]" class="select">
                                 <?php

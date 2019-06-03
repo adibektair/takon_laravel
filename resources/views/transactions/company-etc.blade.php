@@ -16,13 +16,12 @@
             <thead>
             <tr>
                 <th class="text-center">#</th>
-                <th class="text-center">Продавец</th>
+                <th class="text-center">Отправитель</th>
+                <th class="text-center">Получатель</th>
                 <th class="text-center">Услуга/Товар</th>
                 <th class="text-center">Количество</th>
                 <th class="text-center">Сумма</th>
                 <th class="text-center">Дата</th>
-                <th class="text-center">Подробнее</th>
-
             </tr>
             </thead>
             <tbody>
@@ -44,15 +43,17 @@
             $('#table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('transactions.company.all') }}",
+                ajax: "/transactions/company/etc/get?id=<?=$id?>",
                 columns: [
                     { data: 'id', name: 'id' },
-                    { data: 'partner', name: 'partner' },
+                    { data: '1', name: '1' },
+                    { data: '0', name: '0' },
                     { data: 'service', name: 'service'},
                     { data: 'amount', name: 'amount'},
-                    { data: '1', name: '1'},
+                    { data: '2', name: '2'},
+
                     { data: 'created_at', name: 'created_at'},
-                    { data: '0', name: '0'},
+
 
                 ],
             });
