@@ -369,7 +369,26 @@ class ApiController extends Controller
                 $us->amount -= $model->amount;
                 if($us->save()){
                     $service = Service::where('id', $us->service_id)->first();
+
+
+
+
+
                     $stat = new Transaction();
+                    $parent = Transaction::where('service_id', $service->id)
+                        ->where('u_r_id', $us->mobile_user_id)
+                        ->where('users_service_id', $us->id)
+                        ->orderBy('created_at', 'desc')->first();
+
+                    if($parent){
+                        $stat->parent_id = $parent->id;
+                    }else{
+                        $parent = Transaction::where('service_id', $service->id)
+                            ->where('u_r_id', $us->mobile_user_id)
+                            ->orderBy('created_at', 'desc')->first();
+                        $stat->parent_id = $parent->parent_id;
+                    }
+
                     $stat->type = 3;
                     $stat->service_id = $us->service_id;
                     $stat->u_s_id = $us->mobile_user_id;
