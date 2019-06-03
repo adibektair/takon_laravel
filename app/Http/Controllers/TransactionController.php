@@ -131,7 +131,7 @@ class TransactionController extends Controller
             })
             ->addColumn('3', function ($service) {
                 if($service->type == 4){
-                    return $service->price * $service->amount . ' тенге' . '<label class="bg-info">Перевод</label>';
+                    return $service->price * $service->amount . ' тенге' . ' (Перевод)';
                 }
                 return $service->price * $service->amount . ' тенге';
             })
