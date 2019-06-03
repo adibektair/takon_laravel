@@ -44,11 +44,11 @@
             $('#table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('transactions.admin.all') }}",
+                ajax: "/transactions/admin/more/get?id=<?=$id?>",
                 columns: [
                     { data: 'id', name: 'id' },
-                    { data: 'partner', name: 'partner' },
-                    { data: 'company', name: 'company' },
+                    { data: 'sender', name: 'sender' },
+                    { data: '1', name: '1' },
                     { data: 'service', name: 'service'},
                     { data: 'amount', name: 'amount'},
                     { data: 'created_at', name: 'created_at'},

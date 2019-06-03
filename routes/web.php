@@ -116,6 +116,10 @@ Route::group(['middleware' => ['authenticated']], function () {
         // admin
     Route::get('/transactions', 'TransactionController@index')->name('transactions.admin');
     Route::get('/transactions/admin/all', 'TransactionController@adminAll')->name('transactions.admin.all');
+    Route::get('/transactions/admin/more', 'TransactionController@adminMore')->name('transactions.admin.more');
+    Route::get('/transactions/admin/more/get', 'TransactionController@adminMoreGet')->name('transactions.admin.more.get');
+    Route::get('/transactions/admin/etc', 'TransactionController@adminEtc')->name('transactions.admin.etc');
+    Route::get('/transactions/admin/etc/get', 'TransactionController@adminEtcGet')->name('transactions.admin.etc.get');
 
     // TODO: Create middleware for superadmin user
 

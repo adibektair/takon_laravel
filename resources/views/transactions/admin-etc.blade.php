@@ -21,8 +21,6 @@
                 <th class="text-center">Услуга/Товар</th>
                 <th class="text-center">Количество</th>
                 <th class="text-center">Дата</th>
-                <th class="text-center">Подробнее</th>
-
             </tr>
             </thead>
             <tbody>
@@ -44,15 +42,15 @@
             $('#table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('transactions.admin.all') }}",
+                ajax: "/transactions/admin/etc/get?id=<?=$id?>",
                 columns: [
                     { data: 'id', name: 'id' },
-                    { data: 'partner', name: 'partner' },
-                    { data: 'company', name: 'company' },
+                    { data: '1', name: '1' },
+                    { data: '0', name: '0' },
                     { data: 'service', name: 'service'},
                     { data: 'amount', name: 'amount'},
                     { data: 'created_at', name: 'created_at'},
-                    { data: '0', name: '0'},
+
 
                 ],
             });
