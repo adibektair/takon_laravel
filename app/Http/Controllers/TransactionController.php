@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\CompaniesService;
 use App\Partner;
 use App\Transaction;
 use Illuminate\Http\Request;
@@ -354,6 +355,10 @@ class TransactionController extends Controller
             ->addColumn('2', function ($service) {
                 return $service->price * $service->amount . ' тенге';
             })
+            ->addColumn('3', function ($service) {
+                $cs = CompaniesService::where('id', $service->cs_id)->first();
+                return $cs->amount;
+            })
             ->make(true);
         return $s;
     }
@@ -376,6 +381,10 @@ class TransactionController extends Controller
             ->addColumn('2', function ($service) {
                 return $service->price * $service->amount . ' тенге';
             })
+            ->addColumn('3', function ($service) {
+                $cs = CompaniesService::where('id', $service->cs_id)->first();
+                return $cs->amount;
+            })
             ->make(true);
         return $s;
     }
@@ -397,6 +406,10 @@ class TransactionController extends Controller
             })
             ->addColumn('2', function ($service) {
                 return $service->price * $service->amount . ' тенге';
+            })
+            ->addColumn('3', function ($service) {
+                $cs = CompaniesService::where('id', $service->cs_id)->first();
+                return $cs->amount;
             })
             ->make(true);
         return $s;

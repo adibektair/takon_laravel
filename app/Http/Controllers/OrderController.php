@@ -146,6 +146,7 @@ class OrderController extends Controller
                 $c_service->deadline = strtotime("+" . $service->deadline ." day", strtotime("now"));
                 if($c_service->save()){
                     $model = new Transaction();
+                    $model->cs_id = $c_service->id;
                     $model->service_id = $service->id;
                     $model->type = 2;
                     $model->p_s_id = $service->partner_id;

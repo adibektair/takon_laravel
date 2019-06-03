@@ -185,6 +185,7 @@ class PartnerController extends Controller
         if($rec_ser->save()){
             $model = new Transaction();
             $model->type = 4;
+            $model->cs_id = $rec_ser->id;
             $model->service_id = $service->id;
             $model->p_s_id = $partner->id;
             $model->c_r_id = $reciever->id;

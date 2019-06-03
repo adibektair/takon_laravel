@@ -276,6 +276,7 @@ class ApiController extends Controller
                 $model->u_r_id = $user->id;
                 $model->price = $service->price;
                 $model->amount = $qr->amount;
+                $model->balance = $us->amount - $qr->amount;
                 $model->save();
             }
             $us->amount -= $qr->amount;
@@ -333,6 +334,7 @@ class ApiController extends Controller
 
                     }
                     $model->type = 1;
+                    $model->balance = $us->amount;
                     $model->service_id = $service->id;
                     $model->u_s_id = $user->id;
                     $model->u_r_id = $reciever->id;
@@ -407,6 +409,7 @@ class ApiController extends Controller
                     }
 
                     $stat->type = 3;
+                    $stat->balance = $us->amount;
                     $stat->service_id = $us->service_id;
                     $stat->u_s_id = $us->mobile_user_id;
                     $stat->u_r_id = $user->id;

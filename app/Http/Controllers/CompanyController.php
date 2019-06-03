@@ -155,6 +155,7 @@ class CompanyController extends Controller
                 }else{
                     $model->parent_id = $parent->id;
                 }
+                $model->balance = $c_service->amount - $request->amount[$k];
                 $model->users_service_id = $m_service->id;
                 $model->type = 1;
                 $model->service_id = $c_service->service_id;
@@ -230,7 +231,9 @@ class CompanyController extends Controller
                 $model->parent_id = $parent->parent_id;
             }else{
                 $model->parent_id = $parent->id;
-            }            $model->type = 4;
+            }
+            $model->type = 4;
+            $model->balance = $com_ser->amount;
             $model->service_id = $service->id;
             $model->c_s_id = auth()->user()->company_id;
             $model->c_r_id = $reciever->id;

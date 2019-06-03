@@ -21,6 +21,8 @@
                 <th class="text-center">Услуга/Товар</th>
                 <th class="text-center">Количество</th>
                 <th class="text-center">Сумма</th>
+                <th class="text-center">Остаток</th>
+
                 <th class="text-center">Дата</th>
             </tr>
             </thead>
@@ -51,6 +53,7 @@
                     { data: 'service', name: 'service'},
                     { data: 'amount', name: 'amount'},
                     { data: '2', name: '2'},
+                    { data: 'balance', name: 'balance'},
 
                     { data: 'created_at', name: 'created_at'},
 
