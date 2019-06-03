@@ -85,7 +85,10 @@ class TransactionController extends Controller
     {
         return view('transactions/partners');
     }
-
+    public function company()
+    {
+        return view('transactions/company');
+    }
     public function partnerMore(Request $request){
         return view('transactions/partner-more')->with(['id' => $request->id]);
     }
@@ -251,7 +254,7 @@ class TransactionController extends Controller
 
         return $s;
     }
-    
+
     public function adminAll(){
         $result = DB::table('transactions')
             ->where('parent_id', Null)
@@ -293,6 +296,30 @@ class TransactionController extends Controller
             ->make(true);
         return $s;
     }
+
+
+
+    public function companyAll(){
+        $result = DB::table('transactions')
+            ->where('parent_id', Null)
+            ->where('type', 2)
+            ->where('p_s_id', auth()->user()->partner_id)
+            ->join('services', 'services.id', '=', 'transactions.service_id')
+            ->join('companies', 'companies.id', '=', 'transactions.c_r_id')
+            ->join('partners', 'partners.id', '=', 'transactions.p_s_id')
+            ->select('transactions.*', 'services.name as service', 'companies.name as company', 'partners.name as partner')
+            ->get();
+        $s = DataTables::of($result)
+            ->addColumn('1', function ($service) {
+                return '<a href="/transactions/partner/more?id=' . $service->id . '"><button class="btn btn-success">Подробнее</button></a>';
+            })
+            ->addColumn('2', function ($service) {
+                return $service->price * $service->amount . ' тенге';
+            })
+            ->make(true);
+        return $s;
+    }
+
 
 
 

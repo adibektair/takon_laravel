@@ -82,7 +82,7 @@
                         <a href="{{ route('company.services') }}" class="list-group-item list-group-item-action bg-dark text-light">Товары и услуги</a>
                         <a href="/mobile_users" class="list-group-item list-group-item-action bg-dark text-light">Пользователи</a>
                         <a href="/return" class="list-group-item list-group-item-action bg-dark text-light">Возврат таконов</a>
-
+                        <a href="{{ route('transactions.company') }}" class="list-group-item list-group-item-action bg-dark text-light">Транзакции  </a>
                     @endif
                 </div>
             </div>
