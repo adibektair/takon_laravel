@@ -20,6 +20,7 @@
                 <th class="text-center">Получатель</th>
                 <th class="text-center">Услуга/Товар</th>
                 <th class="text-center">Количество</th>
+                <th class="text-center">Сумма</th>
                 <th class="text-center">Дата</th>
                 <th class="text-center">Подробнее</th>
 
@@ -51,6 +52,7 @@
                     { data: '1', name: '1' },
                     { data: 'service', name: 'service'},
                     { data: 'amount', name: 'amount'},
+                    { data: '2', name: '2'},
                     { data: 'created_at', name: 'created_at'},
                     { data: '0', name: '0'},
 

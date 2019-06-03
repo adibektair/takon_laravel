@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Partner;
 use App\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -118,6 +119,9 @@ class TransactionController extends Controller
                 }
                 return $service->user;
             })
+            ->addColumn('3', function ($service) {
+                return $service->price * $service->amount . ' тенге';
+            })
             ->make(true);
 
         return $s;
@@ -132,11 +136,17 @@ class TransactionController extends Controller
             ->leftJoin('companies as c', 'c.id', '=', 'transactions.c_r_id')
             ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_r_id')
             ->leftJoin('mobile_users as m', 'm.id', '=', 'transactions.u_s_id')
-            ->select('transactions.*', 'services.name as service', 'companies.name as c1', 'c.name as c2', 'mobile_users.phone as u1', 'm.phone as u2')
+            ->select('transactions.*', 'services.name as service', 'services.partner_id as partner_id', 'companies.name as c1', 'c.name as c2', 'mobile_users.phone as u1', 'm.phone as u2')
             ->get();
 
         $s = DataTables::of($result)
             ->addColumn('1', function ($service) {
+
+                if($service->type == 3){
+                    $partner = Partner::where('id', $service->partner_id)->first();
+
+                    return 'Потрачено у ' . $partner->name;
+                }
                 if($service->c2){
                     return $service->c2;
                 }
@@ -145,9 +155,12 @@ class TransactionController extends Controller
             })
             ->addColumn('2', function ($service) {
                 if($service->c1){
-                    return '<label>'. $service->c1 . '</label>';
+                    return  $service->c1;
                 }
-                return '<label>'. $service->u2 . '</label>';
+                return $service->u2 ;
+            })
+            ->addColumn('3', function ($service) {
+                return $service->price * $service->amount . ' тенге';
             })
             ->make(true);
 
@@ -168,6 +181,9 @@ class TransactionController extends Controller
             ->addColumn('1', function ($service) {
                     return '<a href="/transactions/admin/more?id=' . $service->id . '"><button class="btn btn-success">Подробнее</button></a>';
                 })
+            ->addColumn('2', function ($service) {
+                return $service->price * $service->amount . ' тенге';
+            })
             ->make(true);
         return $s;
     }
