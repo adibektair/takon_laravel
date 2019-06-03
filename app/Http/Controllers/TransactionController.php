@@ -81,17 +81,24 @@ class TransactionController extends Controller
      * @param  \App\Transaction  $transaction
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Transaction $transaction)
+    public function partner()
     {
-        //
+        return view('transactions/partners');
     }
 
+    public function partnerMore(Request $request){
+        return view('transactions/partner-more')->with(['id' => $request->id]);
+    }
     public function adminMore(Request $request){
         return view('transactions/admin-more')->with(['id' => $request->id]);
     }
 
     public function adminEtc(Request $request){
         return view('transactions/admin-etc')->with(['id' => $request->id]);
+    }
+
+    public function partnerEtc(Request $request){
+        return view('transactions/partner-etc')->with(['id' => $request->id]);
     }
 
     public function adminMoreGet(Request $request){
@@ -112,6 +119,41 @@ class TransactionController extends Controller
                     return '<a href="/transactions/admin/etc?id=' . $service->id . '"><button class="btn btn-success">Подробнее</button></a>';
                 }
 //                    return '<a href="/transactions/admin/etc?id=' . $service->id . '"><button class="btn btn-success">Подробнее</button></a>';
+            })
+            ->addColumn('2', function ($service) {
+                if($service->company){
+                    return $service->company;
+                }
+                return $service->user;
+            })
+            ->addColumn('3', function ($service) {
+                if($service->type == 4){
+                    return $service->price * $service->amount . ' тенге' . '<label class="bg-info">Перевод</label>';
+                }
+                return $service->price * $service->amount . ' тенге';
+            })
+            ->make(true);
+
+        return $s;
+    }
+
+    public function partnerMoreGet(Request $request){
+
+        $result = DB::table('transactions')
+            ->where('parent_id', $request->id)
+            ->whereIn('type', [1, 4])
+            ->join('services', 'services.id', '=', 'transactions.service_id')
+            ->join('companies', 'companies.id', '=', 'transactions.c_s_id')
+            ->leftJoin('companies as c', 'c.id', '=', 'transactions.c_r_id')
+            ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_r_id')
+            ->select('transactions.*', 'services.name as service', 'companies.name as sender', 'c.name as company', 'mobile_users.phone as user')
+            ->get();
+
+        $s = DataTables::of($result)
+            ->addColumn('1', function ($service) {
+                if($service->user) {
+                    return '<a href="/transactions/partner/etc?id=' . $service->id . '"><button class="btn btn-success">Подробнее</button></a>';
+                }
             })
             ->addColumn('2', function ($service) {
                 if($service->company){
@@ -170,7 +212,46 @@ class TransactionController extends Controller
         return $s;
     }
 
+    public function partnerEtcGet(Request $request){
 
+        $result = DB::table('transactions')
+            ->where('parent_id', $request->id)
+            ->join('services', 'services.id', '=', 'transactions.service_id')
+            ->leftJoin('companies', 'companies.id', '=', 'transactions.c_s_id')
+            ->leftJoin('companies as c', 'c.id', '=', 'transactions.c_r_id')
+            ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_r_id')
+            ->leftJoin('mobile_users as m', 'm.id', '=', 'transactions.u_s_id')
+            ->select('transactions.*', 'services.name as service', 'services.partner_id as partner_id', 'companies.name as c1', 'c.name as c2', 'mobile_users.phone as u1', 'm.phone as u2')
+            ->get();
+
+        $s = DataTables::of($result)
+            ->addColumn('1', function ($service) {
+
+                if($service->type == 3){
+                    $partner = Partner::where('id', $service->partner_id)->first();
+
+                    return 'Потрачено у ' . $partner->name;
+                }
+                if($service->c2){
+                    return $service->c2;
+                }
+                return $service->u1;
+
+            })
+            ->addColumn('2', function ($service) {
+                if($service->c1){
+                    return  $service->c1;
+                }
+                return $service->u2 ;
+            })
+            ->addColumn('3', function ($service) {
+                return $service->price * $service->amount . ' тенге';
+            })
+            ->make(true);
+
+        return $s;
+    }
+    
     public function adminAll(){
         $result = DB::table('transactions')
             ->where('parent_id', Null)
@@ -184,6 +265,28 @@ class TransactionController extends Controller
             ->addColumn('1', function ($service) {
                     return '<a href="/transactions/admin/more?id=' . $service->id . '"><button class="btn btn-success">Подробнее</button></a>';
                 })
+            ->addColumn('2', function ($service) {
+                return $service->price * $service->amount . ' тенге';
+            })
+            ->make(true);
+        return $s;
+    }
+
+
+    public function partnerAll(){
+        $result = DB::table('transactions')
+            ->where('parent_id', Null)
+            ->where('type', 2)
+            ->where('p_s_id', auth()->user()->partner_id)
+            ->join('services', 'services.id', '=', 'transactions.service_id')
+            ->join('companies', 'companies.id', '=', 'transactions.c_r_id')
+            ->join('partners', 'partners.id', '=', 'transactions.p_s_id')
+            ->select('transactions.*', 'services.name as service', 'companies.name as company', 'partners.name as partner')
+            ->get();
+        $s = DataTables::of($result)
+            ->addColumn('1', function ($service) {
+                return '<a href="/transactions/partner/more?id=' . $service->id . '"><button class="btn btn-success">Подробнее</button></a>';
+            })
             ->addColumn('2', function ($service) {
                 return $service->price * $service->amount . ' тенге';
             })

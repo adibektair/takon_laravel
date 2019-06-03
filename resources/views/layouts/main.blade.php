@@ -76,6 +76,7 @@
                         <a href="/profile" class="list-group-item list-group-item-action bg-dark text-light">Профиль</a>
                         <a href="/employees" class="list-group-item list-group-item-action bg-dark text-light">Сотрудники</a>
                         <a href="/services" class="list-group-item list-group-item-action bg-dark text-light">Товары и услуги</a>
+                        <a href="{{ route('transactions.partner') }}" class="list-group-item list-group-item-action bg-dark text-light">Транзакции  </a>
 
                     @elseif(auth()->user()->role_id == 3)
                         <a href="{{ route('company.services') }}" class="list-group-item list-group-item-action bg-dark text-light">Товары и услуги</a>
