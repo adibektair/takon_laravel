@@ -107,13 +107,16 @@ class TransactionController extends Controller
 
         $s = DataTables::of($result)
             ->addColumn('1', function ($service) {
-                return '<a href="/transactions/admin/etc?id=' . $service->id . '"><button class="btn btn-success">Подробнее</button></a>';
+                if($service->user) {
+                    return '<a href="/transactions/admin/etc?id=' . $service->id . '"><button class="btn btn-success">Подробнее</button></a>';
+                }
+//                    return '<a href="/transactions/admin/etc?id=' . $service->id . '"><button class="btn btn-success">Подробнее</button></a>';
             })
             ->addColumn('2', function ($service) {
                 if($service->company){
-                    return '<label>'. $service->company . '</label>';
+                    return $service->company;
                 }
-                return '<label>'. $service->user . '</label>';
+                return $service->user;
             })
             ->make(true);
 
@@ -135,9 +138,9 @@ class TransactionController extends Controller
         $s = DataTables::of($result)
             ->addColumn('1', function ($service) {
                 if($service->c2){
-                    return '<label>'. $service->c2 . '</label>';
+                    return $service->c2;
                 }
-                return '<label>'. $service->u1 . '</label>';
+                return $service->u1;
 
             })
             ->addColumn('2', function ($service) {
