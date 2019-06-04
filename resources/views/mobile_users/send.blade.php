@@ -23,7 +23,15 @@ $users = DB::table('mobile_users')->whereIn('id', $array)->get();
 ?>
     <br><br>
     <div class="col-md-12 mt-2">
+        <?php
+        if($cs_id == null){
+            $cs = \App\CompaniesService::first();
+        }else{
+            $cs = \App\CompaniesService::where('id', $cs_id)->first();
+        }
 
+
+        ?>
         <table class="table table-bordered" id="table">
             <thead>
             <tr>
@@ -36,12 +44,7 @@ $users = DB::table('mobile_users')->whereIn('id', $array)->get();
             <tbody>
             <form method="post" action="{{ route('send.takons') }}">
 
-                <?php
-                    if(!$cs_id){
-                        $cs_id = 1;
-                    }
-                    $cs = \App\CompaniesService::where('id', $cs_id)->first();
-                ?>
+
                 @csrf
                 @foreach($users as $user)
                     <?php
