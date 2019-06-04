@@ -257,6 +257,7 @@ class CompanyController extends Controller
     public function getReturn(){
         $users = DB::table('users_services')
             ->where('company_id', auth()->user()->company_id)
+            ->where('users_services.amount', '<>', 0)
             ->join('services', 'services.id', '=', 'users_services.service_id')
             ->join('mobile_users', 'mobile_users.id', '=', 'users_services.mobile_user_id')
             ->select('users_services.*', 'mobile_users.phone', 'services.name as service')->get();
@@ -270,7 +271,6 @@ class CompanyController extends Controller
     }
 
     public function finish(Request $request){
-        // TODO: add deadline comparison here
 
         $us = UsersService::where('id', $request->id)->first();
         $user = MobileUser::where('id', $us->mobile_user_id)->first();
@@ -282,12 +282,26 @@ class CompanyController extends Controller
         }
 
         $us->amount -= $request->amount;
-        $us->save();
-
         $cs = CompaniesService::where('service_id', $service->id)
             ->where('company_id', $company->id)
             ->where('deadline', $us->deadline)
             ->first();
+
+        if($us->save()){
+            $model = new Transaction();
+            $model->u_s_id =$user->id;
+            $model->balance = $us->amount;
+            $model->c_r_id = $company->id;
+            $model->amount = $request->amount;
+            $model->service_id = $service->id;
+            $model->type = 5;
+            $model->price = $service->price;
+            $model->cs_id = $cs->id;
+            $model->users_service_id = $us->id;
+            $model->save();
+
+        }
+
         if($cs){
             $cs->amount += $request->amount;
         }else{

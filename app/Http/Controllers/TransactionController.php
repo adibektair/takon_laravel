@@ -26,9 +26,9 @@ class TransactionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function return()
     {
-        //
+        return view('transactions/return');
     }
 
     /**
@@ -417,6 +417,35 @@ class TransactionController extends Controller
 
 
 
+    public function returnAll(){
+
+        if(auth()->user()->role_id == 1){
+            $result = DB::table('transactions')
+                ->where('type', 5)
+                ->join('services', 'services.id', '=', 'transactions.service_id')
+                ->join('companies', 'companies.id', '=', 'transactions.c_r_id')
+                ->join('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
+                ->select('transactions.*', 'services.name as service', 'companies.name as company', 'mobile_users.phone as user')
+                ->get();
+        }else{
+            $result = DB::table('transactions')
+                ->where('type', 5)
+                ->where('transactions.c_r_id', auth()->user()->company_id)
+                ->join('services', 'services.id', '=', 'transactions.service_id')
+                ->join('companies', 'companies.id', '=', 'transactions.c_r_id')
+                ->join('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
+                ->select('transactions.*', 'services.name as service', 'companies.name as company', 'mobile_users.phone as user')
+                ->get();
+        }
+
+
+        $s = DataTables::of($result)
+            ->addColumn('0', function ($service) {
+                return $service->price * $service->amount . ' тенге';
+            })
+            ->make(true);
+        return $s;
+    }
 
 
 
