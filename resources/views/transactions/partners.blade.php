@@ -12,17 +12,17 @@
     <br><br>
     <div class="col-md-12 mt-2">
 
-        <table class="table" id="table">
+        <table class="table table-bordered" id="table">
             <thead>
             <tr>
-                <th class="text-center">#</th>
-                <th class="text-center">Покупатель</th>
-                <th class="text-center">Услуга/Товар</th>
-                <th class="text-center">Количество</th>
-                <th class="text-center">Сумма</th>
-                <th class="text-center">Остаток</th>
-                <th class="text-center">Дата</th>
-                <th class="text-center">Подробнее</th>
+                <th >#</th>
+                <th >Покупатель</th>
+                <th >Услуга/Товар</th>
+                <th >Количество</th>
+                <th >Сумма</th>
+                <th >Остаток</th>
+                <th >Дата</th>
+                <th >Подробнее</th>
 
             </tr>
             </thead>

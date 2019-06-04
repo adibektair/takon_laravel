@@ -23,13 +23,13 @@
     <br><br>
     <div class="col-md-12 mt-2">
 
-        <table class="table" id="table">
+        <table class="table table-bordered" id="table">
             <thead>
             <tr>
-                <th class="text-center">#</th>
-                <th class="text-center">Имя</th>
-                <th class="text-center">email</th>
-                <th class="text-center">Создан</th>
+                <th >#</th>
+                <th >Имя</th>
+                <th >email</th>
+                <th >Создан</th>
             </tr>
             </thead>
             <tbody>

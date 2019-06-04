@@ -16,16 +16,16 @@
     <br><br>
     <div class="col-md-12 mt-2">
 
-        <table class="table" id="table">
+        <table class="table table-bordered" id="table">
             <thead>
                 <tr>
-                    <th class="text-center">#</th>
-                    <th class="text-center">Название</th>
-                    <th class="text-center">Поставщик</th>
-                    <th class="text-center">Цена за единицу</th>
-                    <th class="text-center">Количество</th>
-                    <th class="text-center">Дата приобретения</th>
-                    <th class="text-center">Поделиться</th>
+                    <th >#</th>
+                    <th >Название</th>
+                    <th >Поставщик</th>
+                    <th >Цена за единицу</th>
+                    <th >Количество</th>
+                    <th >Дата приобретения</th>
+                    <th >Поделиться</th>
 
                 </tr>
             </thead>

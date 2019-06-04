@@ -12,19 +12,19 @@
     <br><br>
     <div class="col-md-12 mt-2">
 
-        <table class="table" id="table">
+        <table class="table table-bordered" id="table">
             <thead>
             <tr>
-                <th class="text-center">#</th>
-                <th class="text-center">Отправитель</th>
-                <th class="text-center">Получатель</th>
-                <th class="text-center">Услуга/Товар</th>
-                <th class="text-center">Количество</th>
-                <th class="text-center">Сумма</th>
-                <th class="text-center">Остаток</th>
+                <th >#</th>
+                <th >Отправитель</th>
+                <th >Получатель</th>
+                <th >Услуга/Товар</th>
+                <th >Количество</th>
+                <th >Сумма</th>
+                <th >Остаток</th>
 
-                <th class="text-center">Дата</th>
-                <th class="text-center">Подробнее</th>
+                <th >Дата</th>
+                <th >Подробнее</th>
 
             </tr>
             </thead>

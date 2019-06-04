@@ -34,13 +34,13 @@
     <br><br>
     <div class="col-md-12 mt-2">
 
-        <table  class="table" id="table">
+        <table class="table table-bordered" id="table">
             <thead>
             <tr>
                 <th></th>
-                <th class="text-center">Имя</th>
-                <th class="text-center">Телефон</th>
-                <th class="text-center">Создан</th>
+                <th >Имя</th>
+                <th >Телефон</th>
+                <th >Создан</th>
                 <th></th>
             </tr>
             </thead>

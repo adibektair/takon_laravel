@@ -17,14 +17,14 @@
     <br><br>
     <div class="col-md-12 mt-2">
 
-        <table class="table" id="table">
+        <table class="table table-bordered" id="table">
             <thead>
             <tr>
-                <th class="text-center">#</th>
-                <th class="text-center">Телефон</th>
-                <th class="text-center">Услуга</th>
-                <th class="text-center">Количество</th>
-                <th class="text-center">Вернуть</th>
+                <th >#</th>
+                <th >Телефон</th>
+                <th >Услуга</th>
+                <th >Количество</th>
+                <th >Вернуть</th>
             </tr>
             </thead>
             <tbody>
