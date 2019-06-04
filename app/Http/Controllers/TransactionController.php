@@ -367,7 +367,7 @@ class TransactionController extends Controller
     public function partnerAll(){
         $result = DB::table('transactions')
             ->where('parent_id', Null)
-            ->where('type', 2)
+            ->where('type', [2, 4])
             ->where('p_s_id', auth()->user()->partner_id)
             ->join('services', 'services.id', '=', 'transactions.service_id')
             ->join('companies', 'companies.id', '=', 'transactions.c_r_id')
@@ -394,7 +394,7 @@ class TransactionController extends Controller
     public function companyAll(){
         $result = DB::table('transactions')
             ->where('parent_id', Null)
-            ->where('type', 2)
+            ->where('type', [2, 4])
             ->where('c_r_id', auth()->user()->company_id)
             ->join('services', 'services.id', '=', 'transactions.service_id')
             ->join('partners', 'partners.id', '=', 'transactions.p_s_id')
