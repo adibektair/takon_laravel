@@ -75,9 +75,10 @@ Route::group(['middleware' => ['authenticated']], function () {
 
 
 // Mobile Users
-    Route::get('/mobile_users', function () {
-        return view('mobile_users/index');
-    });
+//    Route::get('/mobile_users', function () {
+//
+//    });
+    Route::get('/mobile_users', ['as' => 'mobile_users', 'uses' => 'MobileUserController@index']);
     Route::get('/all-mobile-users', ['as' => 'all.mobile_users', 'uses' => 'MobileUserController@all']);
 
 // Employees

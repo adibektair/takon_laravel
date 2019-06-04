@@ -14,9 +14,10 @@ class MobileUserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+
+        return view('mobile_users/index')->with(['id' => $request->id]);
     }
 
     /**
@@ -85,7 +86,7 @@ class MobileUserController extends Controller
         $ids = $request->ids;
         $array = explode(',', $ids);
 
-        return view('mobile_users/send')->with(['ids' => $ids]);
+        return view('mobile_users/send')->with(['ids' => $ids, 'cs_id' => $request->cs_id]);
     }
 
     public function getUsersByIds(Request $request){

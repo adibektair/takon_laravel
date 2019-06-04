@@ -24,6 +24,8 @@
             <form action="{{ route('send') }}" method="post">
                 @csrf
                 <input type="text" hidden name="ids" id="ids">
+                <input type="text" hidden name="cs_id" value="{{ $id }}">
+
                 <button hidden id="bt" class="btn btn-success ">Выбрать</button>
             </form>
     </div>

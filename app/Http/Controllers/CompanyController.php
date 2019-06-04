@@ -182,7 +182,7 @@ class CompanyController extends Controller
             ->get();
 
         $s = DataTables::of($services)->addColumn('checkbox', function ($service) {
-            return '<a href="/share-services?id=' . $service->id .'"><button class="btn btn-success">Передать</button></a> <a href="/mobile_users"><button class="btn btn-outline-success">Раздать</button></a>';
+            return '<a href="/share-services?id=' . $service->id .'"><button class="btn btn-success">Передать</button></a> <a href="/mobile_users?id=' . $service->id .'"><button class="btn btn-outline-success">Раздать</button></a>';
         })->make();
         return $s;
     }

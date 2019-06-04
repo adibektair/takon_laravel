@@ -19,6 +19,7 @@
 $array = explode(',', $ids);
 $users = DB::table('mobile_users')->whereIn('id', $array)->get();
 
+
 ?>
     <br><br>
     <div class="col-md-12 mt-2">
@@ -34,6 +35,13 @@ $users = DB::table('mobile_users')->whereIn('id', $array)->get();
             </thead>
             <tbody>
             <form method="post" action="{{ route('send.takons') }}">
+
+                <?php
+                    if(!$cs_id){
+                        $cs_id = 1;
+                    }
+                    $cs = \App\CompaniesService::where('id', $cs_id)->first();
+                ?>
                 @csrf
                 @foreach($users as $user)
                     <?php
@@ -56,7 +64,7 @@ $users = DB::table('mobile_users')->whereIn('id', $array)->get();
                                 foreach ($services as $service){
                                 $main_serv = \App\Service::where('id', '=', $service->service_id)->first();
                                 ?>
-                                <option value="<?=$service->id?>"><?=$main_serv->name?> (кол-во: <?=$service->amount?>) </option>
+                                <option value="<?=$service->id?>" <?php if($service->id == $cs->service_id) { ?> selected <?php } ?> > <?=$main_serv->name?> (кол-во: <?=$service->amount?>) </option>
                                 <?php
                                 }
                                 ?>
