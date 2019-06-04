@@ -20,7 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('/m_register', ['uses' => 'ApiController@auth']);
 Route::post('/m_login', ['uses' => 'ApiController@checkCode']);
-Route::group(['middleware' => ['authenticated']], function () {
+Route::group(['middleware' => ['token']], function () {
 
     Route::post('/getsubscriptions', ['uses' => 'ApiController@getSubscriptions']);
     Route::post('/getorganizations', ['uses' => 'ApiController@getPartners']);
