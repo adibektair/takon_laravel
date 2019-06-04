@@ -228,8 +228,16 @@ class PartnerController extends Controller
             ->addColumn('buy', function($partner){
                 return '<a href="/partners-services?id=' . $partner->id .'"><button class="btn btn-success">Посмотреть товары и услуги</button></a>';
             })
-            ->rawColumns(['buy'])
+            ->addColumn('email', function ($partner){
+                $user = User::where('role_id', 2)->where('partner_id', $partner->id)->first();
+                return $user->email;
+            })
+            ->rawColumns(['buy', 'email'])
             ->make(true);
+
+
+
+
 //        return datatables()->toJson();
     }
 }

@@ -325,6 +325,14 @@ class CompanyController extends Controller
     public function all(){
 
             $companies = Company::all();
-            return datatables($companies)->toJson();
+            return Datatables::of($companies)
+                ->addColumn('email', function($company){
+                    $user = User::where('role_id', 3)->where('company_id', $company->id)->first();
+                    return $user->email;
+
+                })
+                ->rawColumns(['email'])
+                ->make(true);
+//            return datatables($companies)->toJson();
     }
 }

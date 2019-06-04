@@ -29,6 +29,8 @@
                 <th >#</th>
                 <th >Имя</th>
                 <th >Телефон</th>
+                <th >email</th>
+
                 <th >Адрес</th>
                 <th >Создан</th>
             </tr>
@@ -56,6 +58,8 @@
                     { data: 'id', name: 'id' },
                     { data: 'name', name: 'name' },
                     { data: 'phone', name: 'phone' },
+                    { data: 'email', name: 'email' },
+
                     { data: 'address', name: 'address'},
                     { data: 'created_at', name: 'created_at'},
 
