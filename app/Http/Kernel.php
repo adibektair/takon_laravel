@@ -41,6 +41,9 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\Authenticate::class,
         ],
 
+        [
+            'token' => \App\Http\Middleware\ApiToken::class
+        ],
         'api' => [
             'throttle:60,1',
             'bindings',
@@ -61,6 +64,7 @@ class Kernel extends HttpKernel
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'role' => \App\Http\Middleware\CheckRole::class,
+        'token' => \App\Http\Middleware\ApiToken::class,
         'is_company_admin' => \App\Http\Middleware\IsCompanyAdmin::class,
         'is_superadmin' => \App\Http\Middleware\IsSuperAdmin::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
