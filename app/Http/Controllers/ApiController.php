@@ -435,13 +435,23 @@ class ApiController extends Controller
                 ->join('services', 'services.id', '=', 'transactions.service_id')
                 ->leftJoin('mobile_users as s_users', 's_users.id', '=', 'transactions.u_s_id')
                 ->leftJoin('mobile_users as r_users', 'r_users.id', '=', 'transactions.u_r_id')
-                ->leftJoin('companies as r_company', 'r_company.id', '=', 'transactions.c_r_id')
+                ->leftJoin('companies as s_company', 's_company.id', '=', 'transactions.c_s_id')
                 ->leftJoin('companies_services as cs', 'cs.id', '=', 'transactions.cs_id')
                 ->leftJoin('companies as company', 'cs.company_id', '=', 'company.id')
-                ->select('company.name as company', 'services.name as service', 's_users.phone as s_user_phone', 'r_users.phone as r_user_phone', 's_users.id as s_user_id', 'r_users.id as r_user_id')
+                ->select('company.name as company', 's_company.name as s_company', 'transactions.*',
+                    'services.name as service', 's_users.phone as s_user_phone', 'r_users.phone as r_user_phone',
+                    's_users.id as s_user_id', 'r_users.id as r_user_id')
                 ->get();
 
-            return $this->makeResponse(200, true, ['info' => $model]);
+                $result = [];
+                foreach ($model as $value){
+
+                    $el["service"] = $value->service;
+
+                    array_push($result, $el);
+                }
+
+            return $this->makeResponse(200, true, ['info' => $result]);
 
         }
         return $this->makeResponse(401, false, ['message'=>'Данные для авторизации неверны', 'error' => 'incorrect auth data']);
