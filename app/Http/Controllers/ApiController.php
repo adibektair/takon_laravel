@@ -274,6 +274,7 @@ class ApiController extends Controller
                 $model->service_id = $service->id;
                 $model->u_s_id = $us->mobile_user_id;
                 $model->u_r_id = $user->id;
+                $model->cs_id = $parent->cs_id;
                 $model->price = $service->price;
                 $model->amount = $qr->amount;
                 $model->balance = $us->amount - $qr->amount;
@@ -335,6 +336,7 @@ class ApiController extends Controller
                     }
                     $model->type = 1;
                     $model->balance = $us->amount;
+                    $model->cs_id = $parent->cs_id;
                     $model->service_id = $service->id;
                     $model->u_s_id = $user->id;
                     $model->u_r_id = $reciever->id;
