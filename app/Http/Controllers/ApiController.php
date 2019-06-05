@@ -447,6 +447,31 @@ class ApiController extends Controller
                 foreach ($model as $value){
 
                     $el["service"] = $value->service;
+                    $el["company"] = $value->company;
+                    $el["date"] = $value->created_at;
+
+                    if($user->phone == $value->s_user_phone){
+                        $el["amount"] = -$value->amount;
+                        if($value->r_user_phone){
+                            if($value->type == 3){
+                                $user = User::where('id', $value->r_user_phone)->first();
+                                $partner = Partner::where('id',$user->partner_id)->first();
+                                $el['contragent'] = $partner->name;
+                            }else{
+                                $el['contragent'] = $value->r_user_phone;
+                            }
+
+                        }else{
+
+                        }
+                    }else{
+                        $el["amount"] = +$value->amount;
+                        if($value->s_user_phone) {
+                            $el['contragent'] = $value->s_user_phone;
+                        }else{
+                            $el['contragent'] = $value->s_company;
+                        }
+                    }
 
                     array_push($result, $el);
                 }
