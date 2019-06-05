@@ -427,7 +427,7 @@ class ApiController extends Controller
     public function getHistory(Request $request){
 
         $token = $request->token;
-        $user = User::where('token', $token)->first();
+        $user = MobileUser::where('token', $token)->first();
         if($user){
             $model = DB::table('transactions')
                 ->where('u_s_id', $user->id)
