@@ -452,10 +452,10 @@ class ApiController extends Controller
 
                     if($user->phone == $value->s_user_phone){
                         $el["amount"] = -$value->amount;
-                        if($value->r_user_phone){
+                        if($value->r_user_id){
                             if($value->type == 3){
-                                $user = User::where('id', $value->r_user_phone)->first();
-                                $partner = Partner::where('id',$user->partner_id)->first();
+                                $suser = User::where('id', $value->r_user_id)->first();
+                                $partner = Partner::where('id',$suser->partner_id)->first();
                                 $el['contragent'] = $partner->name;
                             }else{
                                 $el['contragent'] = $value->r_user_phone;
