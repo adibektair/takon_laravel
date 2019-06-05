@@ -433,12 +433,12 @@ class ApiController extends Controller
                 ->where('u_s_id', $user->id)
                 ->orWhere('u_r_id', $user->id)
                 ->join('services', 'services.id', '=', 'transactions.service_id')
-                ->leftJoin('mobile_users as s_users', 's_user.id', '=', 'transactions.u_s_id')
-                ->leftJoin('mobile_users as r_users', 'r_user.id', '=', 'transactions.u_r_id')
+                ->leftJoin('mobile_users as s_users', 's_users.id', '=', 'transactions.u_s_id')
+                ->leftJoin('mobile_users as r_users', 'r_users.id', '=', 'transactions.u_r_id')
                 ->leftJoin('companies as r_company', 'r_company.id', '=', 'transactions.c_r_id')
                 ->leftJoin('companies_services as cs', 'cs.id', '=', 'transactions.cs_id')
                 ->leftJoin('companies as company', 'cs.company_id', '=', 'company.id')
-                ->select('company.name as company', 'services.name as service', 's_users.* as s_user', 'r_users.* as r_user')
+                ->select('company.name as company', 'services.name as service', 's_users.phone as s_user_phone', 'r_users.phone as r_user_phone', 's_users.id as s_user_id', 'r_users.id as r_user_id')
                 ->get();
 
             return $this->makeResponse(200, true, ['info' => $model]);
