@@ -389,10 +389,6 @@ class ApiController extends Controller
                 if($us->save()){
                     $service = Service::where('id', $us->service_id)->first();
 
-
-
-
-
                     $stat = new Transaction();
                     $parent = Transaction::where('service_id', $service->id)
                         ->where('u_r_id', $us->mobile_user_id)
@@ -425,6 +421,31 @@ class ApiController extends Controller
             return $this->makeResponse(400, false, ['message'=>'QR не найден']);
         }
         return $this->makeResponse(401, false, ['message'=>'Данные для авторизации неверны', 'error' => 'incorrect auth data']);
+    }
+
+
+    public function getHistory(Request $request){
+
+        $token = $request->token;
+        $user = User::where('token', $token)->first();
+        if($user){
+            $model = DB::table('transactions')
+                ->where('u_s_id', $user->id)
+                ->orWhere('u_r_id', $user->id)
+                ->join('services', 'services.id', '=', 'transactions.service_id')
+                ->leftJoin('mobile_users as s_users', 's_user.id', '=', 'transactions.u_s_id')
+                ->leftJoin('mobile_users as r_users', 'r_user.id', '=', 'transactions.u_r_id')
+                ->leftJoin('companies as r_company', 'r_company.id', '=', 'transactions.c_r_id')
+                ->leftJoin('companies_services as cs', 'cs.id', '=', 'transactions.cs_id')
+                ->leftJoin('companies as company', 'cs.company_id', '=', 'company.id')
+                ->select('company.name as company', 'services.name as service', 's_users.* as s_user', 'r_users.* as r_user')
+                ->get();
+
+            return $this->makeResponse(200, true, ['info' => $model]);
+
+        }
+        return $this->makeResponse(401, false, ['message'=>'Данные для авторизации неверны', 'error' => 'incorrect auth data']);
+
     }
 
     public function makeResponse(int $code, Bool $success, Array $other){
