@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Code;
+use App\Company;
 use App\MobileUser;
 use App\Partner;
 use App\QrCode;
@@ -439,11 +440,12 @@ class ApiController extends Controller
                 ->leftJoin('mobile_users as s_users', 's_users.id', '=', 'transactions.u_s_id')
                 ->leftJoin('mobile_users as r_users', 'r_users.id', '=', 'transactions.u_r_id')
                 ->leftJoin('companies as s_company', 's_company.id', '=', 'transactions.c_s_id')
+                ->leftJoin('companies as return', 'return.id', '=', 'transactions.c_r_id')
                 ->leftJoin('companies_services as cs', 'cs.id', '=', 'transactions.cs_id')
                 ->leftJoin('companies as company', 'cs.company_id', '=', 'company.id')
                 ->select('company.name as company', 's_company.name as s_company', 'transactions.*',
                     'services.name as service', 's_users.phone as s_user_phone', 'r_users.phone as r_user_phone',
-                    's_users.id as s_user_id', 'r_users.id as r_user_id', 'partners.name as creater')
+                    's_users.id as s_user_id', 'r_users.id as r_user_id', 'partners.name as creater', 'return.name as ret_name')
                 ->get();
 
                 $result = [];
@@ -465,9 +467,10 @@ class ApiController extends Controller
                                 $el['contragent'] = $value->r_user_phone;
                             }
 
-                        }else{
-
                         }
+                        if($value->type == 5){
+                            $el['contragent'] = $value->ret_name;
+                         }
                     }else{
                         $el["amount"] = +$value->amount;
                         if($value->s_user_phone) {
