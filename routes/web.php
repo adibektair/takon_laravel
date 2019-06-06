@@ -91,7 +91,10 @@ Route::group(['middleware' => ['authenticated']], function () {
 // Services
     Route::get('/services', 'ServiceController@index')->middleware('role');
     Route::get('/my-services', ['as' => 'all.my_services', 'uses' => 'ServiceController@getMyServices']);
+    Route::get('/edit-service', ['as' => 'edit.service', 'uses' => 'ServiceController@edit']);
     Route::get('/create-service', ['as' => 'create.service', 'uses' => 'ServiceController@create'])->middleware('role');
+    Route::post('/edit-service-save', ['as' => 'edit.service.save', 'uses' => 'ServiceController@editSave']);
+
     Route::post('/store-service', ['as' => 'store.service', 'uses' => 'ServiceController@store'])->middleware('role');
     Route::get('/services/moderation', function () {
         return view('services/moderation');

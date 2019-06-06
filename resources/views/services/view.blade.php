@@ -29,6 +29,12 @@
         </div>
 
         <div class="form-group">
+            <label>Описание</label>
+            <input type="text" value="<?=$service->description?>" disabled class="form-control">
+        </div>
+
+
+        <div class="form-group">
             <label>Срок дейтсвия</label>
 
             <input type="text" value="{{ $service->deadline }}" class="form-control" disabled>

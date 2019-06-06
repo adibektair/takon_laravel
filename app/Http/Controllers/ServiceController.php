@@ -43,11 +43,24 @@ class ServiceController extends Controller
         $model->name = $request->name;
         $model->deadline = $request->deadline;
         $model->price = $request->price;
+        $model->description = $request->desc;
         $model->partner_id = auth()->user()->partner_id;
         $model->save();
         toastr()->info('Товар или услуга были отправлены на модерацию');
         return view('services/index');
 
+    }
+
+    public function editSave(Request $request)
+    {
+        $model = Service::where('id', $request->id)->first();
+        $model->name = $request->name;
+        $model->deadline = $request->deadline;
+        $model->price = $request->price;
+        $model->description = $request->desc;
+        $model->save();
+        toastr()->success('Товар или услуга были изменены');
+        return view('services/index');
     }
 
     /**
@@ -80,9 +93,10 @@ class ServiceController extends Controller
      * @param  \App\Service  $service
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Service $service)
+    public function edit(Request $request)
     {
-        //
+        $service = Service::where('id', $request->id)->first();
+        return view('services/edit')->with(['service' => $service]);
     }
 
     /**
@@ -100,12 +114,22 @@ class ServiceController extends Controller
 
         $servives = DB::table('services')
             ->where('partner_id', '=', auth()->user()->partner_id)
-            ->where('status', '=', 3)
+            ->whereIn('status',  [3, 4])
             ->get();
 
         $s = DataTables::of($servives)->addColumn('checkbox', function ($service) {
-            return '<a href="/partner-share-services?id=' . $service->id . '"><button class="btn btn-success">Поделиться</button></a>';
-        })->make();
+            if($service->status == 3){
+                return '<a href="/partner-share-services?id=' . $service->id . '"><button class="btn btn-success">Поделиться</button></a>';
+            }else{
+                return 'Неактивен';
+            }
+
+        })
+            ->addColumn('edit', function ($service){
+                return '<a href="/edit-service?id=' . $service->id . '"><button class="btn btn-outline-info">Редактировать</button></a>';
+            })
+            ->rawColumns(['checkbox', 'edit'])
+            ->make();
 
 
         return $s;

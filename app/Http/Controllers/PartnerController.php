@@ -97,6 +97,7 @@ class PartnerController extends Controller
         $model = Partner::where('id', '=', $request->id)->first();
         $model->name = $request->name;
         $model->phone = $request->phone;
+        $model->description = $request->desc;
         $model->address = $request->address;
         if(request()->avatar){
             $imageName = $model->name . '.' . request()->avatar->getClientOriginalExtension();

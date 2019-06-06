@@ -7,7 +7,7 @@
 @section('content')
     <div class="col-md-12 mt-2 mb-3 bg-transparent">
         <div class="float-left">
-            <h5>Товарыи услуги</h5>
+            <h5>Товары и услуги</h5>
         </div>
     </div>
 
@@ -27,7 +27,8 @@
                 <th>#</th>
                 <th>Название</th>
                 <th>Цена за единицу</th>
-                <th>Количество</th>
+                <th>Срок действия в днях</th>
+                <th>Редактировать</th>
                 <th>Поделиться</th>
             </tr>
             </thead>
@@ -54,7 +55,9 @@
                     { data: 'id', name: 'id' },
                     { data: 'name', name: 'name' },
                     { data: 'price', name: 'price' },
-                    { data: 'amount', name: 'amount' },
+                    { data: 'deadline', name: 'deadline' },
+                    { data: 'edit', name: 'edit' },
+
                     { data: 'checkbox', name: 'checkbox' },
 
                     // {"data": {},

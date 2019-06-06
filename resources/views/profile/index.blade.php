@@ -42,6 +42,10 @@
             <input type="text" name="phone" placeholder="Телефон" required value="<?=$partner->phone?>" class="form-control">
 
             <br>
+            <label class="text-semibold">Описание</label>
+            <input type="text" name="desc" placeholder="Описание" required value="<?=$partner->description?>" class="form-control">
+
+            <br>
             <label class="text-semibold">Адрес </label>
             <input type="text" name="address" placeholder="Адрес" required value="<?=$partner->address?>" class="form-control">
 
