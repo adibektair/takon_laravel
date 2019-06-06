@@ -33,6 +33,7 @@ Route::group(['middleware' => ['token']], function () {
     Route::post('/login', ['uses' => 'ApiController@logIn']);
     Route::post('/qrscan', ['uses' => 'ApiController@scanCashierQR']);
     Route::post('/gethistory', ['uses' => 'ApiController@getHistory']);
+    Route::post('/getarchive', ['uses' => 'ApiController@getArchive']);
 
 });
 

@@ -493,6 +493,19 @@ class ApiController extends Controller
 
     }
 
+
+    public function getArchive(Request $request){
+        $user = User::where('token', $request->token)->first();
+        $model = DB::table('transactions')
+            ->where('u_r_id', $user->id)
+            ->where('type', 3)
+            ->join('services', 'services.id', '=', 'transactions.service_id')
+            ->join('mobile_users', 'mobile_suers.id', '=', 'transactions.u_s_id')
+            ->select('transactions.*', 'services.name as service', 'mobile_users.phone as phone')
+            ->get();
+        $this->makeResponse(200, true, ["qrs" => $model]);
+    }
+
     public function makeResponse(int $code, Bool $success, Array $other){
         $json = array_merge($other, ['success' => $success]);
         return \response()->json($json)->setStatusCode($code);
