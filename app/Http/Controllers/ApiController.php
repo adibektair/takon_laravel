@@ -435,6 +435,7 @@ class ApiController extends Controller
                 ->where('u_s_id', $user->id)
                 ->orWhere('u_r_id', $user->id)
                 ->join('services', 'services.id', '=', 'transactions.service_id')
+                ->leftJoin('partners', 'partners.id', '=', 'services.partner_id')
                 ->leftJoin('mobile_users as s_users', 's_users.id', '=', 'transactions.u_s_id')
                 ->leftJoin('mobile_users as r_users', 'r_users.id', '=', 'transactions.u_r_id')
                 ->leftJoin('companies as s_company', 's_company.id', '=', 'transactions.c_s_id')
@@ -442,15 +443,16 @@ class ApiController extends Controller
                 ->leftJoin('companies as company', 'cs.company_id', '=', 'company.id')
                 ->select('company.name as company', 's_company.name as s_company', 'transactions.*',
                     'services.name as service', 's_users.phone as s_user_phone', 'r_users.phone as r_user_phone',
-                    's_users.id as s_user_id', 'r_users.id as r_user_id')
+                    's_users.id as s_user_id', 'r_users.id as r_user_id', 'partners.name as creater')
                 ->get();
 
                 $result = [];
                 foreach ($model as $value){
 
                     $el["service"] = $value->service;
-                    $el["company"] = $value->company;
+//                    $el["company"] = $value->company;
                     $el["date"] = $value->created_at;
+                    $el["company"] = $value->creater;
 
                     if($user->phone == $value->s_user_phone){
                         $el["amount"] = -$value->amount;
