@@ -176,7 +176,7 @@ class ApiController extends Controller
 //                ->where('users_services.mobile_user_id', $user->id)
                 ->select('services.id', 'services.price', 'services.name', 'services.created_at')
                 ->selectRaw('SUM(DISTINCT users_services.amount) AS usersAmount')
-                ->groupBy('services.id', 'services.price', 'services.name', 'services.created_at')
+                ->groupBy('services.id', 'services.price', 'services.name', 'services.created_at', 'services.description')
                 ->get();
 
             return $this->makeResponse(200, true, ['services' => $partner]);
@@ -263,8 +263,20 @@ class ApiController extends Controller
                 $usr->deadline = $us->deadline;
             }
 
+
             if($usr->save()){
+
+
                 $service = Service::where('id', $us->service_id)->first();
+                $subs = UsersSubscriptions::where('mobile_user_id', $user->id)
+                    ->where('partner_id', $service->partner_id)
+                    ->first();
+                if(!$subs){
+                    $subs = new UsersSubscriptions();
+                    $subs->mobile_user_id = $user->id;
+                    $subs->partner_id = $service->partner_id;
+                    $subs->save();
+                }
 
                 $parent = Transaction::where('service_id', $service->id)
                     ->where('u_r_id', $user->id)
@@ -325,6 +337,15 @@ class ApiController extends Controller
                 $model->company_id = $us->company_id;
                 $model->deadline = $us->deadline;
                 $model->save();
+                $subs = UsersSubscriptions::where('mobile_user_id', $reciever->id)
+                    ->where('partner_id', $service->partner_id)
+                    ->first();
+                if(!$subs){
+                    $subs = new UsersSubscriptions();
+                    $subs->mobile_user_id = $reciever->id;
+                    $subs->partner_id = $service->partner_id;
+                    $subs->save();
+                }
 
                 $us->amount -= $amount;
                 if($us->save()){
@@ -516,6 +537,19 @@ class ApiController extends Controller
             ->select('transactions.*', 'services.name as service', 'mobile_users.phone as phone', 'users.email')
             ->get();
         return $this->makeResponse(200, true, ["qrs" => $model]);
+    }
+
+    public function setPushId(Request $request){
+        $token = $request->token;
+        $platform = $request->platform;
+        $pushId = $request->pushId;
+        $user = MobileUser::where('token', $token)->first();
+
+        if($user){
+            $user->push_id = $pushId;
+            $user->platform = $platform;
+            $user->save();
+        }
     }
 
     public function makeResponse(int $code, Bool $success, Array $other){

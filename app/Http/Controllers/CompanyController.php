@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\CloudMessage;
 use App\CompaniesService;
 use App\Company;
 use App\MobileUser;
@@ -10,6 +11,7 @@ use App\Service;
 use App\Transaction;
 use App\User;
 use App\UsersService;
+use App\UsersSubscriptions;
 use Grimthorr\LaravelToast\Toast;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -142,28 +144,46 @@ class CompanyController extends Controller
             $m_service->amount = $request->amount[$k];
             $m_service->deadline = $c_service->deadline;
 
+
+
+            $subs = UsersSubscriptions::where('mobile_user_id', $v)
+                ->where('partner_id', $c_service->service_id)
+                ->first();
+            if(!$subs){
+                $subs = new UsersSubscriptions();
+                $subs->mobile_user_id = $v;
+                $subs->partner_id = $c_service->service_id;
+                $subs->save();
+            }
+            $user = MobileUser::where('id', $v)->first();
+            $message = new CloudMessage("Вам были отправлены Таконы", $user->push_id, $user->platform);
+            $message->sendNotification();
+
+
             if($m_service->save()){
+                if($request->amount[$k] > 0){
+                    $exactly_service = Service::where('id', '=', $c_service->service_id)->first();
+                    $parent = Transaction::where('service_id', $exactly_service->id)
+                        ->where('c_r_id', auth()->user()->company_id)
+                        ->orderBy('created_at', 'desc')->first();
 
-                $exactly_service = Service::where('id', '=', $c_service->service_id)->first();
-                $parent = Transaction::where('service_id', $exactly_service->id)
-                    ->where('c_r_id', auth()->user()->company_id)
-                    ->orderBy('created_at', 'desc')->first();
-
-                $model = new Transaction();
-                if ($parent->parent_id){
-                    $model->parent_id = $parent->parent_id;
-                }else{
-                    $model->parent_id = $parent->id;
+                    $model = new Transaction();
+                    if ($parent->parent_id){
+                        $model->parent_id = $parent->parent_id;
+                    }else{
+                        $model->parent_id = $parent->id;
+                    }
+                    $model->balance = $c_service->amount - $request->amount[$k];
+                    $model->users_service_id = $m_service->id;
+                    $model->type = 1;
+                    $model->service_id = $c_service->service_id;
+                    $model->c_s_id = auth()->user()->company_id;
+                    $model->u_r_id = $v;
+                    $model->price = $exactly_service->price;
+                    $model->amount = $request->amount[$k];
+                    $model->save();
                 }
-                $model->balance = $c_service->amount - $request->amount[$k];
-                $model->users_service_id = $m_service->id;
-                $model->type = 1;
-                $model->service_id = $c_service->service_id;
-                $model->c_s_id = auth()->user()->company_id;
-                $model->u_r_id = $v;
-                $model->price = $exactly_service->price;
-                $model->amount = $request->amount[$k];
-                $model->save();
+
             }
             $c_service->amount -= $request->amount[$k];
             $c_service->save();
