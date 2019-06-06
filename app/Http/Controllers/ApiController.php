@@ -385,12 +385,15 @@ class ApiController extends Controller
             $model = QrCode::where('hash', $string)->first();
             if ($model){
                 $us = UsersService::where('id', $model->users_service_id)->first();
+                $service = Service::where('id', $us->service_id)->first();
+                if($user->partner_id != $service->partner_id){
+                    return $this->makeResponse(400, false, ['message'=>'Ошибка']);
+                }
                 if($us->amount < $model->amount){
                     return $this->makeResponse(400, false, ['message'=>'Недостаточно средств']);
                 }
                 $us->amount -= $model->amount;
                 if($us->save()){
-                    $service = Service::where('id', $us->service_id)->first();
 
                     $stat = new Transaction();
                     $parent = Transaction::where('service_id', $service->id)
