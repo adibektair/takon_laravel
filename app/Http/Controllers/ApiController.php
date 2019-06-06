@@ -503,7 +503,7 @@ class ApiController extends Controller
             ->join('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
             ->select('transactions.*', 'services.name as service', 'mobile_users.phone as phone')
             ->get();
-        $this->makeResponse(200, true, ["qrs" => $model]);
+        return $this->makeResponse(200, true, ["qrs" => $model]);
     }
 
     public function makeResponse(int $code, Bool $success, Array $other){
