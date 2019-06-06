@@ -501,7 +501,8 @@ class ApiController extends Controller
             ->where('type', 3)
             ->join('services', 'services.id', '=', 'transactions.service_id')
             ->join('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
-            ->select('transactions.*', 'services.name as service', 'mobile_users.phone as phone')
+            ->join('users', 'users.id', '=', 'transactions.u_r_id')
+            ->select('transactions.*', 'services.name as service', 'mobile_users.phone as phone', 'users.email')
             ->get();
         return $this->makeResponse(200, true, ["qrs" => $model]);
     }
