@@ -411,6 +411,11 @@ class TransactionController extends Controller
                 $cs = CompaniesService::where('id', $service->cs_id)->first();
                 return $cs->amount;
             })
+            ->addColumn('4', function ($service) {
+                $cs = CompaniesService::where('id', $service->cs_id)->first();
+                $date = date('Y-m-d', $cs->deadline);
+                return $date;
+            })
             ->make(true);
         return $s;
     }

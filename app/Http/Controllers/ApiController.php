@@ -149,6 +149,17 @@ class ApiController extends Controller
 
     }
 
+    public function removeSubscription(Request $request){
+        $token = $request->token;
+        $user = MobileUser::where('token', $token)->first();
+        if($user){
+            $sub = UsersSubscriptions::where('mobile_user_id', $user->id)->where('partner_id', $request->id)->first();
+            $sub->delete();
+            return $this->makeResponse(200, true, ['msg' => 'success']);
+
+        }
+    }
+
     public function getServices(Request $request){
         $token = $request->token;
         $user = MobileUser::where('token', $token)->first();

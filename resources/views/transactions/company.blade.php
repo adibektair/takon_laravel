@@ -22,6 +22,8 @@
                 <th >Сумма</th>
                 <th >Остаток</th>
                 <th >Дата</th>
+                <th >Срок действия</th>
+
                 <th >Подробнее</th>
 
             </tr>
@@ -54,6 +56,8 @@
                     { data: '1', name: '1'},
                     { data: '2', name: '2'},
                     { data: 'created_at', name: 'created_at'},
+                    { data: '3', name: '3'},
+
                     { data: '0', name: '0'},
 
                 ],

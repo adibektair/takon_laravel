@@ -90,6 +90,10 @@ class PartnerController extends Controller
      */
     public function save(Request $request)
     {
+        $this->validate($request, [
+            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
         $model = Partner::where('id', '=', $request->id)->first();
         $model->name = $request->name;
         $model->phone = $request->phone;

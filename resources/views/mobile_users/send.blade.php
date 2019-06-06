@@ -30,7 +30,7 @@ $users = DB::table('mobile_users')->whereIn('id', $array)->get();
             $cs = \App\CompaniesService::where('id', $cs_id)->first();
         }
 
-
+//dd($cs);
         ?>
         <table class="table table-bordered" id="table">
             <thead>
@@ -67,7 +67,7 @@ $users = DB::table('mobile_users')->whereIn('id', $array)->get();
                                 foreach ($services as $service){
                                 $main_serv = \App\Service::where('id', '=', $service->service_id)->first();
                                 ?>
-                                <option value="<?=$service->id?>" <?php if($service->id == $cs->service_id) { ?> selected <?php } ?> > <?=$main_serv->name?> (кол-во: <?=$service->amount?>) </option>
+                                <option value="<?=$service->id?>" <?php if($service->id == $cs->id) { ?> selected <?php } ?> > <?=$main_serv->name?> (кол-во: <?=$service->amount?>) </option>
                                 <?php
                                 }
                                 ?>

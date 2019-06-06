@@ -25,6 +25,8 @@
                     <th >Цена за единицу</th>
                     <th >Количество</th>
                     <th >Дата приобретения</th>
+                    <th >Срок действия</th>
+
                     <th >Поделиться</th>
 
                 </tr>
@@ -56,6 +58,9 @@
                     { data: 'price', name: 'price'},
                     { data: 'amount', name: 'amount'},
                     { data: 'created_at', name: 'created_at'},
+                    { data: 'return', name: 'return'},
+
+
                     { data: 'checkbox', name: 'checkbox'},
                     // {
                     //     "mData": {},

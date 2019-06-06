@@ -34,6 +34,7 @@ Route::group(['middleware' => ['token']], function () {
     Route::post('/qrscan', ['uses' => 'ApiController@scanCashierQR']);
     Route::post('/gethistory', ['uses' => 'ApiController@getHistory']);
     Route::post('/getarchive', ['uses' => 'ApiController@getArchive']);
+    Route::post('/deletesubscription', ['uses' => 'ApiController@removeSubscription']);
 
 });
 

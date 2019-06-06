@@ -183,7 +183,18 @@ class CompanyController extends Controller
 
         $s = DataTables::of($services)->addColumn('checkbox', function ($service) {
             return '<a href="/share-services?id=' . $service->id .'"><button class="btn btn-success">Передать</button></a> <a href="/mobile_users?id=' . $service->id .'"><button class="btn btn-outline-success">Раздать</button></a>';
-        })->make();
+        })
+            ->addColumn('return', function($user){
+                $date = date('Y-m-d', $user->deadline);
+                return $date;
+            })
+            ->rawColumns(['return', 'checkbox'])
+            ->make(true);
+
+
+
+
+
         return $s;
     }
 
