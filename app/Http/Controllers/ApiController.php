@@ -544,11 +544,14 @@ class ApiController extends Controller
         $platform = $request->platform;
         $pushId = $request->pushId;
         $user = MobileUser::where('token', $token)->first();
-
         if($user){
             $user->push_id = $pushId;
             $user->platform = $platform;
-            $user->save();
+           if($user->save()){
+               return $this->makeResponse(200, true, ["msg" => "success"]);
+
+           }
+            return $this->makeResponse(200, false, ["msg" => "error"]);
         }
     }
 
