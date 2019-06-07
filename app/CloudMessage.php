@@ -27,7 +27,7 @@ class CloudMessage
     }
 
     function sendNotification(){
-        $data = array("text" => $this->message, "type" => "1", "title" => $this->title);
+        $data = array("text" => $this->message, "type" => $this->type, "title" => $this->title, "name" => $this->name);
         if($this->platform == 1){
             $data1 = array('to' => $this->reciever,
                 'notification' => $data);
