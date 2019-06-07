@@ -144,19 +144,19 @@ class CompanyController extends Controller
             $m_service->amount = $request->amount[$k];
             $m_service->deadline = $c_service->deadline;
 
-
+            $serv = Service::where('id', $c_service->service_id)->first();
 
             $subs = UsersSubscriptions::where('mobile_user_id', $v)
-                ->where('partner_id', $c_service->service_id)
+                ->where('partner_id', $serv->partner_id)
                 ->first();
             if(!$subs){
                 $subs = new UsersSubscriptions();
                 $subs->mobile_user_id = $v;
-                $subs->partner_id = $c_service->service_id;
+                $subs->partner_id = $serv->partner_id;
                 $subs->save();
             }
             $user = MobileUser::where('id', $v)->first();
-            $message = new CloudMessage("Вам были отправлены Таконы", $user->push_id, $user->platform, "Внимение");
+            $message = new CloudMessage("Вам были отправлены Таконы " . $serv->name, $user->push_id, $user->platform, "Внимение");
             $message->sendNotification();
 
 
