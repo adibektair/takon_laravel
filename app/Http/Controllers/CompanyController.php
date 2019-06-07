@@ -177,7 +177,7 @@ class CompanyController extends Controller
                     $model->users_service_id = $m_service->id;
                     $model->type = 1;
                     $model->service_id = $c_service->service_id;
-                    $model->c_s_id = auth()->user()->company_id;
+                    $model->c_s_id = $c_service->id;
                     $model->u_r_id = $v;
                     $model->price = $exactly_service->price;
                     $model->amount = $request->amount[$k];

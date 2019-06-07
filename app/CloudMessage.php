@@ -11,6 +11,7 @@ class CloudMessage
     private $reciever;
     private $platform;
 
+
     function __construct($message, $reciever, $platform)
     {
         $this->platform = $platform;
