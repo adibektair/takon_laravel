@@ -156,7 +156,7 @@ class CompanyController extends Controller
                 $subs->save();
             }
             $user = MobileUser::where('id', $v)->first();
-            $message = new CloudMessage("Вам были отправлены Таконы", $user->push_id, $user->platform);
+            $message = new CloudMessage("Вам были отправлены Таконы", $user->push_id, $user->platform, "Внимение");
             $message->sendNotification();
 
 

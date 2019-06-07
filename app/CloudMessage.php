@@ -8,19 +8,21 @@ class CloudMessage
 {
     const API_KEY = 'AIzaSyAvrCzEiWIkypjQfInobpY6YNUzk-Qk9Sk';
     private $message;
+    private $title;
     private $reciever;
     private $platform;
 
 
-    function __construct($message, $reciever, $platform)
+    function __construct($message, $reciever, $platform, $title)
     {
+        $this->title = $title;
         $this->platform = $platform;
         $this->message = $message;
         $this->reciever = $reciever;
     }
 
     function sendNotification(){
-        $data = array("message" => $this->message);
+        $data = array("text" => $this->message, "type" => "1", "title" => $this->title);
         if($this->platform == 1){
             $data1 = array('to' => $this->reciever,
                 'notification' => $data);
