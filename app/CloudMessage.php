@@ -10,15 +10,20 @@ class CloudMessage
     private $message;
     private $title;
     private $reciever;
+    private $type;
+    private $name;
     private $platform;
 
 
-    function __construct($message, $reciever, $platform, $title)
+    function __construct($message, $reciever, $platform, $title, $type, $name)
     {
         $this->title = $title;
         $this->platform = $platform;
         $this->message = $message;
         $this->reciever = $reciever;
+        $this->type= $type;
+        $this->name= $name;
+
     }
 
     function sendNotification(){

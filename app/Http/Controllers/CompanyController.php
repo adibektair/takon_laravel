@@ -7,6 +7,7 @@ use App\CompaniesService;
 use App\Company;
 use App\MobileUser;
 use App\Notification;
+use App\Partner;
 use App\Service;
 use App\Transaction;
 use App\User;
@@ -145,7 +146,7 @@ class CompanyController extends Controller
             $m_service->deadline = $c_service->deadline;
 
             $serv = Service::where('id', $c_service->service_id)->first();
-
+            $partner = Partner::where('id', $serv->partner_id)->first();
             $subs = UsersSubscriptions::where('mobile_user_id', $v)
                 ->where('partner_id', $serv->partner_id)
                 ->first();
@@ -156,7 +157,7 @@ class CompanyController extends Controller
                 $subs->save();
             }
             $user = MobileUser::where('id', $v)->first();
-            $message = new CloudMessage("Вам были отправлены Таконы " . $serv->name, $user->push_id, $user->platform, "Внимение");
+            $message = new CloudMessage("Вам были отправлены Таконы " . $serv->name, $user->push_id, $user->platform, "Внимение", $serv->partner_id, $partner->name);
             $message->sendNotification();
 
 
