@@ -6,7 +6,7 @@ namespace App;
 
 class CloudMessage
 {
-    const API_KEY = 'AIzaSyAvrCzEiWIkypjQfInobpY6YNUzk-Qk9Sk';
+    const API_KEY = 'AIzaSyC8UpS3aECUWjniIYvonDRK1HwQAxHqGZA';
     private $message;
     private $title;
     private $reciever;
