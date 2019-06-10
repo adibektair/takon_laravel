@@ -138,11 +138,24 @@ class CompanyController extends Controller
         foreach ($user_ids as $k => $v){
 
             $c_service = CompaniesService::where('id', '=', $service_ids[$k])->first();
-            $m_service = new UsersService();
+            $m_service = UsersService::where('service', $c_service->service_id)
+                ->where('mobile_user_id', $v)
+                ->where('deadline', $c_service->deadline)
+                ->where('company_id', auth()->user()->company_id)
+                ->first();
+            if($m_service){
+                $m_service->amount += $request->amount[$k];
+
+            }else{
+
+                $m_service = new UsersService();
+                $m_service->amount = $request->amount[$k];
+
+            }
+
             $m_service->mobile_user_id = $v;
             $m_service->company_id = auth()->user()->company_id;
             $m_service->service_id = $c_service->service_id;
-            $m_service->amount = $request->amount[$k];
             $m_service->deadline = $c_service->deadline;
 
             $serv = Service::where('id', $c_service->service_id)->first();
