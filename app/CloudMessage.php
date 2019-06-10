@@ -31,7 +31,7 @@ class CloudMessage
         $data = array("text" => $this->message, "type" => $this->type, "title" => $this->title, "name" => $this->name);
         if($this->platform == 1){
             $data1 = array('to' => $this->reciever,
-                'notification' => $data);
+                'notification' => ["title" => $this->title, "body" => $this->message, "sound" => "default"]);
         }else{
             $data1 = array('to' => $this->reciever,
                 "data" => $data);
