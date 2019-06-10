@@ -178,13 +178,19 @@ class PartnerController extends Controller
 
         // TODO: add moderation
         // TODO: deadline check
-        $rec_ser = CompaniesService::where('service_id', '=', $request->id)->where('company_id', '=', $request->company_id)->first();
+
+        $deadline = strtotime("+" . $service->deadline ." day", strtotime("now"));
+        $rec_ser = CompaniesService::where('service_id', '=', $request->id)
+            ->where('company_id', '=', $request->company_id)
+            ->where('deadline', '=', $deadline)
+            ->first();
         if($rec_ser){
             $rec_ser->amount += $request->amount;
         }else{
             $rec_ser = new CompaniesService();
             $rec_ser->service_id = $request->id;
             $rec_ser->amount = $request->amount;
+            $rec_ser->deadline = $deadline;
             $rec_ser->company_id = $request->company_id;
         }
         if($rec_ser->save()){

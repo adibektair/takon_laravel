@@ -353,10 +353,14 @@ class TransactionController extends Controller
                     return '<a href="/transactions/admin/more?id=' . $service->id . '"><button class="btn btn-success">Подробнее</button></a>';
                 })
             ->addColumn('2', function ($service) {
+                if($service->type == 4){
+                    return $service->price * $service->amount . ' (Передача)';
+                }
                 return $service->price * $service->amount . ' тенге';
             })
             ->addColumn('3', function ($service) {
                 $cs = CompaniesService::where('id', $service->cs_id)->first();
+
                 return $cs->amount;
             })
             ->make(true);
@@ -379,6 +383,9 @@ class TransactionController extends Controller
                 return '<a href="/transactions/partner/more?id=' . $service->id . '"><button class="btn btn-success">Подробнее</button></a>';
             })
             ->addColumn('2', function ($service) {
+                if($service->type == 4){
+                    return $service->price * $service->amount . ' (Передача)';
+                }
                 return $service->price * $service->amount . ' тенге';
             })
             ->addColumn('3', function ($service) {
@@ -405,6 +412,9 @@ class TransactionController extends Controller
                 return '<a href="/transactions/company/more?id=' . $service->id . '"><button class="btn btn-success">Подробнее</button></a>';
             })
             ->addColumn('2', function ($service) {
+                if($service->type == 4){
+                    return $service->price * $service->amount . ' (Передача)';
+                }
                 return $service->price * $service->amount . ' тенге';
             })
             ->addColumn('3', function ($service) {
