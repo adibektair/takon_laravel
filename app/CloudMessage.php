@@ -15,12 +15,13 @@ class CloudMessage
     private $platform;
 
 
-    function __construct($message, $reciever, $platform, $title, $type, $name)
+    function __construct($message, $reciever,  $title, $type, $name)
     {
+        $user = MobileUser::where('id', $reciever)->first();
+        $this->reciever = $user->push_id;
         $this->title = $title;
-        $this->platform = $platform;
+        $this->platform = $user->platform;
         $this->message = $message;
-        $this->reciever = $reciever;
         $this->type= $type;
         $this->name= $name;
 

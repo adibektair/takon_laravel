@@ -11,6 +11,8 @@
             <?php
                 $services = \App\CompaniesService::where('company_id', '=', auth()->user()->company_id)->get();
             ?>
+            <br>
+            <button class="btn btn-outline-info float-right mb-2" type="submit">Добавить группу в избранное</button>
 
         </div>
     </div>
@@ -80,6 +82,7 @@ $users = DB::table('mobile_users')->whereIn('id', $array)->get();
                         </th>
                     </tr>
                 @endforeach
+
 
                 <button class="btn btn-success float-right mb-2" type="submit">Отправить</button>
             </form>

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\CloudMessage;
 use App\Code;
 use App\Company;
 use App\MobileUser;
@@ -266,8 +267,11 @@ class ApiController extends Controller
 
             if($usr->save()){
 
-
                 $service = Service::where('id', $us->service_id)->first();
+                $partner = Partner::where('id', $service->partner_id)->first();
+
+                $not = new CloudMessage("С Вашего счета были отправлены таконы " . $service->name, $us->mobile_user_id, "Внимание", $service->partner_id, $partner->name);
+                $not->sendNotification();
                 $subs = UsersSubscriptions::where('mobile_user_id', $user->id)
                     ->where('partner_id', $service->partner_id)
                     ->first();
@@ -326,16 +330,30 @@ class ApiController extends Controller
             $reciever = MobileUser::where('phone', $phone)->first();
             $us = UsersService::where('id', $id)->first();
             $service = Service::where('id', $us->service_id)->first();
+            $partner = Partner::where('id', $service->partner_id)->first();
+
             if($reciever){
                 if($us->amount < $amount){
                     return $this->makeResponse(400, false, ['msg' => 'Недостаточно таконов']);
                 }
-                $model = new UsersService();
-                $model->mobile_user_id = $reciever->id;
-                $model->amount = $amount;
-                $model->service_id = $service->id;
-                $model->company_id = $us->company_id;
-                $model->deadline = $us->deadline;
+
+                $model = UsersService::where('service_id', $us->service_id)
+                    ->where('mobile_user_id', $reciever->id)
+                    ->where('deadline', $us->deadline)
+                    ->where('company_id', $us->company_id)
+                    ->first();
+                if ($model){
+                    $model->amount += $amount;
+
+                }else{
+                    $model = new UsersService();
+                    $model->mobile_user_id = $reciever->id;
+                    $model->service_id = $service->id;
+                    $model->company_id = $us->company_id;
+                    $model->deadline = $us->deadline;
+                    $model->amount = $amount;
+
+                }
                 $model->save();
                 $subs = UsersSubscriptions::where('mobile_user_id', $reciever->id)
                     ->where('partner_id', $service->partner_id)
@@ -350,6 +368,8 @@ class ApiController extends Controller
                 $us->amount -= $amount;
                 if($us->save()){
 
+                    $not = new CloudMessage("На Ваш счет поступили таконы " . $service->name, $reciever->id, "Внимание", $service->partner_id, $partner->name);
+                    $not->sendNotification();
 
                     $parent = Transaction::where('service_id', $service->id)
                         ->where('u_r_id', $user->id)
