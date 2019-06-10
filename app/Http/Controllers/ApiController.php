@@ -293,7 +293,7 @@ class ApiController extends Controller
                     $model->parent_id = $parent->id;
                 }else{
                     $parent = Transaction::where('service_id', $service->id)
-                        ->where('u_r_id', $user->id)
+                        ->where('u_r_id', $us->mobile_user_id)
                         ->orderBy('created_at', 'desc')->first();
                     $model->parent_id = $parent->parent_id;
 
