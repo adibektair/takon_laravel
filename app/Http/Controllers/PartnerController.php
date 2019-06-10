@@ -100,7 +100,7 @@ class PartnerController extends Controller
         $model->description = $request->desc;
         $model->address = $request->address;
         if(request()->avatar){
-            $imageName = $model->name . '.' . request()->avatar->getClientOriginalExtension();
+            $imageName = strtotime('now') . $model->name . '.'  . request()->avatar->getClientOriginalExtension();
             request()->avatar->move(public_path('avatars'), $imageName);
             $model->image_path = $imageName;
         }
