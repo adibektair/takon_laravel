@@ -354,7 +354,7 @@ class TransactionController extends Controller
                 })
             ->addColumn('2', function ($service) {
                 if($service->type == 4){
-                    return $service->price * $service->amount . ' (Передача)';
+                    return $service->price * $service->amount . ' (переданные)';
                 }
                 return $service->price * $service->amount . ' тенге';
             })
@@ -384,7 +384,7 @@ class TransactionController extends Controller
             })
             ->addColumn('2', function ($service) {
                 if($service->type == 4){
-                    return $service->price * $service->amount . ' (Передача)';
+                    return $service->price * $service->amount . ' (переданные)';
                 }
                 return $service->price * $service->amount . ' тенге';
             })
@@ -413,7 +413,7 @@ class TransactionController extends Controller
             })
             ->addColumn('2', function ($service) {
                 if($service->type == 4){
-                    return $service->price * $service->amount . ' (Передача)';
+                    return $service->price * $service->amount . ' (переданные)';
                 }
                 return $service->price * $service->amount . ' тенге';
             })
