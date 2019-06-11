@@ -175,7 +175,7 @@ class ApiController extends Controller
 //                ->leftJoin('users_services', 'users_services.service_id', '=', 'services.id')
                 ->where('services.status', 3)
 //                ->where('users_services.mobile_user_id', $user->id)
-                ->select('services.id', 'services.price', 'services.name', 'services.created_at')
+                ->select('services.id', 'services.price', 'services.name', 'services.created_at','services.description')
                 ->selectRaw('SUM(DISTINCT users_services.amount) AS usersAmount')
                 ->groupBy('services.id', 'services.price', 'services.name', 'services.created_at', 'services.description')
                 ->get();
