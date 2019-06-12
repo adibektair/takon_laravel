@@ -266,6 +266,7 @@ class ApiController extends Controller
 
 
             if($usr->save()){
+                $qr->delete();
 
                 $service = Service::where('id', $us->service_id)->first();
                 $partner = Partner::where('id', $service->partner_id)->first();
@@ -310,7 +311,6 @@ class ApiController extends Controller
             }
             $us->amount -= $qr->amount;
             $us->save();
-            $qr->delete();
 
             return $this->makeResponse(200, true, ['msg' => $string]);
 
