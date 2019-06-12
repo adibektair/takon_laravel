@@ -394,8 +394,25 @@ class TransactionController extends Controller
                 return $cs->amount;
             })
             ->addColumn('4', function ($service) {
+<<<<<<< HEAD
                 $all = UsersService::where('company_id', $service->cs_id)->first();
                 return $cs->amount;
+=======
+                $all = UsersService::where('cs_id', $service->cs_id)->get();
+                $amount = 0;
+                foreach ($all as $v){
+                    $amount += $v->amount;
+                }
+                return $service->amount - $amount;
+            })
+            ->addColumn('5', function ($service) {
+                $all = UsersService::where('cs_id', $service->cs_id)->get();
+                $amount = 0;
+                foreach ($all as $v){
+                    $amount += $v->amount;
+                }
+                return $amount;
+>>>>>>> f731b0583e2a1028bc37f3ab2a32534a964d5fd9
             })
             ->make(true);
         return $s;
