@@ -155,6 +155,8 @@ class CompanyController extends Controller
 
             $m_service->mobile_user_id = $v;
             $m_service->company_id = auth()->user()->company_id;
+            $m_service->cs_id = $c_service->id;
+
             $m_service->service_id = $c_service->service_id;
             $m_service->deadline = $c_service->deadline;
 

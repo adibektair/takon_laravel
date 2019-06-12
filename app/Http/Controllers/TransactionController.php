@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\CompaniesService;
 use App\Partner;
 use App\Transaction;
+use App\UsersService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
@@ -390,6 +391,10 @@ class TransactionController extends Controller
             })
             ->addColumn('3', function ($service) {
                 $cs = CompaniesService::where('id', $service->cs_id)->first();
+                return $cs->amount;
+            })
+            ->addColumn('4', function ($service) {
+                $all = UsersService::where('company_id', $service->cs_id)->first();
                 return $cs->amount;
             })
             ->make(true);

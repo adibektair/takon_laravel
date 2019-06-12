@@ -251,13 +251,15 @@ class ApiController extends Controller
             $usr = UsersService::where('service_id', $us->service_id)
                 ->where('mobile_user_id', $user->id)
                 ->where('deadline', $us->deadline)
-                ->where('company_id', $us->company_id)
+                ->where('cs_id', $us->cs_id)
                 ->first();
             if($usr){
                 $usr->amount += $qr->amount;
             }else{
                 $usr = new UsersService();
                 $usr->mobile_user_id = $user->id;
+                $usr->cs_id = $us->cs_id;
+
                 $usr->service_id = $us->service_id;
                 $usr->amount = $qr->amount;
                 $usr->company_id = $us->company_id;
@@ -340,7 +342,7 @@ class ApiController extends Controller
                 $model = UsersService::where('service_id', $us->service_id)
                     ->where('mobile_user_id', $reciever->id)
                     ->where('deadline', $us->deadline)
-                    ->where('company_id', $us->company_id)
+                    ->where('cs_id', $us->cs_id)
                     ->first();
                 if ($model){
                     $model->amount += $amount;
@@ -348,11 +350,11 @@ class ApiController extends Controller
                 }else{
                     $model = new UsersService();
                     $model->mobile_user_id = $reciever->id;
+                    $model->cs_id = $us->cs_id;
                     $model->service_id = $service->id;
                     $model->company_id = $us->company_id;
                     $model->deadline = $us->deadline;
                     $model->amount = $amount;
-
                 }
                 $model->save();
                 $subs = UsersSubscriptions::where('mobile_user_id', $reciever->id)
