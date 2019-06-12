@@ -58,6 +58,11 @@ class ServiceController extends Controller
         $model->deadline = $request->deadline;
         $model->price = $request->price;
         $model->description = $request->desc;
+        if($request->active){
+            $model->status = 3;
+        }else{
+            $model->status = 4;
+        }
         $model->save();
         toastr()->success('Товар или услуга были изменены');
         return view('services/index');

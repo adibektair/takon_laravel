@@ -33,7 +33,7 @@
 
             <br>
             <label class="switch">
-                <input type="checkbox" >
+                <input name="active" <?php if($service->status == 3){ ?> checked <?php }?> type="checkbox" >
                 <span class="slider round"></span>
             </label>
             Активно
