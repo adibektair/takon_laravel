@@ -14,7 +14,7 @@
             <br>
             <?php
 
-            if($name){
+            if($name != null){
                 ?>
                 <h5>{{ $name }}</h5>
 <?php
