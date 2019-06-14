@@ -10,9 +10,11 @@
         <div class="float-left">
             <h5>Пользователи</h5>
             <h6>Выберите пользователей, которым хотите  отправить таконы</h6>
-            <br>
-{{--            <button class="btn btn-outline-info">Избранное</button>--}}
-{{--            <br><br><br>--}}
+
+            <a href="{{ route('groups') }}">
+                <button class="btn btn-outline-info">Избранное</button>
+            </a>
+            <br><br><br>
         </div>
 
     </div>
@@ -43,7 +45,6 @@
                 <th >Имя</th>
                 <th >Телефон</th>
                 <th >Создан</th>
-                <th></th>
             </tr>
             </thead>
             <tbody>

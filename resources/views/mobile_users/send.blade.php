@@ -12,7 +12,20 @@
                 $services = \App\CompaniesService::where('company_id', '=', auth()->user()->company_id)->get();
             ?>
             <br>
-            <button class="btn btn-outline-info float-right mb-2" type="submit">Добавить группу в избранное</button>
+            <?php
+
+            if($name){
+                ?>
+                <h5>{{ $name }}</h5>
+<?php
+            }else{
+                ?>
+            <button id="fav" class="btn btn-outline-info float-right mb-2" type="submit" onclick="saveGroup()">Добавить группу в избранное</button>
+<?php
+            }
+
+            ?>
+
 
         </div>
     </div>
@@ -102,6 +115,52 @@ $users = DB::table('mobile_users')->whereIn('id', $array)->get();
         }
     </style>
     <script>
+
+        function saveGroup(){
+
+            swal({
+                text: 'Введите имя для группы',
+                content: "input",
+                button: {
+                    text: "Сохранить",
+                    closeModal: false,
+                },
+            })
+                .then(name => {
+                    if (!name) throw null;
+
+
+                    $.ajax({
+                        type: "POST",
+                        url: '/save-group',
+                        data: {
+                            name: name,
+                            _token: "{{ csrf_token() }}",
+                            ids : '<?=$ids?>'
+                        },
+                        success: function (data) {
+                            if(data.success == true){
+                                var button = document.getElementById('fav');
+                                button.innerText = 'Сохранено';
+                                $('#fav').prop('disabled', true);
+                                swal("Успешно", "Группа пользователей сохранена в избранное", "success");
+
+                            }
+
+                        }
+                    });
+
+
+                });
+
+
+
+
+
+
+
+        }
+
         $(document).ready(function () {
 
             $('#default').on('keyup paste',username_check);

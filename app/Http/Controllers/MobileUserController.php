@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Group;
+use App\GroupsUser;
 use App\MobileUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -47,9 +49,9 @@ class MobileUserController extends Controller
      * @param  \App\MobileUser  $mobileUser
      * @return \Illuminate\Http\Response
      */
-    public function show(MobileUser $mobileUser)
+    public function groups()
     {
-        //
+        return view('mobile_users/groups');
     }
 
     /**
@@ -58,9 +60,19 @@ class MobileUserController extends Controller
      * @param  \App\MobileUser  $mobileUser
      * @return \Illuminate\Http\Response
      */
-    public function edit(MobileUser $mobileUser)
+    public function getGroups(Request $request)
     {
-        //
+        $groups = DB::table('groups')
+            ->where('company_id', auth()->user()->company_id)
+            ->join('groups_users', 'groups.id', '=', 'groups_users.group_id')
+            ->select('groups.*')
+            ->get();
+
+        $s = DataTables::of($groups)->addColumn('checkbox', function ($group) {
+            return '<a href="/choose-group?id='.$group->id.'"><button class="btn btn-success" >Выбрать</button></a>';
+        })->rawColumns(['checkbox'])->make();
+
+        return $s;
     }
 
     /**
@@ -70,9 +82,16 @@ class MobileUserController extends Controller
      * @param  \App\MobileUser  $mobileUser
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, MobileUser $mobileUser)
+    public function chooseGroup(Request $request)
     {
-        //
+        $group = Group::where('id', $request->id)->first();
+        $group_id = $request->id;
+        $users = GroupsUser::where('group_id', $group_id)->get();
+        $string = '';
+        foreach ($users as $user){
+            $string .= $user->mobile_user_id . ',';
+        }
+        return view('mobile_users/send')->with(['ids' => $string, 'name' =>$group->name, 'cs_id' => $request->cs_id]);
     }
 
     /**
@@ -81,10 +100,30 @@ class MobileUserController extends Controller
      * @param  \App\MobileUser  $mobileUser
      * @return \Illuminate\Http\Response
      */
+    public function saveGroup(Request $request){
+        $array = explode(',', $request->ids);
+        $group = new Group();
+        $group->name = $request->name;
+        $group->company_id = auth()->user()->company_id;
+        if ($group->save()){
+            foreach ($array as $el){
+                $gu = new GroupsUser();
+                $gu->group_id = $group->id;
+                $gu->mobile_user_id = $el;
+                $gu->save();
+            }
+        }else{
+            $response = ['success' => false];
+        }
+
+        $response = ['success' => true];
+
+        return $response;
+    }
+
     public function send(Request $request)
     {
         $ids = $request->ids;
-        $array = explode(',', $ids);
 
         return view('mobile_users/send')->with(['ids' => $ids, 'cs_id' => $request->cs_id]);
     }

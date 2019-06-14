@@ -513,42 +513,47 @@ class ApiController extends Controller
 //                    if($value->id == 51){
 //                        dd($value);
 //                    }
-                    $el["service"] = $value->service;
-//                    $el["company"] = $value->company;
-                    $el["date"] = $value->created_at;
-                    $el["company"] = $value->creater;
+                    if($value->ttype == 3 AND $user->phone == $value->r_user_phone){
 
-                    if($user->phone == $value->s_user_phone){
-                        $el["amount"] = -$value->amount;
-                        if($value->r_user_id){
-                            if($value->ttype == 3){
-                                $suser = User::where('id', $value->r_user_id)->first();
-                                $partner = Partner::where('id',$suser->partner_id)->first();
-                                $el['contragent'] = $partner->name;
-                            }else{
-                                $el['contragent'] = $value->r_user_phone;
-                            }
-
-                        }else{
-                            if($value->ttype == 3){
-                                $suser = User::where('id', $value->u_r_id)->first();
-                                $partner = Partner::where('id',$suser->partner_id)->first();
-                                $el['contragent'] = $partner->name;
-                            }
-                        }
-                        if($value->ttype == 5){
-                            $el['contragent'] = $value->ret_name;
-                         }
                     }else{
-                        $el["amount"] = +$value->amount;
-                        if($value->s_user_phone) {
-                            $el['contragent'] = $value->s_user_phone;
+                        $el["service"] = $value->service;
+//                    $el["company"] = $value->company;
+                        $el["date"] = $value->created_at;
+                        $el["company"] = $value->creater;
+
+                        if($user->phone == $value->s_user_phone){
+                            $el["amount"] = -$value->amount;
+                            if($value->r_user_id){
+                                if($value->ttype == 3){
+                                    $suser = User::where('id', $value->r_user_id)->first();
+                                    $partner = Partner::where('id',$suser->partner_id)->first();
+                                    $el['contragent'] = $partner->name;
+                                }else{
+                                    $el['contragent'] = $value->r_user_phone;
+                                }
+
+                            }else{
+                                if($value->ttype == 3){
+                                    $suser = User::where('id', $value->u_r_id)->first();
+                                    $partner = Partner::where('id',$suser->partner_id)->first();
+                                    $el['contragent'] = $partner->name;
+                                }
+                            }
+                            if($value->ttype == 5){
+                                $el['contragent'] = $value->ret_name;
+                            }
                         }else{
-                            $el['contragent'] = $value->s_company;
+                            $el["amount"] = +$value->amount;
+                            if($value->s_user_phone) {
+                                $el['contragent'] = $value->s_user_phone;
+                            }else{
+                                $el['contragent'] = $value->s_company;
+                            }
                         }
+
+                        array_push($result, $el);
                     }
 
-                    array_push($result, $el);
                 }
 
             return $this->makeResponse(200, true, ['info' => $result]);
