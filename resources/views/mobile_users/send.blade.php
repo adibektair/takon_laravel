@@ -20,12 +20,12 @@
 {{--<?php--}}
 {{--            }else{--}}
 {{--                ?>--}}
-            <button id="fav" class="btn btn-outline-info float-right mb-2" type="submit" onclick="saveGroup()">Добавить группу в избранное</button>
 <?php
 //            }
 //
 //            ?>
 
+            <button id="fav" class="btn btn-outline-info float-right mb-2" type="submit" onclick="saveGroup()">Добавить группу в избранное</button>
 
         </div>
     </div>
