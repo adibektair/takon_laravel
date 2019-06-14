@@ -20,6 +20,7 @@
                 <th >Услуга/Товар</th>
                 <th >Количество</th>
                 <th >Сумма</th>
+                <th >Использовано</th>
                 <th >Остаток</th>
                 <th >Дата</th>
                 <th >Срок действия</th>
@@ -54,10 +55,11 @@
                     { data: 'service', name: 'service'},
                     { data: 'amount', name: 'amount'},
                     { data: '1', name: '1'},
+                    { data: '4', name: '4'},
+
                     { data: '2', name: '2'},
                     { data: 'created_at', name: 'created_at'},
                     { data: '3', name: '3'},
-
                     { data: '0', name: '0'},
 
                 ],

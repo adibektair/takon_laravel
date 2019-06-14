@@ -48,7 +48,7 @@ class UserController extends Controller
         if($user->save()){
 
             toastr()->success('Сотрудник успешно добавлен!');
-            return view('employees/index');
+            return redirect()->route('emplyees.index');
         }else{
             abort(400);
         }
