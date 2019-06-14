@@ -59,7 +59,6 @@
                     { data: '2', name: '2'},
                     { data: 'created_at', name: 'created_at'},
                     { data: '0', name: '0'},
-
                 ],
             });
         });
