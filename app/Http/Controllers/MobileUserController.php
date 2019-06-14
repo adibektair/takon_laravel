@@ -64,7 +64,6 @@ class MobileUserController extends Controller
     {
         $groups = DB::table('groups')
             ->where('company_id', auth()->user()->company_id)
-            ->join('groups_users', 'groups.id', '=', 'groups_users.group_id')
             ->select('groups.*')
             ->get();
 
