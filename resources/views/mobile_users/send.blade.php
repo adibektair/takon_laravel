@@ -12,19 +12,6 @@
                 $services = \App\CompaniesService::where('company_id', '=', auth()->user()->company_id)->get();
             ?>
             <br>
-{{--            <?php--}}
-
-{{--            if($name != null){--}}
-{{--                ?>--}}
-{{--                <h5>{{ $name }}</h5>--}}
-{{--<?php--}}
-{{--            }else{--}}
-{{--                ?>--}}
-<?php
-//            }
-//
-//            ?>
-
             <button id="fav" class="btn btn-outline-info float-right mb-2" type="submit" onclick="saveGroup()">Добавить группу в избранное</button>
 
         </div>
