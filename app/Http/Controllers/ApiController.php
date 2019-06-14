@@ -469,6 +469,7 @@ class ApiController extends Controller
                     $stat->service_id = $us->service_id;
                     $stat->u_s_id = $us->mobile_user_id;
                     $stat->u_r_id = $user->id;
+                    $stat->cs_id = $parent->cs_id;
                     $stat->price = $service->price;
                     $stat->amount = $model->amount;
                     $stat->save();
@@ -502,12 +503,16 @@ class ApiController extends Controller
                 ->leftJoin('companies as company', 'cs.company_id', '=', 'company.id')
                 ->select('company.name as company', 's_company.name as s_company', 'transactions.*',
                     'services.name as service', 's_users.phone as s_user_phone', 'r_users.phone as r_user_phone',
-                    's_users.id as s_user_id', 'r_users.id as r_user_id', 'partners.name as creater', 'return.name as ret_name')
+                    's_users.id as s_user_id', 'r_users.id as r_user_id', 'partners.name as creater', 'return.name as ret_name', 'transactions.type as ttype')
+                ->orderBy('transactions.created_at', 'asc')
                 ->get();
 
                 $result = [];
                 foreach ($model as $value){
 
+//                    if($value->id == 51){
+//                        dd($value);
+//                    }
                     $el["service"] = $value->service;
 //                    $el["company"] = $value->company;
                     $el["date"] = $value->created_at;
@@ -516,7 +521,7 @@ class ApiController extends Controller
                     if($user->phone == $value->s_user_phone){
                         $el["amount"] = -$value->amount;
                         if($value->r_user_id){
-                            if($value->type == 3){
+                            if($value->ttype == 3){
                                 $suser = User::where('id', $value->r_user_id)->first();
                                 $partner = Partner::where('id',$suser->partner_id)->first();
                                 $el['contragent'] = $partner->name;
@@ -524,8 +529,14 @@ class ApiController extends Controller
                                 $el['contragent'] = $value->r_user_phone;
                             }
 
+                        }else{
+                            if($value->ttype == 3){
+                                $suser = User::where('id', $value->u_r_id)->first();
+                                $partner = Partner::where('id',$suser->partner_id)->first();
+                                $el['contragent'] = $partner->name;
+                            }
                         }
-                        if($value->type == 5){
+                        if($value->ttype == 5){
                             $el['contragent'] = $value->ret_name;
                          }
                     }else{

@@ -67,7 +67,7 @@ class CompanyController extends Controller
             $user->save();
         }
         toastr()->success('Юр. лицо успешно добавлено!');
-        return view('companies/index');
+        return redirect()->route('companies.index');
     }
 
     /**
@@ -193,6 +193,7 @@ class CompanyController extends Controller
                     $model->balance = $c_service->amount - $request->amount[$k];
                     $model->users_service_id = $m_service->id;
                     $model->type = 1;
+                    $model->cs_id = $c_service->id;
                     $model->service_id = $c_service->service_id;
                     $model->c_s_id = auth()->user()->company_id;
                     $model->u_r_id = $v;

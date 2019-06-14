@@ -65,7 +65,7 @@ class PartnerController extends Controller
 
         $partners = Partner::all();
         toastr()->success('Партнер успешно добавлен!');
-        return view('partners/partners')->with(['partners' => $partners]);
+        return redirect()->route('partners_list')->with(['partners' => $partners]);
 
     }
 

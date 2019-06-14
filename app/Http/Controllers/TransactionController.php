@@ -152,13 +152,13 @@ class TransactionController extends Controller
     public function partnerMoreGet(Request $request){
 
         $result = DB::table('transactions')
-            ->where('parent_id', $request->id)
-            ->whereIn('type', [1, 4])
+            ->where('cs_id', $request->id)
+            ->whereIn('type', [3])
             ->join('services', 'services.id', '=', 'transactions.service_id')
-            ->join('companies', 'companies.id', '=', 'transactions.c_s_id')
             ->leftJoin('companies as c', 'c.id', '=', 'transactions.c_r_id')
-            ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_r_id')
-            ->select('transactions.*', 'services.name as service', 'companies.name as sender', 'c.name as company', 'mobile_users.phone as user')
+            ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
+            ->leftJoin('users', 'users.id', '=', 'transactions.u_r_id')
+            ->select('transactions.*', 'services.name as service', 'mobile_users.phone as sender', 'users.name as user')
             ->get();
 
         $s = DataTables::of($result)
@@ -168,9 +168,7 @@ class TransactionController extends Controller
                 }
             })
             ->addColumn('2', function ($service) {
-                if($service->company){
-                    return $service->company;
-                }
+
                 return $service->user;
             })
             ->addColumn('3', function ($service) {
@@ -381,7 +379,7 @@ class TransactionController extends Controller
             ->get();
         $s = DataTables::of($result)
             ->addColumn('1', function ($service) {
-                return '<a href="/transactions/partner/more?id=' . $service->id . '"><button class="btn btn-success">Подробнее</button></a>';
+                return '<a href="/transactions/partner/more?id=' . $service->cs_id . '"><button class="btn btn-success">Подробнее</button></a>';
             })
             ->addColumn('2', function ($service) {
                 if($service->type == 4){
@@ -394,25 +392,24 @@ class TransactionController extends Controller
                 return $cs->amount;
             })
             ->addColumn('4', function ($service) {
-<<<<<<< HEAD
-                $all = UsersService::where('company_id', $service->cs_id)->first();
-                return $cs->amount;
-=======
+                $cs = CompaniesService::where('id', $service->cs_id)->first();
+
                 $all = UsersService::where('cs_id', $service->cs_id)->get();
                 $amount = 0;
                 foreach ($all as $v){
                     $amount += $v->amount;
                 }
-                return $service->amount - $amount;
+                return $service->amount - ($amount + $cs->amount);
             })
             ->addColumn('5', function ($service) {
+                $cs = CompaniesService::where('id', $service->cs_id)->first();
+
                 $all = UsersService::where('cs_id', $service->cs_id)->get();
                 $amount = 0;
                 foreach ($all as $v){
                     $amount += $v->amount;
                 }
-                return $amount;
->>>>>>> f731b0583e2a1028bc37f3ab2a32534a964d5fd9
+                return $amount + $cs->amount;
             })
             ->make(true);
         return $s;
@@ -441,13 +438,31 @@ class TransactionController extends Controller
             })
             ->addColumn('3', function ($service) {
                 $cs = CompaniesService::where('id', $service->cs_id)->first();
-                return $cs->amount;
+
+                $all = UsersService::where('cs_id', $service->cs_id)->get();
+                $amount = 0;
+                foreach ($all as $v){
+                    $amount += $v->amount;
+                }
+                return $amount + $cs->amount;
+
             })
             ->addColumn('4', function ($service) {
                 $cs = CompaniesService::where('id', $service->cs_id)->first();
                 $date = date('Y-m-d', $cs->deadline);
                 return $date;
             })
+            ->addColumn('5', function ($service) {
+                $cs = CompaniesService::where('id', $service->cs_id)->first();
+
+                $all = UsersService::where('cs_id', $service->cs_id)->get();
+                $amount = 0;
+                foreach ($all as $v){
+                    $amount += $v->amount;
+                }
+                return $service->amount - ($amount + $cs->amount);
+            })
+
             ->make(true);
         return $s;
     }

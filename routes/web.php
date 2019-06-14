@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/policy', function () {
+    return view('policy');
+});
 
 Route::get('/forbidden', function () {
     return view('other/forbidden');
@@ -44,7 +47,7 @@ Route::group(['middleware' => ['authenticated']], function () {
 // Companies
     Route::get('/all-companies', ['as' => 'all.companies', 'uses' => 'CompanyController@all']);
     Route::get('/get-services', ['as' => 'company.get.services', 'uses' => 'CompanyController@getServices']);
-    Route::get('/companies', 'CompanyController@index');
+    Route::get('/companies', 'CompanyController@index')->name('companies.index');
     Route::get('/create-company', ['as' => 'create.company', 'uses' => 'CompanyController@create']);
     Route::post('/store-company', ['as' => 'store.company', 'uses' => 'CompanyController@store']);
     Route::post('/send', ['as' => 'send', 'uses' => 'MobileUserController@send']);
@@ -82,14 +85,14 @@ Route::group(['middleware' => ['authenticated']], function () {
     Route::get('/all-mobile-users', ['as' => 'all.mobile_users', 'uses' => 'MobileUserController@all']);
 
 // Employees
-    Route::get('/employees', 'UserController@index');
+    Route::get('/employees', 'UserController@index')->name('emplyees.index');
     Route::get('/my-employees', ['as' => 'all.employees', 'uses' => 'UserController@all']);
     Route::get('/create-employee', ['as' => 'create.employee', 'uses' => 'UserController@create']);
     Route::post('/store-employee', ['as' => 'store.employee', 'uses' => 'UserController@store']);
 
 
 // Services
-    Route::get('/services', 'ServiceController@index')->middleware('role');
+    Route::get('/services', 'ServiceController@index')->name('services.index')->middleware('role');
     Route::get('/my-services', ['as' => 'all.my_services', 'uses' => 'ServiceController@getMyServices']);
     Route::get('/edit-service', ['as' => 'edit.service', 'uses' => 'ServiceController@edit']);
     Route::get('/create-service', ['as' => 'create.service', 'uses' => 'ServiceController@create'])->middleware('role');

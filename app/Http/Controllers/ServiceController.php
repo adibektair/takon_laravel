@@ -47,7 +47,7 @@ class ServiceController extends Controller
         $model->partner_id = auth()->user()->partner_id;
         $model->save();
         toastr()->info('Товар или услуга были отправлены на модерацию');
-        return view('services/index');
+        return redirect()->route('services.index'); //view('services/index');
 
     }
 
@@ -65,7 +65,7 @@ class ServiceController extends Controller
         }
         $model->save();
         toastr()->success('Товар или услуга были изменены');
-        return view('services/index');
+        return redirect()->route('services.index');
     }
 
     /**

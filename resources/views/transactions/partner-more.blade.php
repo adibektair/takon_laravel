@@ -22,9 +22,7 @@
                 <th >Количество</th>
                 <th >Сумма</th>
                 <th >Остаток</th>
-
                 <th >Дата</th>
-                <th >Подробнее</th>
 
             </tr>
             </thead>
@@ -58,7 +56,6 @@
                     { data: 'balance', name: 'balance'},
 
                     { data: 'created_at', name: 'created_at'},
-                    { data: '0', name: '0'},
 
                 ],
             });
