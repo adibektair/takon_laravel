@@ -211,7 +211,6 @@ class PartnerController extends Controller
         $not->make('info', 'Внимание!', 'Вам было отправлено ' . $request->amount . ' таконов товара/услуги ' . $service->name . ' от компании ' . $partner->name,
             null, $request->company_id, false);
 
-        // TODO: add superadmin notification view
         $not1 = new Notification();
         $not1->make('info', 'Внимание!',  $request->amount . ' таконов товара/услуги ' . $service->name . ' от партнера' . $partner->name . ' были отправлены ' . $reciever->name,
             null, $request->company_id, true);

@@ -30,6 +30,7 @@
                 <th >Имя</th>
                 <th >email</th>
                 <th >Создан</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -57,7 +58,7 @@
                     { data: 'email', name: 'email' },
 
                     { data: 'created_at', name: 'created_at'},
-
+                    { data: 'edit', name: 'edit'},
 
                 ]
             });

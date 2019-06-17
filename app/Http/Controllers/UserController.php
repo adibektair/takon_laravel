@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\User;
-use Dotenv\Validator;
 use Grimthorr\LaravelToast\Toast;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -74,9 +75,11 @@ class UserController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
+    public function edit(Request $request)
     {
-        //
+        $id = $request->id;
+        $user = User::where('id', $id)->first();
+        return view('partners/user')->with(['user' => $user]);
     }
 
     /**
@@ -86,9 +89,27 @@ class UserController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|max:42',
+            'name' => 'required|string|max:255',
+            'password' => 'required|string|max:255',
+
+        ]);
+        if ($validator->fails()) {
+          
+            toastr()->error($validator->errors());
+            return redirect()->back();
+        }
+
+        $user = User::where('id', $request->id)->first();
+        $user->email = $request->email;
+        $user->name = $request->name;
+        $user->password = Hash::make($request->password1);
+        $user->save();
+        toastr()->success('Успешно');
+        return redirect()->route('emplyees.index');
     }
 
     /**
@@ -106,7 +127,12 @@ class UserController extends Controller
 
         $users = User::where('partner_id', '=', auth()->user()->partner_id)->where('role_id', '=', 4)->get();
 
-        return datatables($users)->toJson();
+        return Datatables::of($users)
+            ->addColumn('edit', function($user){
+                return '<a href="/edit-user?id=' . $user->id .'"><button class="btn btn-outline-info">Редактировать</button></a>';
+            })
+            ->rawColumns(['edit'])
+            ->make(true);
 
     }
 }

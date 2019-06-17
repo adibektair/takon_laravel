@@ -74,13 +74,9 @@ Route::group(['middleware' => ['authenticated']], function () {
     Route::get('/get-return', ['as' => 'get.return', 'uses' => 'CompanyController@getReturn']);
     Route::get('/return-takon', ['as' => 'return.takon', 'uses' => 'CompanyController@returnTakon']);
     Route::post('/finish', ['as' => 'finish.return',  'uses' => 'CompanyController@finish'])->middleware('is_company_admin');
+    Route::get('/edit-user', ['as' => 'edit.user',  'uses' => 'UserController@edit']);
 
 
-
-// Mobile Users
-//    Route::get('/mobile_users', function () {
-//
-//    });
     Route::get('/mobile_users', ['as' => 'mobile_users', 'uses' => 'MobileUserController@index']);
     Route::get('/groups', ['as' => 'groups', 'uses' => 'MobileUserController@groups']);
     Route::get('/get-groups', ['as' => 'get.groups', 'uses' => 'MobileUserController@getGroups']);
@@ -88,6 +84,7 @@ Route::group(['middleware' => ['authenticated']], function () {
 
     Route::get('/all-mobile-users', ['as' => 'all.mobile_users', 'uses' => 'MobileUserController@all']);
     Route::post('/save-group', ['as' => 'save.group', 'uses' => 'MobileUserController@saveGroup']);
+    Route::post('/save-user', ['as' => 'store.user', 'uses' => 'UserController@update']);
 
 // Employees
     Route::get('/employees', 'UserController@index')->name('emplyees.index');
