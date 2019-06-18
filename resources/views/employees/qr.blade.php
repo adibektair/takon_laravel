@@ -21,7 +21,15 @@
 
     </div>
 
-    <div id="a">
+    <div id="qr">
+
+        <?php
+        use chillerlan\QRCode\QRCode;
+        $qr = new QRCode();
+
+        echo '<img src="'.$qr->render($user->hash).'" />';
+
+        ?>
 
     </div>
     <br>
@@ -33,15 +41,11 @@
     </div>
 
     <script>
-        jQuery('#qrcode').qrcode({text: '<?=$user->hash?>', render: 'table'});
 
         function print() {
             var mywindow = window.open('', 'PRINT', 'height=400,width=600');
-            mywindow.document.write('<html><head><title>' + document.title  + '</title>');
-            mywindow.document.write('</head><body>');
             mywindow.document.write('<h1>' + document.title  + '</h1>');
-            mywindow.document.write('<div style="background-color: red; width: 300px; height: 300px">'+ document.getElementById('qrcode').outerHTML +'</div>');
-            mywindow.document.write('</body></html>');
+            mywindow.document.write('<div style="background-color: red; width: 300px; height: 300px">'+ document.getElementById('qr').outerHTML +'</div>');
             mywindow.document.close(); // necessary for IE >= 10
             mywindow.focus(); // necessary for IE >= 10*/
             mywindow.print();

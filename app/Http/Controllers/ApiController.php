@@ -239,83 +239,94 @@ class ApiController extends Controller
         $user = MobileUser::where('token', $token)->first();
         if($user){
 
-            if (str)
-            $qr = QrCode::where('hash', $string)->first();
-            if(!$qr){
-                return $this->makeResponse(400, false, ['msg' => 'Недостаточно таконов']);
-            }
-
-            $us = UsersService::where('id', $qr->users_service_id)->first();
-            if($qr->amount > $us->amount){
-                return $this->makeResponse(400, false, ['msg' => 'Недостаточно таконов']);
-            }
-            $usr = UsersService::where('service_id', $us->service_id)
-                ->where('mobile_user_id', $user->id)
-                ->where('deadline', $us->deadline)
-                ->where('cs_id', $us->cs_id)
-                ->first();
-            if($usr){
-                $usr->amount += $qr->amount;
-            }else{
-                $usr = new UsersService();
-                $usr->mobile_user_id = $user->id;
-                $usr->cs_id = $us->cs_id;
-
-                $usr->service_id = $us->service_id;
-                $usr->amount = $qr->amount;
-                $usr->company_id = $us->company_id;
-                $usr->deadline = $us->deadline;
-            }
-
-
-            if($usr->save()){
-                $qr->delete();
-
-                $service = Service::where('id', $us->service_id)->first();
-                $partner = Partner::where('id', $service->partner_id)->first();
-
-                $not = new CloudMessage("С Вашего счета были отправлены таконы " . $service->name, $us->mobile_user_id, "Внимание", $service->partner_id, $partner->name);
-                $not->sendNotification();
-                $subs = UsersSubscriptions::where('mobile_user_id', $user->id)
-                    ->where('partner_id', $service->partner_id)
-                    ->first();
-                if(!$subs){
-                    $subs = new UsersSubscriptions();
-                    $subs->mobile_user_id = $user->id;
-                    $subs->partner_id = $service->partner_id;
-                    $subs->save();
+            if (strlen($string) == 65){
+                $qr = QrCode::where('hash', $string)->first();
+                if(!$qr){
+                    return $this->makeResponse(400, false, ['msg' => 'Недостаточно таконов']);
                 }
 
-                $parent = Transaction::where('service_id', $service->id)
-                    ->where('u_r_id', $us->mobile_user_id)
-                    ->where('users_service_id', $us->id)
-                    ->orderBy('created_at', 'desc')->first();
-
-
-                $model = new Transaction();
-                if($parent){
-                    $model->parent_id = $parent->id;
+                $us = UsersService::where('id', $qr->users_service_id)->first();
+                if($qr->amount > $us->amount){
+                    return $this->makeResponse(400, false, ['msg' => 'Недостаточно таконов']);
+                }
+                $usr = UsersService::where('service_id', $us->service_id)
+                    ->where('mobile_user_id', $user->id)
+                    ->where('deadline', $us->deadline)
+                    ->where('cs_id', $us->cs_id)
+                    ->first();
+                if($usr){
+                    $usr->amount += $qr->amount;
                 }else{
+                    $usr = new UsersService();
+                    $usr->mobile_user_id = $user->id;
+                    $usr->cs_id = $us->cs_id;
+
+                    $usr->service_id = $us->service_id;
+                    $usr->amount = $qr->amount;
+                    $usr->company_id = $us->company_id;
+                    $usr->deadline = $us->deadline;
+                }
+
+
+                if($usr->save()){
+                    $qr->delete();
+
+                    $service = Service::where('id', $us->service_id)->first();
+                    $partner = Partner::where('id', $service->partner_id)->first();
+
+                    $not = new CloudMessage("С Вашего счета были отправлены таконы " . $service->name, $us->mobile_user_id, "Внимание", $service->partner_id, $partner->name);
+                    $not->sendNotification();
+                    $subs = UsersSubscriptions::where('mobile_user_id', $user->id)
+                        ->where('partner_id', $service->partner_id)
+                        ->first();
+                    if(!$subs){
+                        $subs = new UsersSubscriptions();
+                        $subs->mobile_user_id = $user->id;
+                        $subs->partner_id = $service->partner_id;
+                        $subs->save();
+                    }
+
                     $parent = Transaction::where('service_id', $service->id)
                         ->where('u_r_id', $us->mobile_user_id)
+                        ->where('users_service_id', $us->id)
                         ->orderBy('created_at', 'desc')->first();
-                    $model->parent_id = $parent->parent_id;
 
+
+                    $model = new Transaction();
+                    if($parent){
+                        $model->parent_id = $parent->id;
+                    }else{
+                        $parent = Transaction::where('service_id', $service->id)
+                            ->where('u_r_id', $us->mobile_user_id)
+                            ->orderBy('created_at', 'desc')->first();
+                        $model->parent_id = $parent->parent_id;
+
+                    }
+                    $model->type = 1;
+                    $model->service_id = $service->id;
+                    $model->u_s_id = $us->mobile_user_id;
+                    $model->u_r_id = $user->id;
+                    $model->cs_id = $parent->cs_id;
+                    $model->price = $service->price;
+                    $model->amount = $qr->amount;
+                    $model->balance = $us->amount - $qr->amount;
+                    $model->save();
                 }
-                $model->type = 1;
-                $model->service_id = $service->id;
-                $model->u_s_id = $us->mobile_user_id;
-                $model->u_r_id = $user->id;
-                $model->cs_id = $parent->cs_id;
-                $model->price = $service->price;
-                $model->amount = $qr->amount;
-                $model->balance = $us->amount - $qr->amount;
-                $model->save();
+                $us->amount -= $qr->amount;
+                $us->save();
+                return $this->makeResponse(200, true, ['msg' => $string]);
             }
-            $us->amount -= $qr->amount;
-            $us->save();
+            else{
+                $cashier = User::where('hash', $string)->first();
+                if($cashier){
+                    $partner = Partner::where('id', $cashier->partner_id)->first();
+                    return $this->makeResponse(200, true, ['partner_id' => $partner->id, 'partner_name' => $partner->name]);
+                }
+                return $this->makeResponse(400, false, ['msg' => 'QR код недействительный']);
 
-            return $this->makeResponse(200, true, ['msg' => $string]);
+            }
+
+
 
         }
         return $this->makeResponse(401, false, ['msg' => 'phone or code missing']);
