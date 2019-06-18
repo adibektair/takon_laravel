@@ -53,6 +53,7 @@ Route::group(['middleware' => ['authenticated']], function () {
     Route::post('/send', ['as' => 'send', 'uses' => 'MobileUserController@send']);
     Route::get('/get-by-ids', ['as' => 'get.by.ids', 'uses' => 'MobileUserController@getUsersByIds']);
     Route::post('/send-takons', ['as' => 'send.takons', 'uses' => 'CompanyController@sendTakons']);
+    Route::get('/generate-qr', ['as' => 'generate-qr', 'uses' => 'UserController@generateQR']);
 
     Route::get('/company-services', function () {
         return view('companies/services');

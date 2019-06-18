@@ -31,6 +31,8 @@
                 <th >email</th>
                 <th >Создан</th>
                 <th></th>
+                <th></th>
+
             </tr>
             </thead>
             <tbody>
@@ -56,10 +58,9 @@
                     { data: 'id', name: 'id' },
                     { data: 'name', name: 'name' },
                     { data: 'email', name: 'email' },
-
                     { data: 'created_at', name: 'created_at'},
                     { data: 'edit', name: 'edit'},
-
+                    { data: 'qr', name: 'qr'},
                 ]
             });
         });

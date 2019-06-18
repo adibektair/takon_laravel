@@ -239,6 +239,7 @@ class ApiController extends Controller
         $user = MobileUser::where('token', $token)->first();
         if($user){
 
+            if (str)
             $qr = QrCode::where('hash', $string)->first();
             if(!$qr){
                 return $this->makeResponse(400, false, ['msg' => 'Недостаточно таконов']);

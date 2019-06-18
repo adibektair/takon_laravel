@@ -6,6 +6,7 @@ use App\User;
 use Grimthorr\LaravelToast\Toast;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Validator;
 
@@ -118,9 +119,12 @@ class UserController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function generateQR(Request $request)
     {
-        //
+        $user = User::where('id', $request->id)->first();
+        $user->hash = Str::random(50);
+        $user->save();
+        return view('employees/qr')->with(['user' => $user]);
     }
 
     public function all(){
@@ -131,7 +135,11 @@ class UserController extends Controller
             ->addColumn('edit', function($user){
                 return '<a href="/edit-user?id=' . $user->id .'"><button class="btn btn-outline-info">Редактировать</button></a>';
             })
-            ->rawColumns(['edit'])
+            ->addColumn('qr', function($user){
+                return '<a href="/generate-qr?id=' . $user->id .'"><button class="btn btn-info">Распечатать QR код</button></a>';
+            })
+
+            ->rawColumns(['edit', 'qr'])
             ->make(true);
 
     }
