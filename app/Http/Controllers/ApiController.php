@@ -320,7 +320,7 @@ class ApiController extends Controller
                 $cashier = User::where('hash', $string)->first();
                 if($cashier){
                     $partner = Partner::where('id', $cashier->partner_id)->first();
-                    return $this->makeResponse(200, true, ['partner_id' => $partner->id, 'partner_name' => $partner->name]);
+                    return $this->makeResponse(200, true, ['partner_id' => $partner->id, 'partner_name' => $partner->name, 'user_id' => $cashier->id]);
                 }
                 return $this->makeResponse(400, false, ['msg' => 'QR код недействительный']);
 
@@ -496,6 +496,56 @@ class ApiController extends Controller
         return $this->makeResponse(401, false, ['message'=>'Данные для авторизации неверны', 'error' => 'incorrect auth data']);
     }
 
+
+
+    public function scan(Request $request){
+        $token = $request->token;
+        $id = $request->takon_id;
+        $user_id = $request->user_id;
+
+        $amount = $request->amount;
+        $user = MobileUser::where('token', $token)->first();
+        if($user){
+
+            $us = UsersService::where('id', $id)->first();
+            if($us->amount < $amount){
+                return $this->makeResponse(400, false, ['msg' => 'Недостаточно таконов']);
+            }
+            $us->amount -= $amount;
+            $service = Service::where('id', $us->service_id)->first();
+            if($us->save()){
+
+                $stat = new Transaction();
+                $parent = Transaction::where('service_id', $service->id)
+                    ->where('u_r_id', $us->mobile_user_id)
+                    ->where('users_service_id', $us->id)
+                    ->orderBy('created_at', 'desc')->first();
+
+                if($parent){
+                    $stat->parent_id = $parent->id;
+                }else{
+                    $parent = Transaction::where('service_id', $service->id)
+                        ->where('u_r_id', $us->mobile_user_id)
+                        ->orderBy('created_at', 'desc')->first();
+                    $stat->parent_id = $parent->parent_id;
+                }
+
+                $stat->type = 3;
+                $stat->balance = $us->amount;
+                $stat->service_id = $us->service_id;
+                $stat->u_s_id = $us->mobile_user_id;
+                $stat->u_r_id = $user_id;
+                $stat->cs_id = $parent->cs_id;
+                $stat->price = $service->price;
+                $stat->amount = $amount;
+                $stat->save();
+            }
+            return $this->makeResponse(200, true, ['msg' => 'Таконы успешно переданы']);
+
+        }
+        return $this->makeResponse(401, false, ['msg' => 'phone or code missing']);
+
+    }
 
     public function getHistory(Request $request){
 
