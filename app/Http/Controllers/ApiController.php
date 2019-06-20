@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\CloudMessage;
 use App\Code;
 use App\Company;
+use App\Http\Payment;
 use App\MobileUser;
 use App\Partner;
 use App\QrCode;
@@ -17,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use phpDocumentor\Reflection\Types\Boolean;
 use phpDocumentor\Reflection\Types\Integer;
@@ -502,8 +504,8 @@ class ApiController extends Controller
         $token = $request->token;
         $id = $request->takon_id;
         $user_id = $request->user_id;
-
         $amount = $request->amount;
+
         $user = MobileUser::where('token', $token)->first();
         if($user){
 
@@ -658,5 +660,24 @@ class ApiController extends Controller
     public function makeResponse(int $code, Bool $success, Array $other){
         $json = array_merge($other, ['success' => $success]);
         return \response()->json($json)->setStatusCode($code);
+    }
+
+
+    public function pay(Request $request){
+        $validator = Validator::make($request->all(), [
+            'ip' => 'required',
+            'cryptogram' => 'required|string',
+            'name' => 'required|string|max:42',
+            'amount' => 'required|integer|max:5',
+        ]);
+        if ($validator->fails()) {
+            return $this->makeResponse(400, false, ['errors' => $validator->errors()->all()]);
+        }
+
+        $paymentModel = new Payment($request->name, $request->cryptogram, $request->ip, $request->amount);
+        $response = $paymentModel->pay();
+        return $this->makeResponse(200,true, $response);
+
+
     }
 }
