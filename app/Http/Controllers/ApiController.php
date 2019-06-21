@@ -669,7 +669,7 @@ class ApiController extends Controller
             'cryptogram' => 'required|string',
             'name' => 'required|string|max:42',
             'amount' => 'required|integer',
-            'service_id' => 'required'
+            'serviceId' => 'required'
         ]);
         if ($validator->fails()) {
             return $this->makeResponse(400, false, ['errors' => $validator->errors()->all()]);
@@ -686,12 +686,13 @@ class ApiController extends Controller
         $PaReq = $response->Model->PaReq;
         $success = $response->Success;
         $payModel = new \App\Payment();
-        $payModel->service_id = $request->service_id;
+        $payModel->service_id = $request->serviceId;
         $payModel->amount = $request->amount;
         $payModel->transaction_id = $TransactionId;
         if($success){
             // add money
         }
+        $payModel->save();
         return $this->makeResponse(200,
             $success,
             [
