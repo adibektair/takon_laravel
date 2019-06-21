@@ -9,13 +9,13 @@ $data = array("PaReq" => $pareq, "MD" => $md, 'TermUrl' => 'http://takon.org/api
 
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-    'Content-type: application/json',
+    'Content-type: application/x-www-form-urlencoded',
     'Authorization: Basic '. base64_encode(ID . ":". API_KEY)
 ));
 curl_setopt($ch, CURLOPT_URL,$url);
 curl_setopt($ch, CURLOPT_POST, 1);
 curl_setopt($ch, CURLOPT_POSTFIELDS,
-    json_encode($data));
+    http_build_query($data));
 
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 $server_output = curl_exec ($ch);
