@@ -676,7 +676,7 @@ class ApiController extends Controller
 
         $paymentModel = new Payment($request->name, $request->cryptogram, $request->ip, $request->amount);
         $response = $paymentModel->pay();
-        return $this->makeResponse(200,true, $response);
+        return $this->makeResponse(200,true, ['response' => $response]);
 
 
     }
