@@ -20,15 +20,16 @@ curl_setopt($ch, CURLOPT_POSTFIELDS,
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 $server_output = curl_exec ($ch);
 curl_close ($ch);
+echo $server_output;
 ?>
 
-<form name="downloadForm" action="<?=$url?>" method="POST">
-    <input hidden name="PaReq" value="<?=$pareq?>">
-    <input hidden name="MD" value="<?=$md?>">
-    <input type="hidden" name="TermUrl" value="http://takon.org/api/paymenthandle">
-</form>
-<script>
-    // window.onload = submitForm;
-    // function submitForm() { downloadForm.submit(); }
-</script>
+{{--<form name="downloadForm" action="<?=$url?>" method="POST">--}}
+{{--    <input hidden name="PaReq" value="<?=$pareq?>">--}}
+{{--    <input hidden name="MD" value="<?=$md?>">--}}
+{{--    <input type="hidden" name="TermUrl" value="http://takon.org/api/paymenthandle">--}}
+{{--</form>--}}
+{{--<script>--}}
+{{--    // window.onload = submitForm;--}}
+{{--    // function submitForm() { downloadForm.submit(); }--}}
+{{--</script>--}}
 
