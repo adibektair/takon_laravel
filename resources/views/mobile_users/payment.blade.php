@@ -6,7 +6,7 @@ $url = $_GET['url'];
 <form name="downloadForm" action="<?=$url?>" method="POST">
     <input name="PaReq" value="<?=$pareq?>">
     <input name="MD" value="<?=$md?>">
-    <input type="hidden" name="TermUrl" value="http://takon.org/payment">
+    <input type="hidden" name="TermUrl" value="http://takon.org/api/paymenthandle">
 </form>
 <script>
     window.onload = submitForm;

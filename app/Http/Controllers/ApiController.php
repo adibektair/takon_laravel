@@ -669,10 +669,13 @@ class ApiController extends Controller
             'cryptogram' => 'required|string',
             'name' => 'required|string|max:42',
             'amount' => 'required|integer',
+            'service_id' => 'required'
         ]);
         if ($validator->fails()) {
             return $this->makeResponse(400, false, ['errors' => $validator->errors()->all()]);
         }
+
+
 
         $paymentModel = new Payment($request->name, $request->cryptogram, $request->ip, $request->amount);
         $response = $paymentModel->pay();
@@ -682,7 +685,13 @@ class ApiController extends Controller
         $AcsUrl = $response->Model->AcsUrl;
         $PaReq = $response->Model->PaReq;
         $success = $response->Success;
-
+        $payModel = new \App\Payment();
+        $payModel->service_id = $request->service_id;
+        $payModel->amount = $request->amount;
+        $payModel->transaction_id = $TransactionId;
+        if($success){
+            // add money
+        }
         return $this->makeResponse(200,
             $success,
             [
@@ -691,6 +700,29 @@ class ApiController extends Controller
                 'PaReq' => $PaReq
             ]
         );
+    }
+    const API_KEY = 'f1bfe6d357926dca0b37913171d258af';
+    const ID = 'pk_0ad5acde2f593df7c5a63c9c27807';
+    public function paymentHandle(Request $request){
+        $TransactionId = $request->MD;
+        $PaRes = $request->PaRes;
+
+        $data = array("TransactionId" => $TransactionId, "PaRes" => $PaRes);
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-type: application/json',
+            'Authorization: Basic '. base64_encode(self::ID . ":". self::API_KEY)
+        ));
+        curl_setopt($ch, CURLOPT_URL,"https://api.cloudpayments.kz/payments/cards/post3ds");
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS,
+            json_encode($data));
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $server_output = curl_exec ($ch);
+        curl_close ($ch);
+        return json_decode($server_output);
 
     }
 }

@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::post('/paymenthandle', ['uses' => 'ApiController@paymentHandle']);
 
 Route::post('/m_register', ['uses' => 'ApiController@auth']);
 Route::post('/m_login', ['uses' => 'ApiController@checkCode']);
