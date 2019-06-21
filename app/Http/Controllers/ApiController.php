@@ -668,7 +668,7 @@ class ApiController extends Controller
             'ip' => 'required',
             'cryptogram' => 'required|string',
             'name' => 'required|string|max:42',
-            'amount' => 'required|integer|max:5',
+            'amount' => 'required|integer',
         ]);
         if ($validator->fails()) {
             return $this->makeResponse(400, false, ['errors' => $validator->errors()->all()]);
