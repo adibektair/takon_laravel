@@ -19,6 +19,9 @@ Route::get('/', function () {
 Route::get('/payment', function () {
     return view('mobile_users/payment');
 });
+Route::post('/payment', function () {
+    return view('mobile_users/payment');
+});
 Route::get('/policy', function () {
     return view('policy');
 });
@@ -28,9 +31,7 @@ Route::get('/forbidden', function () {
 })->name('forbidden');
 
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
-Route::post('/paycom', function () {
-    return view('mobile_users/paymentcomplete');
-});
+
 
 Auth::routes();
 
