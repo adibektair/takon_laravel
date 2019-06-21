@@ -4,6 +4,8 @@
 namespace App\Http;
 
 
+use const http\Client\Curl\AUTH_BASIC;
+
 class Payment
 {
     const API_KEY = 'f1bfe6d357926dca0b37913171d258af';
@@ -30,9 +32,11 @@ class Payment
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             'Content-type: application/json',
-            'Authorization: key='.self::API_KEY
+            'Authorization: Basic '. base64_encode(self::ID . ":". self::API_KEY)
         ));
-        curl_setopt($ch, CURLOPT_USERPWD, self::ID . ":" . self::API_KEY);
+//        curl_setopt($ch, )
+//        curl_setopt($ch, AUTH_BASIC, self::ID . ":" . self::API_KEY);
+
         curl_setopt($ch, CURLOPT_URL,"https://api.cloudpayments.kz/payments/cards/charge");
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS,
