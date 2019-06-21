@@ -676,8 +676,20 @@ class ApiController extends Controller
 
         $paymentModel = new Payment($request->name, $request->cryptogram, $request->ip, $request->amount);
         $response = $paymentModel->pay();
-        return $this->makeResponse(200,true, ['response' => json_decode($response)]);
+        $response = json_decode($response);
+        $TransactionId = $response['Model']['TransactionId'];
+        $AcsUrl = $response['Model']['AcsUrl'];
+        $PaReq = $response['Model']['PaReq'];
+        $success = $response['Success'];
 
+        return $this->makeResponse(200,
+            $success,
+            [
+                'TransactionId' => $TransactionId,
+                'AcsUrl' => $AcsUrl,
+                'PaReq' => $PaReq
+            ]
+        );
 
     }
 }

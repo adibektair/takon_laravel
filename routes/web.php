@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/payment', function () {
+    return view('mobile_users/payment');
+});
 Route::get('/policy', function () {
     return view('policy');
 });
