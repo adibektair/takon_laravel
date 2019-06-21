@@ -28,6 +28,9 @@ Route::get('/forbidden', function () {
 })->name('forbidden');
 
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
+Route::post('/paycom', function () {
+    return view('mobile_users/paymentcomplete');
+});
 
 Auth::routes();
 
