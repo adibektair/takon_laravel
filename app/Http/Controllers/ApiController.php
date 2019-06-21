@@ -678,10 +678,10 @@ class ApiController extends Controller
         $response = $paymentModel->pay();
         $response = json_decode($response);
         $TransactionId = $response->Model->TransactionId;
-        dd($TransactionId);
-        $AcsUrl = $response['Model']['AcsUrl'];
-        $PaReq = $response['Model']['PaReq'];
-        $success = $response['Success'];
+
+        $AcsUrl = $response->Model->AcsUrl;
+        $PaReq = $response->Model->PaReq;
+        $success = $response->Success;
 
         return $this->makeResponse(200,
             $success,
