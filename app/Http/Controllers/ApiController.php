@@ -681,7 +681,6 @@ class ApiController extends Controller
         $response = $paymentModel->pay();
         $response = json_decode($response);
         $TransactionId = $response->Model->TransactionId;
-
         $AcsUrl = $response->Model->AcsUrl;
         $PaReq = $response->Model->PaReq;
         $success = $response->Success;
