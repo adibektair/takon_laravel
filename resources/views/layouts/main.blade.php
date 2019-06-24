@@ -63,7 +63,7 @@
 
     <header class="main-header">
         <a  class="logo">
-            <span class="logo-mini"><b>C</b>KZ</span>
+            <span class="logo-mini"><b>T</b>ORG</span>
             <span class="logo-lg"><b>TAKON.</b>ORG</span>
         </a>
 
