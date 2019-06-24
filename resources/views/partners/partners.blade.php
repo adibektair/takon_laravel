@@ -51,6 +51,11 @@
     <script>
         $(document).ready(function () {
             $('#table').DataTable({
+                buttons: [
+                    'excel', 'pdf'
+                ],
+                dom: 'Bfrtip',
+
                 processing: true,
                 serverSide: true,
                 ajax: "{{ route('all.partners') }}",
