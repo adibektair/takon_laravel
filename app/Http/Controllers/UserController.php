@@ -122,7 +122,9 @@ class UserController extends Controller
     public function generateQR(Request $request)
     {
         $user = User::where('id', $request->id)->first();
-        $user->hash = Str::random(50);
+        if(!$user->hash){
+            $user->hash = Str::random(50);
+        }
         $user->save();
         return view('employees/qr')->with(['user' => $user]);
     }
