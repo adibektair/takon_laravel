@@ -27,7 +27,7 @@
         use chillerlan\QRCode\QRCode;
         $qr = new QRCode();
 
-        echo '<img width="500" height="500" src="'.$qr->render($user->hash).'" />';
+        echo '<img width="300" height="300" src="'.$qr->render($user->hash).'" />';
 
         ?>
 
@@ -45,7 +45,7 @@
         function print() {
             var mywindow = window.open('', 'PRINT', 'height=400,width=600');
             mywindow.document.write('<h1>' + document.title  + '</h1>');
-            mywindow.document.write('<div style=" width: 500px; height:5300px">'+ document.getElementById('qr').outerHTML +'</div>');
+            mywindow.document.write('<div style=" width: 300px; height:300px">'+ document.getElementById('qr').outerHTML +'</div>');
             mywindow.document.close(); // necessary for IE >= 10
             mywindow.focus(); // necessary for IE >= 10*/
             mywindow.print();
