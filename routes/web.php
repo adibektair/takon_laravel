@@ -130,7 +130,11 @@ Route::group(['middleware' => ['authenticated']], function () {
 
 
     // Transactions
-        // admin
+    // use takons
+    Route::get('/transactions/use', 'TransactionController@use')->name('transactions.use');
+    Route::get('/transactions/use/all', 'TransactionController@useAll')->name('transactions.use.all');
+
+    // admin
     Route::get('/transactions', 'TransactionController@index')->name('transactions.admin');
     Route::get('/transactions/admin/all', 'TransactionController@adminAll')->name('transactions.admin.all');
     Route::get('/transactions/admin/more', 'TransactionController@adminMore')->name('transactions.admin.more');

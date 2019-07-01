@@ -61,6 +61,10 @@
                     { data: '0', name: '0'},
 
                 ],
+                dom: 'Bfrtip',
+                buttons: [
+                    'excel'
+                ],
             });
         });
 

@@ -61,7 +61,10 @@
                     { data: 'created_at', name: 'created_at'},
                     { data: '3', name: '3'},
                     { data: '0', name: '0'},
-
+                ],
+                dom: 'Bfrtip',
+                buttons: [
+                    'excel'
                 ],
             });
         });

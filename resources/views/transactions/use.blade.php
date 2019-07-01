@@ -15,15 +15,13 @@
         <table class="table table-bordered" id="table">
             <thead>
             <tr>
-                <th >#</th>
-                <th >Отправитель</th>
-                <th >Получатель</th>
+                <th>#</th>
+                <th>Пользователь</th>
                 <th>Услуга/Товар</th>
-                <th >Количество</th>
-                <th>Сумма</th>
-                <th >Остаток</th>
-
+                <th>Использовано</th>
+                <th>Принял</th>
                 <th>Дата</th>
+
             </tr>
             </thead>
             <tbody>
@@ -45,19 +43,14 @@
             $('#table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "/transactions/admin/etc/get?id=<?=$id?>",
+                ajax: "{{ route('transactions.use.all') }}",
                 columns: [
                     { data: 'id', name: 'id' },
-                    { data: '1', name: '1' },
-                    { data: '0', name: '0' },
+                    { data: 'sender', name: 'sender' },
                     { data: 'service', name: 'service'},
                     { data: 'amount', name: 'amount'},
-                    { data: '2', name: '2'},
-                    { data: 'balance', name: 'balance'},
-
+                    { data: 'reciever', name: 'reciever'},
                     { data: 'created_at', name: 'created_at'},
-
-
                 ],
                 dom: 'Bfrtip',
                 buttons: [

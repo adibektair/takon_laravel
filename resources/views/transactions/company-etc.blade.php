@@ -59,6 +59,10 @@
 
 
                 ],
+                dom: 'Bfrtip',
+                buttons: [
+                    'excel'
+                ],
             });
         });
 

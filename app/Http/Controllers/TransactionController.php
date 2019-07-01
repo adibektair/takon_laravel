@@ -22,6 +22,11 @@ class TransactionController extends Controller
         return view('transactions/admin');
     }
 
+    public function use()
+    {
+        return view('transactions/use');
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -499,6 +504,21 @@ class TransactionController extends Controller
         return $s;
     }
 
+    public function useAll(Request $request){
 
+        $result = DB::table('transactions')
+            ->where('transactions.type', 3)
+            ->join('services', 'services.id', '=', 'transactions.service_id')
+            ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
+            ->leftJoin('users', 'users.id', '=', 'transactions.u_r_id')
+            ->select('transactions.*', 'services.name as service', 'mobile_users.phone as sender', 'users.name as reciever')
+            ->get();
+
+        $s = DataTables::of($result)
+
+            ->make(true);
+
+        return $s;
+    }
 
 }

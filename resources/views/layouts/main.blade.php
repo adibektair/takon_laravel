@@ -31,6 +31,13 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
         <script defer src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.js" defer></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.colVis.js" defer></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.js" defer></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.js" defer></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.js" defer></script>
+
 
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
@@ -171,6 +178,11 @@
                             <a href="{{ route('transactions.admin') }}" >Транзакции  </a>
 
                         </li>
+
+                        <li>
+                            <a href="{{ route('transactions.use') }}">Использование таконов</a>
+                        </li>
+
                         <li>
                             <a href="{{ route('transactions.return') }}">Транзакции по возвратам</a>
                         </li>
@@ -248,25 +260,6 @@
 <script src="{{asset('js/toastr.js')}}"></script>
 <script src="{{asset('js/bootbox.all.min.js')}}"></script>
 
-{{--<script type="text/javascript" src="{{asset("admin/bower_components/datatable/js/jquery.datatables.min.js")}}"></script>--}}
-{{--<script type="text/javascript"--}}
-{{--        src="{{asset("admin/bower_components/datatable/js/dataTables.bootstrap.min.js")}}"></script>--}}
-{{--<script type="text/javascript"--}}
-{{--        src="{{asset("admin/bower_components/datatable/js/dataTables.responsive.min.js")}}"></script>--}}
-{{--<script type="text/javascript"--}}
-{{--        src="{{asset("admin/bower_components/datatable/js/responsive.bootstrap.min.js")}}"></script>--}}
-{{--<script type="text/javascript"--}}
-{{--        src="{{asset("admin/bower_components/datatable/js/dataTables.scroller.min.js")}}"></script>--}}
-{{--<script type="text/javascript"--}}
-{{--        src="{{asset("admin/bower_components/datatable/js/dataTables.fixed-header.min.js")}}"></script>--}}
-{{--<script type="text/javascript"--}}
-{{--        src="{{asset("admin/bower_components/datatable/js/datatable.sum.js")}}"></script>--}}
-
-{{--<script type="text/javascript"--}}
-{{--        src="{{asset("admin/bower_components/daterangepicker/moment.js")}}"></script>--}}
-{{--<script type="text/javascript"--}}
-{{--        src="{{asset("admin/bower_components/daterangepicker/daterangepicker.js")}}"></script>--}}
-{{--<script src="{{asset("admin/bower_components/select2/select2.js")}}"></script>--}}
 
 <script>
     $.ajaxSetup({

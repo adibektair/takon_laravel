@@ -47,7 +47,7 @@
             $('#table').DataTable({
                 dom: 'Bfrtip',
                 buttons: [
-                   'excel', 'pdf'
+                    'excel'
                 ],
                 processing: true,
                 serverSide: true,
