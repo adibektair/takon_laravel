@@ -11,13 +11,14 @@
 
     <br><br>
     <div class="col-md-12 mt-2">
-        <label>Юр. лица </label>
+        <label>Товар/услуга</label>
         <select id="statusFilter">
-            <?php
+            <option >Не выбрано</option>
+        <?php
+
             $services = \App\Service::all();
             foreach ($services as $company){
                 ?>
-                <option >Не выбрано</option>
                 <option value="<?=$company->id?>"><?=$company->name?></option>
 <?php
             }
