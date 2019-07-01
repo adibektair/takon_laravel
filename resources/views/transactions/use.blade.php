@@ -71,13 +71,14 @@
 
                 } ]
             });
+            $('#statusFilter').on('change', function(){
+                var filter_value = $(this).val();
+                var new_url = '/transactions/use/all?id='+filter_value;
+                dtListUsers.ajax.url(new_url).load();
+            });
         });
 
-        $('#statusFilter').on('change', function(){
-            var filter_value = $(this).val();
-            var new_url = '/transactions/use/all?id='+filter_value;
-            dtListUsers.ajax.url(new_url).load();
-        });
+
 
         var newExportAction = function (e, dt, button, config) {
             var self = this;
