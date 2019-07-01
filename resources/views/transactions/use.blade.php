@@ -53,9 +53,18 @@
                     { data: 'created_at', name: 'created_at'},
                 ],
                 dom: 'Bfrtip',
-                buttons: [
-                    'excel'
-                ],
+                buttons : [ {
+                    extend : 'excel',
+                    text : 'Export to Excel',
+                    exportOptions : {
+                        modifier : {
+                            // DataTables core
+                            order : 'index',  // 'current', 'applied', 'index',  'original'
+                            page : 'all',      // 'all',     'current'
+                            search : 'none'     // 'none',    'applied', 'removed'
+                        }
+                    }
+                } ]
             });
         });
 
