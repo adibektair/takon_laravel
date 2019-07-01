@@ -11,6 +11,18 @@
 
     <br><br>
     <div class="col-md-12 mt-2">
+        <label>Юр. лица </label>
+        <select id="statusFilter">
+            <?php
+            $companies = \App\Company::all();
+            foreach ($companies as $company){
+                ?>
+                <option >Не выбрано</option>
+                <option value="<?=$company->id?>"><?=$company->name?></option>
+<?php
+            }
+            ?>
+        </select>
 
         <table class="table table-bordered" id="table">
             <thead>
@@ -40,7 +52,7 @@
 
     <script>
         $(document).ready(function () {
-            $('#table').DataTable({
+            var dtListUsers =  $('#table').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: "{{ route('transactions.use.all') }}",
@@ -59,6 +71,12 @@
 
                 } ]
             });
+        });
+
+        $('#statusFilter').on('change', function(){
+            var filter_value = $(this).val();
+            var new_url = '/transactions/use/all/'+filter_value;
+            dtListUsers.ajax.url(new_url).load();
         });
 
         var newExportAction = function (e, dt, button, config) {
