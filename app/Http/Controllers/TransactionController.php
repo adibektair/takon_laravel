@@ -512,7 +512,7 @@ class TransactionController extends Controller
             ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
             ->leftJoin('users', 'users.id', '=', 'transactions.u_r_id')
             ->select('transactions.*', 'services.name as service', 'mobile_users.phone as sender', 'users.name as reciever')
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'asc')
             ->get();
 
         $s = DataTables::of($result)
