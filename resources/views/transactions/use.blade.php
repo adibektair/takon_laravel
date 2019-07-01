@@ -92,6 +92,18 @@
             // Requery the server with the new one-time export settings
             dt.ajax.reload();
         };
+        var oldExportAction = function (self, e, dt, button, config) {
+            if (button[0].className.indexOf('buttons-excel') >= 0) {
+                if ($.fn.dataTable.ext.buttons.excelHtml5.available(dt, config)) {
+                    $.fn.dataTable.ext.buttons.excelHtml5.action.call(self, e, dt, button, config);
+                }
+                else {
+                    $.fn.dataTable.ext.buttons.excelFlash.action.call(self, e, dt, button, config);
+                }
+            } else if (button[0].className.indexOf('buttons-print') >= 0) {
+                $.fn.dataTable.ext.buttons.print.action(e, dt, button, config);
+            }
+        };
 
     </script>
 
