@@ -19,8 +19,8 @@ Route::get('/', function () {
 Route::get('/payment', function () {
     return view('mobile_users/payment');
 });
-Route::post('/payment', function () {
-    return view('mobile_users/payment');
+Route::post('/paymentcomplete', function () {
+    return view('mobile_users/paymentcomplete');
 });
 Route::get('/policy', function () {
     return view('policy');
