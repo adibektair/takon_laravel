@@ -15,6 +15,8 @@
         <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
+
+
         @toastr_css
         @toastr_js
 
@@ -40,6 +42,8 @@
     <link rel="stylesheet" href="{{asset("admin/dist/css/skins/_all-skins.min.css")}}">
     <link rel="stylesheet" href="{{asset("css/jquery.select.css")}}">
     <link href="{{ asset('css/toastr.css') }}" rel="stylesheet">
+
+
 
 {{--    <link rel="stylesheet" type="text/css"--}}
 {{--          href="{{asset("admin/bower_components/datatable/css/dataTables.bootstrap.min.css")}}"/>--}}
