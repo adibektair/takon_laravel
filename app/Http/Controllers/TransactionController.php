@@ -509,11 +509,11 @@ class TransactionController extends Controller
         if ($request->id){
             $result = DB::table('transactions')
                 ->where('transactions.type', 3)
-                ->where('companies_services.company_id', $request->id)
+                ->where('transactions.service_id', $request->id)
                 ->join('services', 'services.id', '=', 'transactions.service_id')
                 ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
                 ->leftJoin('users', 'users.id', '=', 'transactions.u_r_id')
-                ->join('companies_services.id', 'companies_services.id', '=', 'transactions.cs_id')
+//                ->join('companies_services', 'companies_services.id', '=', 'transactions.cs_id')
                 ->select('transactions.*', 'services.name as service', 'mobile_users.phone as sender', 'users.name as reciever')
                 ->orderBy('created_at', 'asc')
                 ->get();

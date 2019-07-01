@@ -14,8 +14,8 @@
         <label>Юр. лица </label>
         <select id="statusFilter">
             <?php
-            $companies = \App\Company::all();
-            foreach ($companies as $company){
+            $services = \App\Service::all();
+            foreach ($services as $company){
                 ?>
                 <option >Не выбрано</option>
                 <option value="<?=$company->id?>"><?=$company->name?></option>
