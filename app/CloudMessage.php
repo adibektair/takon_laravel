@@ -28,7 +28,7 @@ class CloudMessage
 
     }
 
-    public function setReciever($reciever){
+    public function setReciever($reciever, $platform){
         $this->reciever = $reciever;
     }
 
