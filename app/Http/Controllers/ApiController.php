@@ -656,6 +656,10 @@ class ApiController extends Controller
             return $this->makeResponse(200, false, ["msg" => "error"]);
         }else{
             $user = User::where('token', $token)->first();
+            if(!$user){
+                return $this->makeResponse(401, false, ["msg" => "unauthorized"]);
+
+            }
             $user->push_id = $pushId;
             $user->platform = $platform;
             if($user->save()){
