@@ -541,9 +541,10 @@ class ApiController extends Controller
                 $stat->price = $service->price;
                 $stat->amount = $amount;
                 $stat->save();
+
                 $user = User::where('id', $user_id)->first();
                 if ($user){
-                    $message = new CloudMessage("Вам были переведены " . $amount . " таконов", $user->id, "Произведена оплата", "", "");
+                    $message = new CloudMessage("Вам были переведены " . $amount . " таконов", $user_id, "Произведена оплата", "", "");
                     $message->sendNotification();
                 }
 
