@@ -30,6 +30,7 @@ class CloudMessage
 
     public function setReciever($reciever, $platform){
         $this->reciever = $reciever;
+        $this->platform = $platform;
     }
 
     function sendNotification(){
