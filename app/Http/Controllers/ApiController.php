@@ -542,9 +542,10 @@ class ApiController extends Controller
                 $stat->amount = $amount;
                 $stat->save();
 
-                $user = User::where('id', $user_id)->first();
-                if ($user){
+                $cashier = User::where('id', $user_id)->first();
+                if ($cashier){
                     $message = new CloudMessage("Вам были переведены " . $amount . " таконов", $user_id, "Произведена оплата", "", "");
+                    $message->setReciever($cashier->push_id);
                     $message->sendNotification();
                 }
 

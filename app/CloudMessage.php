@@ -18,6 +18,7 @@ class CloudMessage
     function __construct($message, $reciever,  $title, $type, $name)
     {
         $user = MobileUser::where('id', $reciever)->first();
+
         $this->reciever = $user->push_id;
         $this->title = $title;
         $this->platform = $user->platform;
@@ -25,6 +26,10 @@ class CloudMessage
         $this->type= $type;
         $this->name= $name;
 
+    }
+
+    public function setReciever($reciever){
+        $this->reciever = $reciever;
     }
 
     function sendNotification(){
