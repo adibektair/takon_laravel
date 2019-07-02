@@ -654,6 +654,15 @@ class ApiController extends Controller
 
            }
             return $this->makeResponse(200, false, ["msg" => "error"]);
+        }else{
+            $user = User::where('token', $token)->first();
+            $user->push_id = $pushId;
+            $user->platform = $platform;
+            if($user->save()){
+                return $this->makeResponse(200, true, ["msg" => "success"]);
+
+            }
+            return $this->makeResponse(200, false, ["msg" => "error"]);
         }
     }
 
