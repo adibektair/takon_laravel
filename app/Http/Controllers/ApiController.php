@@ -5,6 +5,7 @@ use App\CloudMessage;
 use App\Code;
 use App\Company;
 use App\Http\Payment;
+use App\Mail\DemoEmail;
 use App\MobileUser;
 use App\Partner;
 use App\QrCode;
@@ -18,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use phpDocumentor\Reflection\Types\Boolean;
@@ -478,6 +480,14 @@ class ApiController extends Controller
                         $stat->parent_id = $parent->parent_id;
                     }
 
+
+                    $objDemo = new \stdClass();
+                    $objDemo->demo_one = 'Demo One Value';
+                    $objDemo->demo_two = 'Demo Two Value';
+                    $objDemo->sender = 'SenderUserName';
+                    $objDemo->receiver = 'ReceiverUserName';
+                    Mail::to("adibek.t@maint.kz")->send(new DemoEmail($objDemo));
+
                     $stat->type = 3;
                     $stat->balance = $us->amount;
                     $stat->service_id = $us->service_id;
@@ -541,6 +551,16 @@ class ApiController extends Controller
                 $stat->price = $service->price;
                 $stat->amount = $amount;
                 $stat->save();
+
+
+                $objDemo = new \stdClass();
+                $objDemo->demo_one = 'Demo One Value';
+                $objDemo->demo_two = 'Demo Two Value';
+                $objDemo->sender = 'SenderUserName';
+                $objDemo->receiver = 'ReceiverUserName';
+                Mail::to("adibek.t@maint.kz")->send(new DemoEmail($objDemo));
+
+
 
                 $cashier = User::where('id', $user_id)->first();
                 if ($cashier){
