@@ -107,7 +107,7 @@ class UserController extends Controller
         $user = User::where('id', $request->id)->first();
         $user->email = $request->email;
         $user->name = $request->name;
-        $user->password = Hash::make($request->password);
+        $user->password = md5($request->password);
         $user->save();
         toastr()->success('Успешно');
         return redirect()->route('emplyees.index');
