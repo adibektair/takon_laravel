@@ -649,6 +649,7 @@ class ApiController extends Controller
 
                 }
 
+                $result = array_reverse($result);
             return $this->makeResponse(200, true, ['info' => $result]);
 
         }
