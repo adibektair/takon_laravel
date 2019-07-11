@@ -598,6 +598,7 @@ class ApiController extends Controller
                 ->select('company.name as company', 's_company.name as s_company', 'transactions.*',
                     'services.name as service', 's_users.phone as s_user_phone', 'r_users.phone as r_user_phone',
                     's_users.id as s_user_id', 'r_users.id as r_user_id', 'partners.name as creater', 'return.name as ret_name', 'transactions.type as ttype')
+                ->orderBy('transactions.id', 'asc')
                 ->get();
 
                 $result = [];
@@ -649,7 +650,6 @@ class ApiController extends Controller
 
                 }
 
-                $result = array_reverse($result);
             return $this->makeResponse(200, true, ['info' => $result]);
 
         }
@@ -667,6 +667,7 @@ class ApiController extends Controller
             ->join('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
             ->join('users', 'users.id', '=', 'transactions.u_r_id')
             ->select('transactions.*', 'services.name as service', 'mobile_users.phone as phone', 'users.email')
+            ->orderBy('transactions.id', 'asc')
             ->get();
 
         return $this->makeResponse(200, true, ["qrs" => $model]);
