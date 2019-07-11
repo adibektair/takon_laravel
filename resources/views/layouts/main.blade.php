@@ -228,6 +228,10 @@
 
                         </li>
 
+                    <li>
+                        <a href="{{ route('transactions.use') }}">Использование таконов</a>
+                    </li>
+
                         @endif
 
             </ul>

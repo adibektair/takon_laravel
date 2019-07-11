@@ -506,29 +506,63 @@ class TransactionController extends Controller
 
     public function useAll(Request $request){
 
-        if ($request->id){
-            $result = DB::table('transactions')
-                ->where('transactions.type', 3)
-                ->where('transactions.service_id', $request->id)
-                ->join('services', 'services.id', '=', 'transactions.service_id')
-                ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
-                ->leftJoin('users', 'users.id', '=', 'transactions.u_r_id')
+        if(auth()->user()->role_id == 1){
+
+            if ($request->id){
+                $result = DB::table('transactions')
+                    ->where('transactions.type', 3)
+                    ->where('transactions.service_id', $request->id)
+                    ->join('services', 'services.id', '=', 'transactions.service_id')
+                    ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
+                    ->leftJoin('users', 'users.id', '=', 'transactions.u_r_id')
 //                ->join('companies_services', 'companies_services.id', '=', 'transactions.cs_id')
-                ->select('transactions.*', 'services.name as service', 'mobile_users.phone as sender', 'users.name as reciever')
-                ->orderBy('created_at', 'asc')
-                ->get();
+                    ->select('transactions.*', 'services.name as service', 'mobile_users.phone as sender', 'users.name as reciever')
+                    ->orderBy('created_at', 'asc')
+                    ->get();
 
+            }else{
+                $result = DB::table('transactions')
+                    ->where('transactions.type', 3)
+                    ->join('services', 'services.id', '=', 'transactions.service_id')
+                    ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
+                    ->leftJoin('users', 'users.id', '=', 'transactions.u_r_id')
+                    ->select('transactions.*', 'services.name as service', 'mobile_users.phone as sender', 'users.name as reciever')
+                    ->orderBy('created_at', 'asc')
+                    ->get();
+
+            }
         }else{
-            $result = DB::table('transactions')
-                ->where('transactions.type', 3)
-                ->join('services', 'services.id', '=', 'transactions.service_id')
-                ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
-                ->leftJoin('users', 'users.id', '=', 'transactions.u_r_id')
-                ->select('transactions.*', 'services.name as service', 'mobile_users.phone as sender', 'users.name as reciever')
-                ->orderBy('created_at', 'asc')
-                ->get();
 
+            if ($request->id){
+                $result = DB::table('transactions')
+                    ->where('transactions.type', 3)
+                    ->where('transactions.service_id', $request->id)
+                    ->join('services', 'services.id', '=', 'transactions.service_id')
+                    ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
+                    ->leftJoin('users', 'users.id', '=', 'transactions.u_r_id')
+                    ->join('companies_services', 'companies_services.id', '=', 'transactions.cs_id')
+                    ->join('companies', 'companies.id', '=', 'companies_services.company_id')
+                    ->where('companies.id', '=', auth()->user()->company_id)
+                    ->select('transactions.*', 'services.name as service', 'mobile_users.phone as sender', 'users.name as reciever')
+                    ->orderBy('created_at', 'asc')
+                    ->get();
+
+            }else{
+                $result = DB::table('transactions')
+                    ->where('transactions.type', 3)
+                    ->join('services', 'services.id', '=', 'transactions.service_id')
+                    ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
+                    ->leftJoin('users', 'users.id', '=', 'transactions.u_r_id')
+                    ->select('transactions.*', 'services.name as service', 'mobile_users.phone as sender', 'users.name as reciever')
+                    ->join('companies_services', 'companies_services.id', '=', 'transactions.cs_id')
+                    ->join('companies', 'companies.id', '=', 'companies_services.company_id')
+                    ->where('companies.id', '=', auth()->user()->company_id)
+                    ->orderBy('created_at', 'asc')
+                    ->get();
+
+            }
         }
+
 
         $s = DataTables::of($result)
 
