@@ -176,7 +176,7 @@ class MobileUserController extends Controller
             return '<input type="text" id="' . $user->id .'" class="name"  value="' . $user->name . '" placeholder="Введите имя">';
              })
 
-            ->rawColumns(['name'])->make();
+            ->rawColumns(['name', 'checkbox'])->make();
         return $s;
     }
 }
