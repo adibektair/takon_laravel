@@ -69,9 +69,27 @@ class MobileUserController extends Controller
 
         $s = DataTables::of($groups)->addColumn('checkbox', function ($group) {
             return '<a href="/choose-group?id='.$group->id.'"><button class="btn btn-success" >Выбрать</button></a>';
-        })->rawColumns(['checkbox'])->make();
+        })
+            ->addColumn('remove', function ($group) {
+                return '<button class="btn btn-danger" id="'. $group->id .'">Удалить группу</button>';
+            })
+            ->rawColumns(['checkbox', 'remove'])->make();
 
         return $s;
+    }
+
+    public function removeGroup(Request $request){
+        $id = $request->id;
+        $gr = Group::where('id', $id)->first();
+        $gr->delete();
+        return ['success' => true];
+    }
+
+    public function removeUser(Request $request){
+        $id = $request->id;
+        $gr = GroupsUser::where('mobile_user_id', $id)->where('group_id', $request->group_id)->first();
+        $gr->delete();
+        return ['success' => true];
     }
 
     /**
@@ -99,7 +117,9 @@ class MobileUserController extends Controller
      * @param  \App\MobileUser  $mobileUser
      * @return \Illuminate\Http\Response
      */
-    public function saveGroup(Request $request){
+    public function saveGroup(Request $request)
+    {
+
         $array = explode(',', $request->ids);
         $group = new Group();
         $group->name = $request->name;
@@ -118,6 +138,7 @@ class MobileUserController extends Controller
         $response = ['success' => true];
 
         return $response;
+
     }
 
     public function send(Request $request)
@@ -136,14 +157,26 @@ class MobileUserController extends Controller
         return $s;
     }
 
+    public function setName(Request $request){
+        $id = $request->id;
+        $name = $request->name;
+        $user = MobileUser::where('id', $id)->first();
+        $user->name = $name;
+        $user->save();
+
+    }
     public function all(){
 //        $users = MobileUser::all();
         $users = DB::table('mobile_users')->get();
 //        dd($users);
         $s = DataTables::of($users)->addColumn('checkbox', function ($user) {
-            return '<button class="btn btn-info" data-name="'.$user->phone.'" id="'.$user->id.'">Выбрать</button>';
+                return '<button class="btn btn-info" data-name="'.$user->phone.'" id="'.$user->id.'">Выбрать</button>';
             })
-            ->rawColumns(['checkbox'])->make();
+            ->addColumn('name', function ($user) {
+            return '<input type="text" id="' . $user->id .'" class="name"  value="' . $user->name . '" placeholder="Введите имя">';
+             })
+
+            ->rawColumns(['name'])->make();
         return $s;
     }
 }

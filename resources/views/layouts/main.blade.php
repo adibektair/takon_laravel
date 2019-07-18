@@ -11,9 +11,15 @@
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
         <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{asset('css/popModal.min.css')}}" rel="stylesheet">
+    <link href="{{asset('css/popModal.css')}}" rel="stylesheet">
         <script src="{{asset('js/jquery.min.js')}}"></script>
         <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
-        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="{{asset('js/popModal.js')}}"></script>
+    <script src="{{asset('js/popModal.min.js')}}"></script>
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 
 

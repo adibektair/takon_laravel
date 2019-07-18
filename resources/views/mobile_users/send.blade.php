@@ -39,6 +39,7 @@ $users = DB::table('mobile_users')->whereIn('id', $array)->get();
             <tr>
                 <th>#</th>
                 <th>Пользователь</th>
+{{--                <th>Удалить пользователя из группы</th>--}}
                 <th>Товар или услуга</th>
                 <th>Количество таконов <input type="number" placeholder="По умолчанию" id="default"></th>
             </tr>
@@ -57,7 +58,8 @@ $users = DB::table('mobile_users')->whereIn('id', $array)->get();
 
                     <tr>
                         <th>{{ $user->id }}</th>
-                        <th>{{ $user->phone }}</th>
+                        <th>{{ $user->phone . ' ' . $user->name }}</th>
+{{--                        <th> <button class="btn-danger" id="{{ $user->id }}">Удалить</button> </th>--}}
                         <th>
                             <select name="service_id[<?=$rand?>]" class="select">
                                 <?php
@@ -148,7 +150,27 @@ $users = DB::table('mobile_users')->whereIn('id', $array)->get();
 
         }
 
-        $(document).ready(function () {
+        {{--$(document).ready(function () {--}}
+        {{--    $( ".btn-danger" ).click(function() {--}}
+        {{--        $.ajax({--}}
+        {{--            type: "POST",--}}
+        {{--            url: '/remove-user',--}}
+        {{--            data: {--}}
+                        //group_id:
+        {{--                id: this.id,--}}
+        {{--                _token: "{{ csrf_token() }}",--}}
+        {{--            },--}}
+        {{--            success: function (data) {--}}
+        {{--                if(data.success == true){--}}
+        {{--                    swal("Успешно", "Пользователь удален из группы", "success");--}}
+        {{--                    location.reload();--}}
+        {{--                }--}}
+
+        {{--            }--}}
+        {{--        });--}}
+
+        {{--    });--}}
+
 
             $('#default').on('keyup paste',username_check);
             function username_check(){
