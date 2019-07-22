@@ -53,6 +53,39 @@ class MobileUserController extends Controller
     {
         return view('mobile_users/groups');
     }
+    public function addUser(Request $request)
+    {
+        return view('mobile_users/add')->with(['id' => $request->id]);
+    }
+    public function addUserGroup(Request $request)
+    {
+        $GU = GroupsUser::where('group_id', $request->id)->get();
+        $arr = [];
+        foreach ($GU as $g){
+            array_push($arr, $g->mobile_user_id);
+        }
+        $users = DB::table('mobile_users')
+            ->whereNotIn('id', $arr)
+            ->select('mobile_users.*')
+            ->get();
+
+        $s = DataTables::of($users)
+            ->addColumn('add', function ($group) {
+                return '<button class="btn btn-info" id="'. $group->id .'">Добавить</button>';
+            })
+            ->rawColumns(['add'])->make();
+
+        return $s;
+    }
+    public function addUserFinish(Request $request){
+        $id = $request->id;
+        $group_id = $request->group_id;
+        $g = new GroupsUser();
+        $g->group_id = $group_id;
+        $g->mobile_user_id = $id;
+        $g->save();
+
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -108,7 +141,7 @@ class MobileUserController extends Controller
         foreach ($users as $user){
             $string .= $user->mobile_user_id . ',';
         }
-        return view('mobile_users/send')->with(['ids' => $string, 'name' =>$group->name, 'cs_id' => $request->cs_id]);
+        return view('mobile_users/send-group')->with(['ids' => $string, 'name' =>$group->name, 'cs_id' => $request->cs_id]);
     }
 
     /**

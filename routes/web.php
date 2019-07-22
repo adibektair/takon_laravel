@@ -92,6 +92,10 @@ Route::group(['middleware' => ['authenticated']], function () {
     Route::get('/groups', ['as' => 'groups', 'uses' => 'MobileUserController@groups']);
     Route::get('/get-groups', ['as' => 'get.groups', 'uses' => 'MobileUserController@getGroups']);
     Route::get('/choose-group', ['uses' => 'MobileUserController@chooseGroup']);
+    Route::get('/add-user', ['uses' => 'MobileUserController@addUser'])->name('add.user');//add-user-group
+
+    Route::get('/add-user-group', ['uses' => 'MobileUserController@addUserGroup']);//add-user-group
+    Route::post('/add-user-finish', ['uses' => 'MobileUserController@addUserFinish']);//add-user-group
 
     Route::get('/all-mobile-users', ['as' => 'all.mobile_users', 'uses' => 'MobileUserController@all']);
     Route::post('/save-group', ['as' => 'save.group', 'uses' => 'MobileUserController@saveGroup']);
