@@ -179,6 +179,6 @@ $users = DB::table('mobile_users')->whereIn('id', $array)->get();
                     document.getElementsByTagName('input').value = this.value;
                 },100);
             }
-        });
+        // });
     </script>
 @endsection
