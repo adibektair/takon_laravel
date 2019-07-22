@@ -18,8 +18,7 @@
         "yoeunes/toastr": "^1.2",
         "doctrine/dbal": "v2.4.2",
       "ext-curl": "*",
-      "ext-json": "*",
-      "ext-http": "*"
+      "ext-json": "*"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
