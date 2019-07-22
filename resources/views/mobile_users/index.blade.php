@@ -114,8 +114,7 @@
 
 
         setTimeout(function(){
-            $('input').change(function() {
-
+            $('.name').change(function() {
                 $.ajax({
                     type: "POST",
                     url: '/set-name',
