@@ -113,6 +113,27 @@
 
 
 
+        setTimeout(function(){
+            $('input').change(function() {
+
+                $.ajax({
+                    type: "POST",
+                    url: '/set-name',
+                    data: {
+                        name: this.value,
+                        id: this.id,
+                        _token: "{{ csrf_token() }}",
+
+                    },
+                    success: function (data) {
+
+                    }
+                });
+
+            });
+        }, 3000);
+
+
     </script>
 
 @endsection

@@ -9,20 +9,20 @@
         <div class="float-left">
             <h5>Отправить таконы</h5>
             <?php
-                $services = \App\CompaniesService::where('company_id', '=', auth()->user()->company_id)->get();
+            $services = \App\CompaniesService::where('company_id', '=', auth()->user()->company_id)->get();
             ?>
             <br>
-            <button id="fav" class="btn btn-outline-info float-right mb-2" type="submit" onclick="saveGroup()">Добавить группу в избранное</button>
+            <a href="/add-user?id=<?=$_GET['id']?>"><button id="fav" class="btn btn-outline-info float-right mb-2" >Добавить пользователя</button></a>
 
         </div>
     </div>
 
-<?php
-$array = explode(',', $ids);
-$users = DB::table('mobile_users')->whereIn('id', $array)->get();
+    <?php
+    $array = explode(',', $ids);
+    $users = DB::table('mobile_users')->whereIn('id', $array)->get();
 
 
-?>
+    ?>
     <br><br>
     <div class="col-md-12 mt-2">
         <?php
@@ -32,14 +32,14 @@ $users = DB::table('mobile_users')->whereIn('id', $array)->get();
             $cs = \App\CompaniesService::where('id', $cs_id)->first();
         }
 
-//dd($cs);
+        //dd($cs);
         ?>
         <table class="table table-bordered" id="table">
             <thead>
             <tr>
                 <th>#</th>
                 <th>Пользователь</th>
-{{--                <th>Удалить пользователя из группы</th>--}}
+                                <th>Удалить пользователя из группы</th>
                 <th>Товар или услуга</th>
                 <th>Количество таконов <input type="number" placeholder="По умолчанию" id="default"></th>
             </tr>
@@ -59,7 +59,7 @@ $users = DB::table('mobile_users')->whereIn('id', $array)->get();
                     <tr>
                         <th>{{ $user->id }}</th>
                         <th>{{ $user->phone . ' ' . $user->name }}</th>
-{{--                        <th> <button class="btn-danger" id="{{ $user->id }}">Удалить</button> </th>--}}
+                                                <th> <button class="btn-danger" id="{{ $user->id }}">Удалить</button> </th>
                         <th>
                             <select name="service_id[<?=$rand?>]" class="select">
                                 <?php
@@ -105,80 +105,35 @@ $users = DB::table('mobile_users')->whereIn('id', $array)->get();
     </style>
     <script>
 
-        function saveGroup(){
-
-            swal({
-                text: 'Введите имя для группы',
-                content: "input",
-                button: {
-                    text: "Сохранить",
-                    closeModal: false,
-                },
-            })
-                .then(name => {
-                    if (!name) throw null;
-
-
-                    $.ajax({
-                        type: "POST",
-                        url: '/save-group',
-                        data: {
-                            name: name,
-                            _token: "{{ csrf_token() }}",
-                            ids : '<?=$ids?>'
-                        },
-                        success: function (data) {
-                            if(data.success == true){
-                                var button = document.getElementById('fav');
-                                button.innerText = 'Сохранено';
-                                $('#fav').prop('disabled', true);
-                                swal("Успешно", "Группа пользователей сохранена в избранное", "success");
-
-                            }
-
+        $(document).ready(function () {
+            $( ".btn-danger" ).click(function() {
+                $.ajax({
+                    type: "POST",
+                    url: '/remove-user',
+                    data: {
+                        group_id: '<?=$_GET['id']?>',
+                        id: this.id,
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function (data) {
+                        if(data.success == true){
+                            swal("Успешно", "Пользователь удален из группы", "success");
+                            location.reload();
                         }
-                    });
 
-
+                    }
                 });
 
+            });
 
 
-
-
-
-
+        $('#default').on('keyup paste',username_check);
+        function username_check(){
+            alert(this.value)
+            setTimeout( function() {
+                document.getElementsByTagName('input').value = this.value;
+            },100);
         }
-
-        {{--$(document).ready(function () {--}}
-        {{--    $( ".btn-danger" ).click(function() {--}}
-        {{--        $.ajax({--}}
-        {{--            type: "POST",--}}
-        {{--            url: '/remove-user',--}}
-        {{--            data: {--}}
-                        //group_id:
-        {{--                id: this.id,--}}
-        {{--                _token: "{{ csrf_token() }}",--}}
-        {{--            },--}}
-        {{--            success: function (data) {--}}
-        {{--                if(data.success == true){--}}
-        {{--                    swal("Успешно", "Пользователь удален из группы", "success");--}}
-        {{--                    location.reload();--}}
-        {{--                }--}}
-
-        {{--            }--}}
-        {{--        });--}}
-
-        {{--    });--}}
-
-
-            $('#default').on('keyup paste',username_check);
-            function username_check(){
-                alert(this.value)
-                setTimeout( function() {
-                    document.getElementsByTagName('input').value = this.value;
-                },100);
-            }
-        // });
+        });
     </script>
 @endsection
