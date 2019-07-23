@@ -282,6 +282,7 @@ class CompanyController extends Controller
                 $model->parent_id = $parent->id;
             }
             $model->type = 4;
+            $model->cs_id = $rec_ser->id;
             $model->balance = $com_ser->amount;
             $model->service_id = $service->id;
             $model->c_s_id = auth()->user()->company_id;
