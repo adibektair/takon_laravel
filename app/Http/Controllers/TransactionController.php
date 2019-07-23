@@ -424,13 +424,14 @@ class TransactionController extends Controller
 
     public function companyAll(){
         $result = DB::table('transactions')
-            ->where('parent_id', Null)
+           // ->where('parent_id', Null)
             ->whereIn('type', [2, 4])
             ->where('c_r_id', auth()->user()->company_id)
             ->join('services', 'services.id', '=', 'transactions.service_id')
             ->leftJoin('partners', 'partners.id', '=', 'services.partner_id')
             ->select('transactions.*', 'services.name as service', 'partners.name as partner')
             ->get();
+
         $s = DataTables::of($result)
             ->addColumn('1', function ($service) {
                 return '<a href="/transactions/company/more?id=' . $service->id . '"><button class="btn btn-success">Подробнее</button></a>';
