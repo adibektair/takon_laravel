@@ -428,7 +428,7 @@ class TransactionController extends Controller
             ->whereIn('type', [2, 4])
             ->where('c_r_id', auth()->user()->company_id)
             ->join('services', 'services.id', '=', 'transactions.service_id')
-            ->leftJoin('partners', 'partners.id', '=', 'transactions.p_s_id')
+            ->leftJoin('partners', 'partners.id', '=', 'services.partner_id')
             ->select('transactions.*', 'services.name as service', 'partners.name as partner')
             ->get();
         $s = DataTables::of($result)
