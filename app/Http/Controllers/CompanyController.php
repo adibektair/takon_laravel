@@ -137,74 +137,77 @@ class CompanyController extends Controller
 
         foreach ($user_ids as $k => $v){
 
-            $c_service = CompaniesService::where('id', '=', $service_ids[$k])->first();
-            $m_service = UsersService::where('service_id', $c_service->service_id)
-                ->where('mobile_user_id', $v)
-                ->where('deadline', $c_service->deadline)
-                ->where('company_id', auth()->user()->company_id)
-                ->first();
-            if($m_service){
-                $m_service->amount += $request->amount[$k];
+            if($request->amount[$k] > 1){
+                $c_service = CompaniesService::where('id', '=', $service_ids[$k])->first();
+                $m_service = UsersService::where('service_id', $c_service->service_id)
+                    ->where('mobile_user_id', $v)
+                    ->where('deadline', $c_service->deadline)
+                    ->where('company_id', auth()->user()->company_id)
+                    ->first();
+                if($m_service){
+                    $m_service->amount += $request->amount[$k];
 
-            }else{
+                }else{
 
-                $m_service = new UsersService();
-                $m_service->amount = $request->amount[$k];
+                    $m_service = new UsersService();
+                    $m_service->amount = $request->amount[$k];
 
-            }
-
-            $m_service->mobile_user_id = $v;
-            $m_service->company_id = auth()->user()->company_id;
-            $m_service->cs_id = $c_service->id;
-
-            $m_service->service_id = $c_service->service_id;
-            $m_service->deadline = $c_service->deadline;
-
-            $serv = Service::where('id', $c_service->service_id)->first();
-            $partner = Partner::where('id', $serv->partner_id)->first();
-            $subs = UsersSubscriptions::where('mobile_user_id', $v)
-                ->where('partner_id', $serv->partner_id)
-                ->first();
-            if(!$subs){
-                $subs = new UsersSubscriptions();
-                $subs->mobile_user_id = $v;
-                $subs->partner_id = $serv->partner_id;
-                $subs->save();
-            }
-            $user = MobileUser::where('id', $v)->first();
-            $message = new CloudMessage("Вам были отправлены Таконы " . $serv->name, $user->id, "Внимение", $serv->partner_id, $partner->name);
-            $message->sendNotification();
-
-
-            if($m_service->save()){
-                if($request->amount[$k] > 0){
-                    $exactly_service = Service::where('id', '=', $c_service->service_id)->first();
-                    $parent = Transaction::where('service_id', $exactly_service->id)
-                        ->where('c_r_id', auth()->user()->company_id)
-                        ->where('u_s_id', null)
-                        ->orderBy('created_at', 'desc')->first();
-
-                    $model = new Transaction();
-                    if ($parent->parent_id){
-                        $model->parent_id = $parent->parent_id;
-                    }else{
-                        $model->parent_id = $parent->id;
-                    }
-                    $model->balance = $c_service->amount - $request->amount[$k];
-                    $model->users_service_id = $m_service->id;
-                    $model->type = 1;
-                    $model->cs_id = $c_service->id;
-                    $model->service_id = $c_service->service_id;
-                    $model->c_s_id = auth()->user()->company_id;
-                    $model->u_r_id = $v;
-                    $model->price = $exactly_service->price;
-                    $model->amount = $request->amount[$k];
-                    $model->save();
                 }
 
+                $m_service->mobile_user_id = $v;
+                $m_service->company_id = auth()->user()->company_id;
+                $m_service->cs_id = $c_service->id;
+
+                $m_service->service_id = $c_service->service_id;
+                $m_service->deadline = $c_service->deadline;
+
+                $serv = Service::where('id', $c_service->service_id)->first();
+                $partner = Partner::where('id', $serv->partner_id)->first();
+                $subs = UsersSubscriptions::where('mobile_user_id', $v)
+                    ->where('partner_id', $serv->partner_id)
+                    ->first();
+                if(!$subs){
+                    $subs = new UsersSubscriptions();
+                    $subs->mobile_user_id = $v;
+                    $subs->partner_id = $serv->partner_id;
+                    $subs->save();
+                }
+                $user = MobileUser::where('id', $v)->first();
+                $message = new CloudMessage("Вам были отправлены Таконы " . $serv->name, $user->id, "Внимение", $serv->partner_id, $partner->name);
+                $message->sendNotification();
+
+
+                if($m_service->save()){
+                    if($request->amount[$k] > 0){
+                        $exactly_service = Service::where('id', '=', $c_service->service_id)->first();
+                        $parent = Transaction::where('service_id', $exactly_service->id)
+                            ->where('c_r_id', auth()->user()->company_id)
+                            ->where('u_s_id', null)
+                            ->orderBy('created_at', 'desc')->first();
+
+                        $model = new Transaction();
+                        if ($parent->parent_id){
+                            $model->parent_id = $parent->parent_id;
+                        }else{
+                            $model->parent_id = $parent->id;
+                        }
+                        $model->balance = $c_service->amount - $request->amount[$k];
+                        $model->users_service_id = $m_service->id;
+                        $model->type = 1;
+                        $model->cs_id = $c_service->id;
+                        $model->service_id = $c_service->service_id;
+                        $model->c_s_id = auth()->user()->company_id;
+                        $model->u_r_id = $v;
+                        $model->price = $exactly_service->price;
+                        $model->amount = $request->amount[$k];
+                        $model->save();
+                    }
+
+                }
+                $c_service->amount -= $request->amount[$k];
+                $c_service->save();
             }
-            $c_service->amount -= $request->amount[$k];
-            $c_service->save();
+
         }
         toastr()->success('Спасибо! Вы успешно отправили таконы своим пользователям!');
         return redirect()->route('company.services');

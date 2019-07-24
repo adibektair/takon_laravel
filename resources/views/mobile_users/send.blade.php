@@ -80,7 +80,7 @@ $users = DB::table('mobile_users')->whereIn('id', $array)->get();
                         <th>
                             <input type="text" value="<?=$ids?>" name="ids" hidden>
                             <input type="text" hidden name="id[<?=$rand?>]" value="<?=$user->id?>">
-                            <input type="number" name="amount[<?=$rand?>]" placeholder="Количество таконов" required class="form-control">
+                            <input type="number" name="amount[<?=$rand?>]" value="0" placeholder="Количество таконов" required class="form-control">
                         </th>
                     </tr>
                 @endforeach
