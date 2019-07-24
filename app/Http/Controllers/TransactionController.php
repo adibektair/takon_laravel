@@ -424,7 +424,6 @@ class TransactionController extends Controller
 
     public function companyAll(){
         $result = DB::table('transactions')
-           // ->where('parent_id', Null)
             ->whereIn('type', [2, 4])
             ->where('c_r_id', auth()->user()->company_id)
             ->join('services', 'services.id', '=', 'transactions.service_id')
