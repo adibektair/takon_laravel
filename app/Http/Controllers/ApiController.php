@@ -587,14 +587,14 @@ class ApiController extends Controller
         $token = $request->token;
         $user = MobileUser::where('token', $token)->first();
         if($user){
-            if($user->phone == "77089995055"){
+            if($user->phone == "77089995055" OR $user->phone == "77005554797"){
                 $result = DB::table('transactions')
                     ->where('transactions.type', 3)
                     ->join('services', 'services.id', '=', 'transactions.service_id')
                     ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
                     ->leftJoin('users', 'users.id', '=', 'transactions.u_r_id')
                     ->select('transactions.created_at as date', 'transactions.amount', 'services.name as service', 'mobile_users.phone as company', 'users.name as contragent')
-                    ->orderBy('transactions.created_at', 'asc')
+                    ->orderBy('transactions.created_at', 'desc')
                     ->get();
                     return $this->makeResponse(200, true, ['info' => $result]);
 
