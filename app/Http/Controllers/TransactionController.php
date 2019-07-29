@@ -188,16 +188,30 @@ class TransactionController extends Controller
     }
     public function companyMoreGet(Request $request){
 
+        $tr = Transaction::where('id', $request->id)->first();
+        if($tr->parent_id){
+            $result = DB::table('transactions')
+                ->where('parent_id', $tr->parent_id)
+                ->whereIn('type', [1, 4])
+                ->join('services', 'services.id', '=', 'transactions.service_id')
+                ->leftJoin('companies', 'companies.id', '=', 'transactions.c_s_id')
+                ->leftJoin('companies as c', 'c.id', '=', 'transactions.c_r_id')
+                ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_r_id')
+                ->select('transactions.*', 'services.name as service', 'companies.name as sender', 'c.name as company', 'mobile_users.phone as user')
+                ->get();
 
-        $result = DB::table('transactions')
-            ->where('parent_id', $request->id)
-            ->whereIn('type', [1, 4])
-            ->join('services', 'services.id', '=', 'transactions.service_id')
-            ->leftJoin('companies', 'companies.id', '=', 'transactions.c_s_id')
-            ->leftJoin('companies as c', 'c.id', '=', 'transactions.c_r_id')
-            ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_r_id')
-            ->select('transactions.*', 'services.name as service', 'companies.name as sender', 'c.name as company', 'mobile_users.phone as user')
-            ->get();
+        }else{
+            $result = DB::table('transactions')
+                ->where('parent_id', $request->id)
+                ->whereIn('type', [1, 4])
+                ->join('services', 'services.id', '=', 'transactions.service_id')
+                ->leftJoin('companies', 'companies.id', '=', 'transactions.c_s_id')
+                ->leftJoin('companies as c', 'c.id', '=', 'transactions.c_r_id')
+                ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_r_id')
+                ->select('transactions.*', 'services.name as service', 'companies.name as sender', 'c.name as company', 'mobile_users.phone as user')
+                ->get();
+
+        }
 
         $s = DataTables::of($result)
             ->addColumn('1', function ($service) {
