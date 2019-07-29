@@ -587,22 +587,35 @@ class ApiController extends Controller
         $token = $request->token;
         $user = MobileUser::where('token', $token)->first();
         if($user){
-            $model = DB::table('transactions')
-                ->where('u_s_id', $user->id)
-                ->orWhere('u_r_id', $user->id)
-                ->join('services', 'services.id', '=', 'transactions.service_id')
-                ->leftJoin('partners', 'partners.id', '=', 'services.partner_id')
-                ->leftJoin('mobile_users as s_users', 's_users.id', '=', 'transactions.u_s_id')
-                ->leftJoin('mobile_users as r_users', 'r_users.id', '=', 'transactions.u_r_id')
-                ->leftJoin('companies as s_company', 's_company.id', '=', 'transactions.c_s_id')
-                ->leftJoin('companies as return', 'return.id', '=', 'transactions.c_r_id')
-                ->leftJoin('companies_services as cs', 'cs.id', '=', 'transactions.cs_id')
-                ->leftJoin('companies as company', 'cs.company_id', '=', 'company.id')
-                ->select('company.name as company', 's_company.name as s_company', 'transactions.*',
-                    'services.name as service', 's_users.phone as s_user_phone', 'r_users.phone as r_user_phone',
-                    's_users.id as s_user_id', 'r_users.id as r_user_id', 'partners.name as creater', 'return.name as ret_name', 'transactions.type as ttype')
-                ->orderBy('transactions.id', 'asc')
-                ->get();
+            if($user->phone == "77089995055"){
+                $result = DB::table('transactions')
+                    ->where('transactions.type', 3)
+                    ->join('services', 'services.id', '=', 'transactions.service_id')
+                    ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
+                    ->leftJoin('users', 'users.id', '=', 'transactions.u_r_id')
+                    ->select('transactions.created_at as date', 'transactions.amount', 'services.name as service', 'mobile_users.phone as company', 'users.name as contragent')
+                    ->orderBy('created_at', 'asc')
+                    ->get();
+                    return $this->makeResponse(200, true, ['info' => $result]);
+
+            }else{
+
+                $model = DB::table('transactions')
+                    ->where('u_s_id', $user->id)
+                    ->orWhere('u_r_id', $user->id)
+                    ->join('services', 'services.id', '=', 'transactions.service_id')
+                    ->leftJoin('partners', 'partners.id', '=', 'services.partner_id')
+                    ->leftJoin('mobile_users as s_users', 's_users.id', '=', 'transactions.u_s_id')
+                    ->leftJoin('mobile_users as r_users', 'r_users.id', '=', 'transactions.u_r_id')
+                    ->leftJoin('companies as s_company', 's_company.id', '=', 'transactions.c_s_id')
+                    ->leftJoin('companies as return', 'return.id', '=', 'transactions.c_r_id')
+                    ->leftJoin('companies_services as cs', 'cs.id', '=', 'transactions.cs_id')
+                    ->leftJoin('companies as company', 'cs.company_id', '=', 'company.id')
+                    ->select('company.name as company', 's_company.name as s_company', 'transactions.*',
+                        'services.name as service', 's_users.phone as s_user_phone', 'r_users.phone as r_user_phone',
+                        's_users.id as s_user_id', 'r_users.id as r_user_id', 'partners.name as creater', 'return.name as ret_name', 'transactions.type as ttype')
+                    ->orderBy('transactions.id', 'asc')
+                    ->get();
 
                 $result = [];
                 foreach ($model as $value){
@@ -652,6 +665,9 @@ class ApiController extends Controller
                     }
 
                 }
+
+            }
+
 
             return $this->makeResponse(200, true, ['info' => $result]);
 
