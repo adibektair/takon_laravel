@@ -186,11 +186,11 @@ class CompanyController extends Controller
                             ->orderBy('created_at', 'desc')->first();
 
                         $model = new Transaction();
-                        if ($parent->parent_id){
-                            $model->parent_id = $parent->parent_id;
-                        }else{
+//                        if ($parent->parent_id){
+//                            $model->parent_id = $parent->parent_id;
+//                        }else{
                             $model->parent_id = $parent->id;
-                        }
+//                        }
                         $model->balance = $c_service->amount - $request->amount[$k];
                         $model->users_service_id = $m_service->id;
                         $model->type = 1;

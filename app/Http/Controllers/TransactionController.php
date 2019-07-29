@@ -188,7 +188,7 @@ class TransactionController extends Controller
     }
     public function companyMoreGet(Request $request){
 
-        $tr = Transaction::where('id', $request->id)->first();
+//        $tr = Transaction::where('id', $request->id)->first();
 //        if($tr->parent_id){
 //            $result = DB::table('transactions')
 //                ->where('parent_id', $tr->parent_id)
