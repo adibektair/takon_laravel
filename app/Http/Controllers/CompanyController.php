@@ -270,6 +270,8 @@ class CompanyController extends Controller
             $rec_ser->service_id = $com_ser->service_id;
             $rec_ser->amount = $request->amount;
             $rec_ser->company_id = $request->company_id;
+            $rec_ser->deadline = $com_ser->deadline;
+
         }
 
         if($rec_ser->save()){

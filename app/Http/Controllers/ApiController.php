@@ -201,7 +201,8 @@ class ApiController extends Controller
                 ->join('companies_services', 'companies_services.company_id', '=', 'companies.id')
                 ->where('users_services.mobile_user_id', $user->id)
                 ->where('users_services.service_id', $service_id)
-                ->select('companies.name as company', 'services.*', 'users_services.id', 'users_services.amount as usersAmount', 'companies_services.deadline')
+                ->select('companies.name as company', 'services.*', 'users_services.id', 'users_services.amount as usersAmount')
+                ->selectRaw('IFNULL(companies_services.deadline, 1577880000) AS deadline')
                 ->distinct('users_services.id')
                 ->groupBy('users_services.id')
                 ->get();
