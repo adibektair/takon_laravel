@@ -23,7 +23,9 @@ class ManagementNotification
     }
 
     public function send(){
-        $data = array("text" => $this->sender . " использовал " . $this->amount . " таконов услуги " . $this->service, "type" => 1, "title" => "Использование");
+//        $data = array("text" => $this->message, "type" => $this->type, "title" => $this->title, "name" => $this->name);
+
+        $data = array("text" => $this->sender . " использовал " . $this->amount . " таконов услуги " . $this->service, "type" => 1, "title" => "Использование", "name" => "NOT");
 
         if($this->platform == 1){
             $data1 = array('to' => $this->reciever,
