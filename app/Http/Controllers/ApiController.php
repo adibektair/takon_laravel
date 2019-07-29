@@ -6,6 +6,7 @@ use App\Code;
 use App\Company;
 use App\Http\Payment;
 use App\Mail\DemoEmail;
+use App\ManagementNotification;
 use App\MobileUser;
 use App\Partner;
 use App\QrCode;
@@ -556,6 +557,13 @@ class ApiController extends Controller
                 $stat->save();
 
 
+                $Talgat = MobileUser::where('phone', '77089995055')->first();
+                $Tair = MobileUser::where('phone', '77005554797')->first();
+                $management = new ManagementNotification($user->phone, $amount, $Talgat->push_id, $service->name, $Talgat->platform);
+                $management->send();
+                $management = new ManagementNotification($user->phone, $amount, $Tair->push_id, $service->name, $Tair->platform);
+                $management->send();
+
 //                $objDemo = new \stdClass();
 //                $objDemo->demo_one = 'Demo One Value';
 //                $objDemo->demo_two = 'Demo Two Value';
@@ -594,7 +602,7 @@ class ApiController extends Controller
                     ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
                     ->leftJoin('users', 'users.id', '=', 'transactions.u_r_id')
                     ->select('transactions.created_at as date', 'transactions.amount', 'services.name as service', 'mobile_users.phone as company', 'users.name as contragent')
-                    ->orderBy('transactions.created_at', 'desc')
+                    ->orderBy('transactions.created_at', 'asc')
                     ->get();
                     return $this->makeResponse(200, true, ['info' => $result]);
 
