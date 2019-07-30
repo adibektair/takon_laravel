@@ -223,7 +223,7 @@ class CompanyController extends Controller
             ->get();
 
         $s = DataTables::of($services)->addColumn('checkbox', function ($service) {
-            return '<a href="/share-services?id=' . $service->id .'"><button class="btn btn-success">Передать</button></a> <a href="/mobile_users?id=' . $service->id .'"><button class="btn btn-outline-success">Раздать</button></a>';
+            return '<a href="/share-services?id=' . $service->id .'"><button class="btn btn-success">Передать</button></a> <a href="/groups?id=' . $service->id .'"><button class="btn btn-outline-success">Раздать</button></a>';
         })
             ->addColumn('return', function($user){
                 $date = date('Y-m-d', $user->deadline);
