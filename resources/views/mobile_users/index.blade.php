@@ -8,13 +8,24 @@
 
     <div class="col-md-12 mt-2 mb-3 bg-transparent">
         <div class="float-left">
-            <h5>Пользователи</h5>
+            <h4>Пользователи</h4>
+
+            <?php
+            if(auth()->user()->role_id == 3){
+                ?>
+
             <h6>Выберите пользователей, которым хотите  отправить таконы</h6>
 
             <a href="{{ route('groups') }}">
                 <button class="btn btn-outline-info">Избранное</button>
             </a>
             <br><br><br>
+
+        <?php
+
+            }
+            ?>
+
         </div>
 
     </div>

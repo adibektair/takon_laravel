@@ -141,7 +141,7 @@ class MobileUserController extends Controller
         foreach ($users as $user){
             $string .= $user->mobile_user_id . ',';
         }
-        return view('mobile_users/send-group')->with(['ids' => $string, 'name' =>$group->name, 'cs_id' => $request->cs_id]);
+        return view('mobile_users/send-group')->with(['ids' => $string, 'name' =>$group->name, 'group_id' => $group->id, 'cs_id' => $request->cs_id]);
     }
 
     /**
@@ -197,6 +197,42 @@ class MobileUserController extends Controller
         $user->name = $name;
         $user->save();
 
+    }
+
+    public function createGroup(){
+        return view('mobile_users/create-group');
+    }
+
+    public function searchUser(Request $request){
+
+        $u = MobileUser::where('phone', 'LIKE', "%".$request->value."%")->first();
+        if ($u){
+            return ['success' => true, "id" => $u->id, "phone" => $u->phone];
+        }else{
+            return ['success' => false];
+        }
+
+    }
+    public function storeGroup(Request $request){
+        if(!$request->id){
+            toastError("Добавьте пользователей в группу, для этого воспользуйтесь поиском!");
+            return redirect()->back();
+        }
+        $group = new Group();
+        $group->name = $request->group_name;
+        $group->company_id = auth()->user()->company_id;
+        if ($group->save()){
+            foreach ($request->id as $user_id => $phone){
+
+                $group_user = new GroupsUser();
+                $group_user->username = $request->name[$user_id];
+                $group_user->mobile_user_id = $user_id;
+                $group_user->group_id = $group->id;
+                $group_user->save();
+            }
+        }
+        toastSuccess('Группа пользователей была добавлена');
+        return redirect()->route('groups');
     }
     public function all(){
 //        $users = MobileUser::all();

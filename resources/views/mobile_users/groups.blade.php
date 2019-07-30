@@ -8,14 +8,13 @@
 
     <div class="col-md-12 mt-2 mb-3 bg-transparent">
         <div class="float-left">
-            <h5>Сохраненные группы пользователей</h5>
-            <br>
-            <a href="{{ route('groups') }}">
-                <button class="btn btn-outline-info">Избранное</button>
-            </a>
-            <br><br><br>
+            <h3>Сохраненные группы пользователей</h3>
         </div>
-
+        <div class="col-md-12 mt-2 mb-3">
+            <div class="float-right">
+                <a href="{{ route('create.group') }}"><button class="btn btn-success">Добавить избранное</button></a>
+            </div>
+        </div>
     </div>
 
 

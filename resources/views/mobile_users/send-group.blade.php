@@ -58,7 +58,10 @@
 
                     <tr>
                         <th>{{ $user->id }}</th>
-                        <th>{{ $user->phone . ' ' . $user->name }}</th>
+                        <?php
+                         $group_user = \App\GroupsUser::where('mobile_user_id', $user->id)->where('group_id', $group_id)->first();
+                        ?>
+                        <th>{{ $user->phone . ' ' . $group_user->username }}</th>
                                                 <th> <button class="btn-danger" id="{{ $user->id }}">Удалить</button> </th>
                         <th>
                             <select name="service_id[<?=$rand?>]" class="select">

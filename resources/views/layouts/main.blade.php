@@ -218,7 +218,7 @@
 
                             </li>
                         <li>
-                            <a href="/mobile_users" >Пользователи</a>
+                            <a href="/groups" >Пользователи</a>
 
                         </li>
                         <li>
