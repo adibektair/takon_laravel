@@ -67,7 +67,6 @@ class MobileUserController extends Controller
 
 
             if($m_service->save()){
-                if($request->amount > 0){
                     $exactly_service = Service::where('id', '=', $cs->service_id)->first();
                     $parent = Transaction::where('service_id', $exactly_service->id)
                         ->where('c_r_id', auth()->user()->company_id)
@@ -89,7 +88,7 @@ class MobileUserController extends Controller
                     $model->price = $exactly_service->price;
                     $model->amount = $request->amount;
                     $model->save();
-                }
+
 
             }
 
@@ -258,7 +257,7 @@ class MobileUserController extends Controller
 
     public function searchUser(Request $request){
 
-        $u = MobileUser::where('phone', 'LIKE', "%".$request->value."%")->first();
+        $u = MobileUser::where('phone', $request->value)->first();
         if ($u){
             return ['success' => true, "id" => $u->id, "phone" => $u->phone];
         }else{

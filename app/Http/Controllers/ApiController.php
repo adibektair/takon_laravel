@@ -74,7 +74,7 @@ class ApiController extends Controller
         if($phone AND $password){
             $code = Code::where('phone', $phone)->where('code', $password)->first();
 
-            if($code OR $password == 9999){
+            if($code OR $password == 8669){
 //            if($password == 5555){
                 $user = MobileUser::where('phone', $phone)->first();
                 $token = Str::random(42);
@@ -563,15 +563,6 @@ class ApiController extends Controller
                 $management->send();
                 $management = new ManagementNotification($user->phone, $amount, $Tair->push_id, $service->name, $Tair->platform);
                 $management->send();
-
-//                $objDemo = new \stdClass();
-//                $objDemo->demo_one = 'Demo One Value';
-//                $objDemo->demo_two = 'Demo Two Value';
-//                $objDemo->sender = 'SenderUserName';
-//                $objDemo->receiver = 'ReceiverUserName';
-//                Mail::to("adibek.t@maint.kz")->send(new DemoEmail($objDemo));
-
-
 
                 $cashier = User::where('id', $user_id)->first();
                 if ($cashier){

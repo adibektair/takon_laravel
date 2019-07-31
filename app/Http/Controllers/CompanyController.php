@@ -177,7 +177,6 @@ class CompanyController extends Controller
 
 
                 if($m_service->save()){
-                    if($request->amount[$k] > 0){
                         $exactly_service = Service::where('id', '=', $c_service->service_id)->first();
                         $parent = Transaction::where('service_id', $exactly_service->id)
                             ->where('c_r_id', auth()->user()->company_id)
@@ -188,7 +187,7 @@ class CompanyController extends Controller
 //                        if ($parent->parent_id){
 //                            $model->parent_id = $parent->parent_id;
 //                        }else{
-                            $model->parent_id = $parent->id;
+                       $model->parent_id = $parent->id;
 //                        }
                         $model->balance = $c_service->amount - $request->amount[$k];
                         $model->users_service_id = $m_service->id;
@@ -200,8 +199,6 @@ class CompanyController extends Controller
                         $model->price = $exactly_service->price;
                         $model->amount = $request->amount[$k];
                         $model->save();
-                    }
-
                 }
                 $c_service->amount -= $request->amount[$k];
                 $c_service->save();
