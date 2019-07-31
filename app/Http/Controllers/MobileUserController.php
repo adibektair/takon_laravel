@@ -97,6 +97,9 @@ class MobileUserController extends Controller
         $cs->amount -= $request->amount;
         $cs->save();
 
+        toastSuccess('Успешно отправлено!');
+        return redirect()->back();
+
     }
 
     public function groups()
