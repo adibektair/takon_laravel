@@ -2,53 +2,103 @@
 
 namespace App\Http\Controllers;
 
+use App\CloudMessage;
+use App\CompaniesService;
 use App\Group;
 use App\GroupsUser;
 use App\MobileUser;
+use App\Partner;
+use App\Service;
+use App\Transaction;
+use App\UsersService;
+use App\UsersSubscriptions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 
 class MobileUserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
-    {
 
-        return view('mobile_users/index')->with(['id' => $request->id]);
+    public function sendUser(Request $request){
+        $cs_id = $request->cs_id;
+        $user = MobileUser::where('phone', $request->phone)->first();
+        if (!$user){
+            toastError('Пользователь с таким номером телефона не найден');
+            return redirect()->back();
+        }
+        $cs = CompaniesService::where('id', $cs_id)->first();
+        if ($cs->amount < $request->amount){
+            toastError('У вас недостаточно таконов');
+            return redirect()->back();
+        }
+
+        $m_service = UsersService::where('service_id', $cs->service_id)
+            ->where('mobile_user_id', $user->id)
+            ->where('deadline', $cs->deadline)
+            ->where('company_id', auth()->user()->company_id)
+            ->first();
+        if($m_service){
+            $m_service->amount += $request->amount;
+        }else {
+
+            $m_service = new UsersService();
+            $m_service->amount = $request->amount;
+        }
+            $m_service->mobile_user_id = $user->id;
+            $m_service->company_id = auth()->user()->company_id;
+            $m_service->cs_id = $cs->id;
+
+            $m_service->service_id = $cs->service_id;
+            $m_service->deadline = $cs->deadline;
+
+            $serv = Service::where('id', $cs->service_id)->first();
+            $partner = Partner::where('id', $serv->partner_id)->first();
+            $subs = UsersSubscriptions::where('mobile_user_id', $user->id)
+                ->where('partner_id', $serv->partner_id)
+                ->first();
+            if(!$subs){
+                $subs = new UsersSubscriptions();
+                $subs->mobile_user_id = $user->id;
+                $subs->partner_id = $serv->partner_id;
+                $subs->save();
+            }
+            $message = new CloudMessage("Вам были отправлены Таконы " . $serv->name, $user->id, "Внимение", $serv->partner_id, $partner->name);
+            $message->sendNotification();
+
+
+            if($m_service->save()){
+                if($request->amount > 0){
+                    $exactly_service = Service::where('id', '=', $cs->service_id)->first();
+                    $parent = Transaction::where('service_id', $exactly_service->id)
+                        ->where('c_r_id', auth()->user()->company_id)
+                        ->where('u_s_id', null)
+                        ->orderBy('created_at', 'desc')->first();
+
+                    $model = new Transaction();
+//                        if ($parent->parent_id){
+//                            $model->parent_id = $parent->parent_id;
+//                        }else{
+                    $model->parent_id = $parent->id;
+                    $model->balance = $cs->amount - $request->amount;
+                    $model->users_service_id = $m_service->id;
+                    $model->type = 1;
+                    $model->cs_id = $cs->id;
+                    $model->service_id = $cs->service_id;
+                    $model->c_s_id = auth()->user()->company_id;
+                    $model->u_r_id = $user->id;
+                    $model->price = $exactly_service->price;
+                    $model->amount = $request->amount;
+                    $model->save();
+                }
+
+            }
+
+
+        $cs->amount -= $request->amount;
+        $cs->save();
+
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\MobileUser  $mobileUser
-     * @return \Illuminate\Http\Response
-     */
     public function groups()
     {
         return view('mobile_users/groups');
@@ -100,8 +150,8 @@ class MobileUserController extends Controller
             ->select('groups.*')
             ->get();
 
-        $s = DataTables::of($groups)->addColumn('checkbox', function ($group) {
-            return '<a href="/choose-group?id='.$group->id.'"><button class="btn btn-success" >Выбрать</button></a>';
+        $s = DataTables::of($groups)->addColumn('checkbox', function ($group) use ($request){
+            return '<a href="/choose-group?id='.$group->id.'&cs_id=' . $request->id. '"><button class="btn btn-success" >Выбрать</button></a>';
         })
             ->addColumn('remove', function ($group) {
                 return '<button class="btn btn-danger" id="'. $group->id .'">Удалить группу</button>';

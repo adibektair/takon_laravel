@@ -136,7 +136,6 @@ class CompanyController extends Controller
 
 
         foreach ($user_ids as $k => $v){
-
             if($request->amount[$k] > 1){
                 $c_service = CompaniesService::where('id', '=', $service_ids[$k])->first();
                 $m_service = UsersService::where('service_id', $c_service->service_id)

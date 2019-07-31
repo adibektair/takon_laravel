@@ -94,9 +94,16 @@ Route::group(['middleware' => ['authenticated']], function () {
 
     Route::post('/remove-user', ['as' => 'remove.user', 'uses' => 'MobileUserController@removeUser']);
     Route::get('/groups', ['as' => 'groups', 'uses' => 'MobileUserController@groups']);
-    Route::get('/get-groups', ['as' => 'get.groups', 'uses' => 'MobileUserController@getGroups']);
+    Route::get('get-groups/', ['as' => 'get.groups', 'uses' => 'MobileUserController@getGroups']);
     Route::get('/choose-group', ['uses' => 'MobileUserController@chooseGroup']);
     Route::get('/add-user', ['uses' => 'MobileUserController@addUser'])->name('add.user');//add-user-group
+
+    Route::get('/send-user', function () {
+        return view('mobile_users/send-user');
+    })->name('send.user');
+    Route::post('/send-to-user', ['uses' => 'MobileUserController@sendUser'])->name('send.to.user');//add-user-group
+
+
 
     Route::get('/add-user-group', ['uses' => 'MobileUserController@addUserGroup']);//add-user-group
     Route::post('/add-user-finish', ['uses' => 'MobileUserController@addUserFinish']);//add-user-group

@@ -4,15 +4,54 @@
 
 
 @section('content')
-
+    <?php
+    if(isset($_GET['id']) ){
+        $id = $_GET['id'];
+    }else{
+        $id = 1;
+    }
+    ?>
 
     <div class="col-md-12 mt-2 mb-3 bg-transparent">
         <div class="float-left">
             <h3>Сохраненные группы пользователей</h3>
         </div>
         <div class="col-md-12 mt-2 mb-3">
+            <form action="{{ route('send.to.user') }}" method="post">
+                <div class="form-group">
+                    <label>Выберите услугу</label>
+                    <?php
+                    $services = \App\CompaniesService::where('company_id', '=', auth()->user()->company_id)->get();
+                    ?>
+                    <select name="cs_id">
+                        <?php
+                        foreach ($services as $service){
+                        $s = \App\Service::where('id', $service->service_id)->first();
+                        ?>
+                        <option  value="<?=$service->id?>" <?php if($id == $service->id) { ?>selected<?php } ?>><?=$s->name . " количество(". $service->amount .")"?></option>
+                        <?php
+                        }
+                        ?>
+                    </select>
+
+
+                </div>
+                @csrf
+                <div class="form-group">
+                    <label >Введите номер телефона в формате 77015554797</label>
+                    <input type="number" required class="form-control" name="phone">
+                </div>
+
+                <div class="form-group">
+                    <label >Введите количество таконов</label>
+                    <input type="number" required class="form-control" name="amount">
+                </div>
+
+                <button type="submit" class="btn btn-success">Отправить</button>
+            </form>
+
             <div class="float-right">
-                <a href="{{ route('create.group') }}"><button class="btn btn-success">Добавить избранное</button></a>
+                <a href="{{ route('create.group') }}"><button class="btn btn-info">Добавить группу</button></a>
             </div>
         </div>
     </div>
@@ -53,7 +92,7 @@
             $('#table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('get.groups') }}",
+                ajax: "/get-groups?id=<?=$id?>",
                 stateSave: true,
                 columns: [
                     { data: 'id', name: 'id' },
