@@ -557,12 +557,12 @@ class ApiController extends Controller
                 $stat->save();
 
 
-                $Talgat = MobileUser::where('phone', '77089995055')->first();
-                $Tair = MobileUser::where('phone', '77005554797')->first();
-                $management = new ManagementNotification($user->phone, $amount, $Talgat->push_id, $service->name, $Talgat->platform);
-                $management->send();
-                $management = new ManagementNotification($user->phone, $amount, $Tair->push_id, $service->name, $Tair->platform);
-                $management->send();
+//                $Talgat = MobileUser::where('phone', '77089995055')->first();
+//                $Tair = MobileUser::where('phone', '77005554797')->first();
+//                $management = new ManagementNotification($user->phone, $amount, $Talgat->push_id, $service->name, $Talgat->platform);
+//                $management->send();
+//                $management = new ManagementNotification($user->phone, $amount, $Tair->push_id, $service->name, $Tair->platform);
+//                $management->send();
 
                 $cashier = User::where('id', $user_id)->first();
                 if ($cashier){
