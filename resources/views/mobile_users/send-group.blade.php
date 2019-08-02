@@ -87,10 +87,9 @@
                         </th>
                     </tr>
                 @endforeach
-
-
-                <button class="btn btn-success float-right mb-2" type="submit">Отправить</button>
+                <button id="sendb" class="btn btn-success float-right mb-2" type="submit">Отправить</button>
             </form>
+
 
             </tbody>
         </table>
@@ -107,6 +106,10 @@
         }
     </style>
     <script>
+
+        function disableButton(){
+            document.getElementById('sendb').disabled = true;
+        }
 
         $(document).ready(function () {
             $( ".btn-danger" ).click(function() {
