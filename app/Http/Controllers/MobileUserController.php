@@ -19,6 +19,11 @@ use Yajra\DataTables\DataTables;
 class MobileUserController extends Controller
 {
 
+    public function index(Request $request)
+    {
+        return view('mobile_users/index')->with(['id' => $request->id]);
+    }
+    
     public function sendUser(Request $request){
         $cs_id = $request->cs_id;
         $user = MobileUser::where('phone', $request->phone)->first();
