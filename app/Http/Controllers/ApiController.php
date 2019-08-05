@@ -726,6 +726,30 @@ class ApiController extends Controller
     }
 
 
+
+    public function getAccount(Request $request){
+        $token = $request->token;
+        $user = MobileUser::where('token', $token)->first();
+        if (!$user){
+            return $this->makeResponse(401, false, []);
+        }
+        return $this->makeResponse(200, true, ['user' => $user]);
+    }
+    public function setName(Request $request){
+
+        $token = $request->token;
+        $user = MobileUser::where('token', $token)->first();
+        if (!$user){
+            return $this->makeResponse(401, false, []);
+        }
+        $user->name = $request->name;
+        $user->save();
+        return $this->makeResponse(200, true, []);
+
+    }
+
+
+
     public function pay(Request $request){
         $validator = Validator::make($request->all(), [
             'ip' => 'required',

@@ -39,6 +39,8 @@ Route::group(['middleware' => ['token']], function () {
     Route::post('/deletesubscription', ['uses' => 'ApiController@removeSubscription']);
     Route::post('/setpushid', ['uses' => 'ApiController@setPushId']);
     Route::post('/pay', ['uses' => 'ApiController@pay']);
+    Route::post('/get-account', ['uses' => 'ApiController@getAccount']);
+    Route::post('/set-name', ['uses' => 'ApiController@setName']);
 
 });
 

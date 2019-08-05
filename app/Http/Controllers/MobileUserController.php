@@ -23,7 +23,7 @@ class MobileUserController extends Controller
     {
         return view('mobile_users/index')->with(['id' => $request->id]);
     }
-    
+
     public function sendUser(Request $request){
         $cs_id = $request->cs_id;
         $user = MobileUser::where('phone', $request->phone)->first();
