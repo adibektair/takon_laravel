@@ -807,6 +807,7 @@ class ApiController extends Controller
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $server_output = curl_exec ($ch);
         curl_close ($ch);
+        $server_output = json_decode($server_output);
         if($server_output->success){
             // add money
             echo "payment successfully endede";
