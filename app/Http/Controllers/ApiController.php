@@ -788,8 +788,8 @@ class ApiController extends Controller
             ]
         );
     }
-    const API_KEY = '5ba96ea2cf7dd28ca602ac3fdd195297';
-    const ID = 'pk_93faa2b475d702b1189eda8d8f214';
+    const API_KEY = 'f1bfe6d357926dca0b37913171d258af';
+    const ID = 'pk_0ad5acde2f593df7c5a63c9c27807';
 
     public function paymentHandle(Request $request){
         $TransactionId = $request->MD;
