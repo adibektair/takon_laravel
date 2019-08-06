@@ -8,8 +8,8 @@ use const http\Client\Curl\AUTH_BASIC;
 
 class Payment
 {
-    const API_KEY = '5ba96ea2cf7dd28ca602ac3fdd195297';
-    const ID = 'pk_93faa2b475d702b1189eda8d8f214';
+    const API_KEY = 'f1bfe6d357926dca0b37913171d258af';
+    const ID = 'pk_0ad5acde2f593df7c5a63c9c27807';
     const CURRENCY = 'KZT';
     private $name;
     private $cryptogram;
@@ -34,8 +34,6 @@ class Payment
             'Content-type: application/json',
             'Authorization: Basic '. base64_encode(self::ID . ":". self::API_KEY)
         ));
-//        curl_setopt($ch, )
-//        curl_setopt($ch, AUTH_BASIC, self::ID . ":" . self::API_KEY);
 
         curl_setopt($ch, CURLOPT_URL,"https://api.cloudpayments.kz/payments/cards/charge");
         curl_setopt($ch, CURLOPT_POST, 1);
