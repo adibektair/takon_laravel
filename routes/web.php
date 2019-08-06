@@ -154,6 +154,10 @@ Route::group(['middleware' => ['authenticated']], function () {
 //    Route::get('/transactions/use/all/{id}', 'TransactionController@useAll')->name('transactions.use.all');
 
     // admin
+    Route::get('/transactions-search', 'TransactionController@search')->name('transactions.search');
+    Route::get('/transactions-search-make', 'TransactionController@searchMake');
+    Route::post('/transactions-search-go', 'TransactionController@searchGo')->name('transactions.search.go');
+
     Route::get('/transactions', 'TransactionController@index')->name('transactions.admin');
     Route::get('/transactions/admin/all', 'TransactionController@adminAll')->name('transactions.admin.all');
     Route::get('/transactions/admin/more', 'TransactionController@adminMore')->name('transactions.admin.more');

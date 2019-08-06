@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\CompaniesService;
+use App\Company;
 use App\Partner;
 use App\Transaction;
 use App\UsersService;
@@ -26,6 +27,83 @@ class TransactionController extends Controller
     {
         return view('transactions/use');
     }
+    public function search()
+    {
+        return view('transactions/search');
+    }
+    public function searchGo(Request $request)
+    {
+        return view('transactions/search-go')->with(['phone' => $request->phone]);
+    }
+    public function searchMake(Request $request)
+    {
+        if(auth()->user()->role_id == 3){
+            $phone = $request->phone;
+            $result = DB::table('transactions')
+                ->where('users.phone', $phone)
+                ->orWhere('musers.phone', $phone)
+                ->leftJoin('mobile_users as users', 'users.id', '=', 'transactions.u_s_id')
+                ->leftJoin('mobile_users as musers', 'musers.id', '=', 'transactions.u_r_id')
+                ->join('services', 'services.id', '=', 'transactions.service_id')
+                ->join('companies_services', 'companies_services.id', '=', 'transactions.cs_id')
+                ->where('companies_services.company_id', '=', auth()->user()->company_id)
+                ->select('transactions.*', 'musers.phone as muserphone', 'users.phone as sender', 'services.name as service')
+                ->get();
+            $s = DataTables::of($result)
+                ->addColumn('reciever', function ($service) {
+                    if($service->type == 3){
+                        return 'Использовано';
+                    }else{
+                        return $service->muserphone;
+                    }
+                })
+                ->addColumn('sender', function ($service) use($phone) {
+                    if($service->c_s_id){
+                        $c = Company::where('id', $service->c_s_id)->first();
+                        return $c->name;
+                    }else{
+                        return $service->sender;
+                    }
+
+                })
+                ->rawColumns(['reciever', 'sender'])
+                ->make(true);
+            return $s;
+        }else{
+            $phone = $request->phone;
+            $result = DB::table('transactions')
+                ->where('users.phone', $phone)
+                ->orWhere('musers.phone', $phone)
+                ->leftJoin('mobile_users as users', 'users.id', '=', 'transactions.u_s_id')
+                ->leftJoin('mobile_users as musers', 'musers.id', '=', 'transactions.u_r_id')
+                ->join('services', 'services.id', '=', 'transactions.service_id')
+                ->select('transactions.*', 'musers.phone as muserphone', 'users.phone as sender', 'services.name as service')
+                ->get();
+            $s = DataTables::of($result)
+                ->addColumn('reciever', function ($service) {
+                    if($service->type == 3){
+                        return 'Использовано';
+                    }else{
+                        return $service->muserphone;
+                    }
+                })
+                ->addColumn('sender', function ($service) use($phone) {
+                    if($service->c_s_id){
+                        $c = Company::where('id', $service->c_s_id)->first();
+                        return $c->name;
+                    }else{
+                        return $service->sender;
+                    }
+
+                })
+                ->rawColumns(['reciever', 'sender'])
+                ->make(true);
+            return $s;
+        }
+
+    }
+
+
 
     /**
      * Show the form for creating a new resource.

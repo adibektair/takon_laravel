@@ -188,7 +188,9 @@
                         <li>
                             <a href="{{ route('transactions.use') }}">Использование таконов</a>
                         </li>
-
+                    <li>
+                        <a href="{{ route('transactions.search') }}">Поиск по транзакциям</a>
+                    </li>
                         <li>
                             <a href="{{ route('transactions.return') }}">Транзакции по возвратам</a>
                         </li>
@@ -236,6 +238,10 @@
 
                     <li>
                         <a href="{{ route('transactions.use') }}">Использование таконов</a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('transactions.search') }}">Поиск по транзакциям</a>
                     </li>
 
                         @endif
