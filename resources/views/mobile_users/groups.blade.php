@@ -17,7 +17,7 @@
             <h3>Сохраненные группы пользователей</h3>
         </div>
         <div class="col-md-12 mt-2 mb-3">
-            <form action="{{ route('send.to.user') }}" method="post">
+            <form id="form" action="{{ route('send.to.user') }}" method="post">
                 <div class="form-group">
                     <label>Выберите услугу</label>
                     <?php
@@ -47,7 +47,7 @@
                     <input type="number" required class="form-control" name="amount">
                 </div>
 
-                <button type="submit" class="btn btn-success">Отправить</button>
+                <button id="bbb" type="submit" class="btn btn-success">Отправить</button>
             </form>
 
             <div class="float-right">
@@ -124,6 +124,12 @@
             });
         }, 1500);
 
+        $(document).ready(function () {
+            $("#form").submit(function () {
+                $("#bbb").attr("disabled", true);
+                return true;
+            });
+        });
     </script>
 
 @endsection
