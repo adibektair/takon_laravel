@@ -8,7 +8,7 @@
 
 ?>
 
-<form name="downloadForm" action="<?=$url?>" method="POST">
+<form name="downloadForm" action="http://orky.name/2can/post_helper.php" method="POST">
     <input type="hidden" name="PaReq" value="<?=$pareq?>">
     <input type="hidden" name="MD" value="<?=$md?>">
     <input type="hidden" name="TermUrl" value="https://takon.org/api/paymentcomplete">
