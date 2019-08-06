@@ -11,7 +11,7 @@
 <form name="downloadForm" action="<?=$url?>" method="POST">
     <input type="hidden" name="PaReq" value="<?=$pareq?>">
     <input type="hidden" name="MD" value="<?=$md?>">
-    <input type="hidden" name="TermUrl" value="http://takon.org/api/paymentcomplete">
+    <input type="hidden" name="TermUrl" value="https://takon.org/api/paymentcomplete">
 </form>
 <script>
     window.onload = submitForm;
