@@ -807,7 +807,13 @@ class ApiController extends Controller
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $server_output = curl_exec ($ch);
         curl_close ($ch);
-        return $server_output;
+        if($server_output["success"]){
+            // add money
+            echo "payment successfully endede";
+        }else{
+            echo "error " . $server_output['Model']['Reason'];
+        }
+        
     }
 
 
