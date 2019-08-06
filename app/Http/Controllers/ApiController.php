@@ -790,12 +790,11 @@ class ApiController extends Controller
     }
     const API_KEY = 'f1bfe6d357926dca0b37913171d258af';
     const ID = 'pk_0ad5acde2f593df7c5a63c9c27807';
+
     public function paymentHandle(Request $request){
         $TransactionId = $request->MD;
         $PaRes = $request->PaRes;
-
         $data = array("TransactionId" => $TransactionId, "PaRes" => $PaRes);
-
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             'Content-type: application/json',
@@ -805,16 +804,15 @@ class ApiController extends Controller
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS,
             json_encode($data));
-
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $server_output = curl_exec ($ch);
         curl_close ($ch);
         return json_decode($server_output);
-
     }
 
 
     public function complete(Request $request){
         return view('mobile_users/paymentcomplete')->with(['data'=>$request]);
     }
+
 }
