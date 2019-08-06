@@ -1,2 +1,2 @@
 <?php
-dd($_POST);
+dd($data);

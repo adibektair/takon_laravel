@@ -812,4 +812,9 @@ class ApiController extends Controller
         return json_decode($server_output);
 
     }
+
+
+    public function complete(Request $request){
+        return view('mobile_users/paymentcomplete')->with(['data'=>$request]);
+    }
 }
