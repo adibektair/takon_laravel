@@ -808,11 +808,11 @@ class ApiController extends Controller
         $server_output = curl_exec ($ch);
         curl_close ($ch);
         $server_output = json_decode($server_output);
-        if($server_output['success']){
+        if($server_output->success){
             // add money
             echo "payment successfully endede";
         }else{
-            echo "error " . $server_output['Model']['Reason'];
+            echo "error " . $server_output->Model->Reason;
         }
 
     }
