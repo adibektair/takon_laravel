@@ -832,7 +832,6 @@ class ApiController extends Controller
         $server_output = curl_exec ($ch);
         curl_close ($ch);
         $s = json_decode($server_output);
-        dd($s);
         if ($s){
             if($s->Success == true){
 
@@ -873,6 +872,41 @@ class ApiController extends Controller
         }
 
 
+    }
+
+    public function payByToken(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            'amount' => 'required',
+            'card_id' => 'required',
+            'service_id' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return $this->makeResponse(400, false, ['errors' => $validator->errors()->all()]);
+        }
+        $user = MobileUser::where('token', $request->token)->first();
+        $service = Service::where('id', $request->service_id)->first();
+        $sum = $service->payment_price * $request->amount;
+
+        $card = Card::where('id', $request->card_id)->first();
+
+        $data = array("Amount" => $sum, "Currency" => 'KZT',  "AccountId" => $user->id, "Token" => $card->token);
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-type: application/json',
+            'Authorization: Basic '. base64_encode(self::ID . ":". self::API_KEY)
+        ));
+
+        curl_setopt($ch, CURLOPT_URL,"https://api.cloudpayments.kz/payments/tokens/charge");
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS,
+            json_encode($data));
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $server_output = curl_exec ($ch);
+        curl_close ($ch);
+        return $server_output;
     }
 
     public function getCards(Request $request){
