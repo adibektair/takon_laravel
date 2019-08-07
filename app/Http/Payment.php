@@ -15,19 +15,20 @@ class Payment
     private $cryptogram;
     private $ip;
     private $amount;
-
-    function __construct($name, $cryptogram, $ip, $amount)
+    private $id;
+    function __construct($name, $cryptogram, $ip, $amount, $id)
     {
         $this->amount = $amount;
         $this->name = $name;
         $this->cryptogram = $cryptogram;
         $this->ip = $ip;
+        $this->id;
     }
 
 
     public function pay(){
 
-        $data = array("Amount" => $this->amount, "Currency" => self::CURRENCY, "IpAddress" => $this->ip, "Name" => $this->name, "CardCryptogramPacket" => $this->cryptogram);
+        $data = array("Amount" => $this->amount, "Currency" => self::CURRENCY, "IpAddress" => $this->ip, "Name" => $this->name, "CardCryptogramPacket" => $this->cryptogram, "AccountId" => $this->id);
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(

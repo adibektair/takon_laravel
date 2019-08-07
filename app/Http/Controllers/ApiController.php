@@ -766,7 +766,7 @@ class ApiController extends Controller
 
         $user = MobileUser::where('token', $request->token)->first();
 
-        $paymentModel = new Payment($request->name, $request->cryptogram, $request->ip, $request->amount);
+        $paymentModel = new Payment($request->name, $request->cryptogram, $request->ip, $request->amount, $user->id);
         $response = $paymentModel->pay();
         $response = json_decode($response);
         $TransactionId = $response->Model->TransactionId;
