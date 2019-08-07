@@ -906,7 +906,7 @@ class ApiController extends Controller
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $server_output = curl_exec ($ch);
         curl_close ($ch);
-        return $server_output;
+        echo($server_output);
     }
 
     public function getCards(Request $request){
