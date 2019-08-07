@@ -832,6 +832,7 @@ class ApiController extends Controller
         $server_output = curl_exec ($ch);
         curl_close ($ch);
         $s = json_decode($server_output);
+        dd($s);
         if ($s){
             if($s->Success == true){
 
