@@ -790,6 +790,16 @@ class ApiController extends Controller
             $newService->deadline = strtotime("+" . $service->deadline ." day", strtotime("now"));
             $newService->save();
 
+
+            $transaction = new Transaction();
+            $transaction->u_r_id = $user->id;
+            $transaction->amount = $request->amount / $service->payment_price;
+            $transaction->service_id = $request->serviceId;
+            $transaction->price = $request->amount;
+            $transaction->type = 5;
+            $transaction->users_service_id = $newService->id;
+            $transaction->save();
+
         }
         $payModel->save();
         return $this->makeResponse(200,
@@ -829,13 +839,22 @@ class ApiController extends Controller
             $newService = new UsersService();
             $newService->mobile_user_id = $user->id;
             $newService->service_id = $payment->service_id;
-            $newService->amount = $request->amount / $service->payment_price;
+            $newService->amount = $payment->amount / $service->payment_price;
             $newService->company_id = null;
             $newService->cs_id = null;
             $newService->deadline = strtotime("+" . $service->deadline ." day", strtotime("now"));
             $newService->save();
 
-            echo "payment done!";
+            $transaction = new Transaction();
+            $transaction->u_r_id = $user->id;
+            $transaction->amount = $payment->amount / $service->payment_price;
+            $transaction->service_id = $request->serviceId;
+            $transaction->price = $payment->amount;
+            $transaction->type = 5;
+            $transaction->users_service_id = $newService->id;
+            $transaction->save();
+            
+            echo "Оплата успешно произведена!";
 
         }else{
             echo "error " . $s->Model->Reason;
