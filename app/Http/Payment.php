@@ -22,7 +22,7 @@ class Payment
         $this->name = $name;
         $this->cryptogram = $cryptogram;
         $this->ip = $ip;
-        $this->id;
+        $this->id = $id;
     }
 
 
