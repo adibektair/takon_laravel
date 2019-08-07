@@ -45,7 +45,7 @@
             </tr>
             </thead>
             <tbody>
-            <form method="post" action="{{ route('send.takons') }}">
+            <form id="form" method="post" action="{{ route('send.takons') }}">
 
 
                 @csrf
@@ -140,6 +140,12 @@
                 document.getElementsByTagName('input').value = this.value;
             },100);
         }
+        });
+        $(document).ready(function () {
+            $("#form").submit(function () {
+                $("#sendb").attr("disabled", true);
+                return true;
+            });
         });
     </script>
 @endsection
