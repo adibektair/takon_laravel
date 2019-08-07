@@ -832,40 +832,45 @@ class ApiController extends Controller
         $server_output = curl_exec ($ch);
         curl_close ($ch);
         $s = json_decode($server_output);
-        if($s->Success == true){
+        if ($s){
+            if($s->Success == true){
 
-            $payment = \App\Payment::where('transaction_id', $TransactionId)->first();
-            $user = MobileUser::where('id', $payment->mobile_user_id)->first();
-            $service = Service::where('id', $payment->service_id)->first();
-            $newService = new UsersService();
-            $newService->mobile_user_id = $user->id;
-            $newService->service_id = $payment->service_id;
-            $newService->amount = $payment->amount / $service->payment_price;
-            $newService->company_id = null;
-            $newService->cs_id = null;
-            $newService->deadline = strtotime("+" . $service->deadline ." day", strtotime("now"));
-            $newService->save();
+                $payment = \App\Payment::where('transaction_id', $TransactionId)->first();
+                $user = MobileUser::where('id', $payment->mobile_user_id)->first();
+                $service = Service::where('id', $payment->service_id)->first();
+                $newService = new UsersService();
+                $newService->mobile_user_id = $user->id;
+                $newService->service_id = $payment->service_id;
+                $newService->amount = $payment->amount / $service->payment_price;
+                $newService->company_id = null;
+                $newService->cs_id = null;
+                $newService->deadline = strtotime("+" . $service->deadline ." day", strtotime("now"));
+                $newService->save();
 
-            $transaction = new Transaction();
-            $transaction->u_r_id = $user->id;
-            $transaction->amount = intval($payment->amount / $service->payment_price);
-            $transaction->service_id = $payment->service_id;
-            $transaction->price = $payment->amount;
-            $transaction->type = 5;
-            $transaction->users_service_id = $newService->id;
-            $transaction->save();
+                $transaction = new Transaction();
+                $transaction->u_r_id = $user->id;
+                $transaction->amount = intval($payment->amount / $service->payment_price);
+                $transaction->service_id = $payment->service_id;
+                $transaction->price = $payment->amount;
+                $transaction->type = 5;
+                $transaction->users_service_id = $newService->id;
+                $transaction->save();
 
-            $card = new Card();
-            $card->mobile_user_id = $user->id;
-            $card->last_four = $s->Model->CardLastFour;
-            $card->token = $s->Model->Token;
-            $card->save();
+                $card = new Card();
+                $card->mobile_user_id = $user->id;
+                $card->last_four = $s->Model->CardLastFour;
+                $card->token = $s->Model->Token;
+                $card->save();
 
-            echo "Оплата успешно произведена!";
+                echo "Оплата успешно произведена!";
 
+            }else{
+                echo "error " . $s->Model->Reason;
+            }
         }else{
-            echo "error " . $s->Model->Reason;
+            echo "SOME ERROR OCURED";
         }
+
 
     }
 
