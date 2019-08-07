@@ -906,7 +906,39 @@ class ApiController extends Controller
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $server_output = curl_exec ($ch);
         curl_close ($ch);
-        dd($server_output);
+        $s = json_decode($server_output);
+
+        if ($s){
+            if($s->Success == true){
+                $service = Service::where('id', $request->service_id)->first();
+                $newService = new UsersService();
+                $newService->mobile_user_id = $user->id;
+                $newService->service_id = $request->service_id;
+                $newService->amount = $request->amount;
+                $newService->company_id = null;
+                $newService->cs_id = null;
+                $newService->deadline = strtotime("+" . $service->deadline ." day", strtotime("now"));
+                $newService->save();
+
+                $transaction = new Transaction();
+                $transaction->u_r_id = $user->id;
+                $transaction->amount = $request->amount;
+                $transaction->service_id = $request->service_id;
+                $transaction->price = $request->amount;
+                $transaction->type = 5;
+                $transaction->users_service_id = $newService->id;
+                $transaction->save();
+
+                return $this->makeResponse(200, true, []);
+
+            }else{
+                return $this->makeResponse(200, false, []);
+            }
+        }else{
+            return $this->makeResponse(200, false, []);
+        }
+
+
     }
 
     public function getCards(Request $request){
