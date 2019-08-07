@@ -847,13 +847,13 @@ class ApiController extends Controller
 
             $transaction = new Transaction();
             $transaction->u_r_id = $user->id;
-            $transaction->amount = $payment->amount / $service->payment_price;
-            $transaction->service_id = $request->serviceId;
+            $transaction->amount = intval($payment->amount / $service->payment_price);
+            $transaction->service_id = $payment->service_id;
             $transaction->price = $payment->amount;
             $transaction->type = 5;
             $transaction->users_service_id = $newService->id;
             $transaction->save();
-            
+
             echo "Оплата успешно произведена!";
 
         }else{
