@@ -18,6 +18,7 @@ use App\UsersSubscriptions;
 use Couchbase\UserSettings;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -820,7 +821,7 @@ class ApiController extends Controller
         $s = json_decode($server_output);
         if($s->Success == true){
 
-            $payment = Payment::where('transaction_id', $TransactionId)->first();
+            $payment = \App\Payment::where('transaction_id', $TransactionId)->first();
             $user = MobileUser::where('id', $payment->mobile_user_id)->first();
             $service = Service::where('id', $payment->service_id)->first();
             $newService = new UsersService();
