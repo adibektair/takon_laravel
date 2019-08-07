@@ -776,6 +776,8 @@ class ApiController extends Controller
         $payModel->service_id = $request->serviceId;
         $payModel->amount = $request->amount;
         $payModel->transaction_id = $TransactionId;
+        $payModel->mobile_user_id = $user->id;
+
         if($success){
             // add money
             $service = Service::where('id', $request->serviceId)->first();
