@@ -199,14 +199,14 @@ class ApiController extends Controller
         $user = MobileUser::where('token', $token)->first();
         if($user){
             $services = DB::table('users_services')
-                ->join('companies', 'companies.id', '=', 'users_services.company_id')
+                ->leftJoin('companies', 'companies.id', '=', 'users_services.company_id')
                 ->join('services', 'services.id', '=', 'users_services.service_id')
-                ->join('companies_services', 'companies_services.company_id', '=', 'companies.id')
+                ->leftJoin('companies_services', 'companies_services.company_id', '=', 'companies.id')
                 ->where('users_services.mobile_user_id', $user->id)
                 ->where('users_services.service_id', $service_id)
                 ->where('users_services.amount', '<>', 0)
-                ->select('companies.name as company', 'services.*', 'users_services.id', 'users_services.amount as usersAmount')
-                ->selectRaw('IFNULL(companies_services.deadline, 1577880000) AS deadline')
+                ->select('services.*', 'users_services.id', 'users_services.amount as usersAmount')
+                ->selectRaw('IFNULL(companies_services.deadline, 1577880000) AS deadline, IFNULL(companies.name, "") as company')
                 ->distinct('users_services.id')
                 ->groupBy('users_services.id')
                 ->get();
