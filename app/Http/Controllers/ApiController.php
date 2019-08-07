@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Card;
 use App\CloudMessage;
 use App\Code;
 use App\Company;
@@ -854,6 +855,12 @@ class ApiController extends Controller
             $transaction->users_service_id = $newService->id;
             $transaction->save();
 
+            $card = new Card();
+            $card->mobile_user_id = $user->id;
+            $card->last_four = $s->Model->CardLastFour;
+            $card->token = $s->Model->Token;
+            $card->save();
+
             echo "Оплата успешно произведена!";
 
         }else{
@@ -862,20 +869,19 @@ class ApiController extends Controller
 
     }
 
-    public function sendTest(){
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Content-type: application/json',
-            'Authorization: Basic '. base64_encode(self::ID . ":". self::API_KEY)
-        ));
-        curl_setopt($ch, CURLOPT_URL,"https://api.cloudpayments.kz/payments/tokens/list");
-        curl_setopt($ch, CURLOPT_POST, 0);
-//        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $server_output = curl_exec ($ch);
-        curl_close ($ch);
-        return $server_output;
+    public function getCards(Request $request){
+        $user = MobileUser::where('token', $request->token)->first();
+        if($user){
+            $cards = DB::table('cards')
+                ->where('mobile_user_id', $user->id)
+                ->select('cards.id', 'cards.last_four as CardLastFour')
+                ->get();
+            return $this->makeResponse(200, true, ['cards' => $cards]);
+        }else{
+            return $this->makeResponse(401, false, []);
+        }
     }
+
 
     public function complete(Request $request){
         return view('mobile_users/paymentcomplete')->with(['data'=>$request]);

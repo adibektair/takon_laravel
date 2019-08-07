@@ -43,6 +43,7 @@ Route::group(['middleware' => ['token']], function () {
     Route::post('/get-account', ['uses' => 'ApiController@getAccount']);
     Route::post('/set-name', ['uses' => 'ApiController@setName']);
     Route::post('/paymentcomplete', ['uses' => 'ApiController@paymentHandle']);
+    Route::post('/getCards', ['uses' => 'ApiController@getCards']);
 
 });
 
