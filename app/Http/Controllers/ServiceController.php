@@ -45,6 +45,10 @@ class ServiceController extends Controller
         $model->price = $request->price;
         $model->description = $request->desc;
         $model->partner_id = auth()->user()->partner_id;
+        if($request->payment){
+            $model->payment_enabled = true;
+            $model->payment_price = $request->payment_price;
+        }
         $model->save();
         toastr()->info('Товар или услуга были отправлены на модерацию');
         return redirect()->route('services.index'); //view('services/index');
@@ -62,6 +66,10 @@ class ServiceController extends Controller
             $model->status = 3;
         }else{
             $model->status = 4;
+        }
+        if($request->payment){
+            $model->payment_enabled = true;
+            $model->payment_price = $request->payment_price;
         }
         $model->save();
         toastr()->success('Товар или услуга были изменены');

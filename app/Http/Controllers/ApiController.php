@@ -183,7 +183,7 @@ class ApiController extends Controller
 //                ->where('users_services.mobile_user_id', $user->id)
                 ->select('services.id', 'services.price', 'services.name', 'services.created_at','services.description')
                 ->selectRaw('SUM(DISTINCT users_services.amount) AS usersAmount')
-                ->groupBy('services.id', 'services.price', 'services.name', 'services.created_at', 'services.description')
+                ->groupBy('services.id', 'services.price', 'services.name', 'services.created_at', 'services.description', 'services.payment_enabled', 'services.payment_price')
                 ->get();
 
             return $this->makeResponse(200, true, ['services' => $partner]);
@@ -762,6 +762,7 @@ class ApiController extends Controller
             return $this->makeResponse(400, false, ['errors' => $validator->errors()->all()]);
         }
 
+        $user = MobileUser::where('token', $request->token)->first();
 
         $paymentModel = new Payment($request->name, $request->cryptogram, $request->ip, $request->amount);
         $response = $paymentModel->pay();
@@ -776,6 +777,16 @@ class ApiController extends Controller
         $payModel->transaction_id = $TransactionId;
         if($success){
             // add money
+            $service = Service::where('id', $request->serviceId)->first();
+            $newService = new UsersService();
+            $newService->mobile_user_id = $user->id;
+            $newService->service_id = $request->serviceId;
+            $newService->amount = $request->amount / $service->payment_price;
+            $newService->company_id = null;
+            $newService->cs_id = null;
+            $newService->deadline = strtotime("+" . $service->deadline ." day", strtotime("now"));
+            $newService->save();
+
         }
         $payModel->save();
         return $this->makeResponse(200,
@@ -808,8 +819,21 @@ class ApiController extends Controller
         curl_close ($ch);
         $s = json_decode($server_output);
         if($s->Success == true){
-            // add money
-            echo "payment successfully endede";
+
+            $payment = Payment::where('transaction_id', $TransactionId)->first();
+            $user = MobileUser::where('id', $payment->mobile_user_id)->first();
+            $service = Service::where('id', $payment->service_id)->first();
+            $newService = new UsersService();
+            $newService->mobile_user_id = $user->id;
+            $newService->service_id = $payment->service_id;
+            $newService->amount = $request->amount / $service->payment_price;
+            $newService->company_id = null;
+            $newService->cs_id = null;
+            $newService->deadline = strtotime("+" . $service->deadline ." day", strtotime("now"));
+            $newService->save();
+
+            echo "payment done!";
+
         }else{
             echo "error " . $s->Model->Reason;
         }
