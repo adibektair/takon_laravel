@@ -172,8 +172,8 @@ class CompanyController extends Controller
                     $subs->save();
                 }
                 $user = MobileUser::where('id', $v)->first();
-                $message = new CloudMessage("Вам были отправлены Таконы " . $serv->name, $user->id, "Внимение", $serv->partner_id, $partner->name);
-                $message->sendNotification();
+//                $message = new CloudMessage("Вам были отправлены Таконы " . $serv->name, $user->id, "Внимение", $serv->partner_id, $partner->name);
+//                $message->sendNotification();
 
 
                 if($m_service->save()){
