@@ -75,7 +75,6 @@ class MobileUserController extends Controller
                 $exactly_service = Service::where('id', '=', $cs->service_id)->first();
                 $parent = Transaction::where('service_id', $exactly_service->id)
                     ->where('c_r_id', auth()->user()->company_id)
-                    ->where('deadline', $cs->deadline)
                     ->where('u_s_id', null)
                     ->orderBy('created_at', 'desc')->first();
 
