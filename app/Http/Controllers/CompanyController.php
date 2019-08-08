@@ -140,7 +140,7 @@ class CompanyController extends Controller
                 $c_service = CompaniesService::where('id', '=', $service_ids[$k])->first();
                 $m_service = UsersService::where('service_id', $c_service->service_id)
                     ->where('mobile_user_id', $v)
-//                    ->where('deadline', $c_service->deadline)
+                    ->where('deadline', $c_service->deadline)
                     ->where('company_id', auth()->user()->company_id)
                     ->first();
                 if($m_service){

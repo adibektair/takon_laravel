@@ -72,29 +72,25 @@ class MobileUserController extends Controller
 
 
             if($m_service->save()){
-                    $exactly_service = Service::where('id', '=', $cs->service_id)->first();
-                    $parent = Transaction::where('service_id', $exactly_service->id)
-                        ->where('c_r_id', auth()->user()->company_id)
-                        ->where('u_s_id', null)
-                        ->orderBy('created_at', 'desc')->first();
+                $exactly_service = Service::where('id', '=', $cs->service_id)->first();
+                $parent = Transaction::where('service_id', $exactly_service->id)
+                    ->where('c_r_id', auth()->user()->company_id)
+                    ->where('deadline', $cs->deadline)
+                    ->where('u_s_id', null)
+                    ->orderBy('created_at', 'desc')->first();
 
-                    $model = new Transaction();
-//                        if ($parent->parent_id){
-//                            $model->parent_id = $parent->parent_id;
-//                        }else{
-                    $model->parent_id = $parent->id;
-                    $model->balance = $cs->amount - $request->amount;
-                    $model->users_service_id = $m_service->id;
-                    $model->type = 1;
-                    $model->cs_id = $cs->id;
-                    $model->service_id = $cs->service_id;
-                    $model->c_s_id = auth()->user()->company_id;
-                    $model->u_r_id = $user->id;
-                    $model->price = $exactly_service->price;
-                    $model->amount = $request->amount;
-                    $model->save();
-
-
+                $model = new Transaction();
+                $model->parent_id = $parent->id;
+                $model->balance = $cs->amount - $request->amount;
+                $model->users_service_id = $m_service->id;
+                $model->type = 1;
+                $model->cs_id = $cs->id;
+                $model->service_id = $cs->service_id;
+                $model->c_s_id = auth()->user()->company_id;
+                $model->u_r_id = $user->id;
+                $model->price = $exactly_service->price;
+                $model->amount = $request->amount;
+                $model->save();
             }
 
 
