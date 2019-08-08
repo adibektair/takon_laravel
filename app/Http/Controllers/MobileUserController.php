@@ -24,15 +24,16 @@ class MobileUserController extends Controller
         return view('mobile_users/index')->with(['id' => $request->id]);
     }
 
-    public function sendUser(Request $request){
+    public function sendUser(Request $request)
+    {
         $cs_id = $request->cs_id;
         $user = MobileUser::where('phone', $request->phone)->first();
-        if (!$user){
+        if (!$user) {
             toastError('Пользователь с таким номером телефона не найден');
             return redirect()->back();
         }
         $cs = CompaniesService::where('id', $cs_id)->first();
-        if ($cs->amount < $request->amount){
+        if ($cs->amount < $request->amount) {
             toastError('У вас недостаточно таконов');
             return redirect()->back();
         }
@@ -42,59 +43,58 @@ class MobileUserController extends Controller
             ->where('deadline', $cs->deadline)
             ->where('company_id', auth()->user()->company_id)
             ->first();
-        if($m_service){
+        if ($m_service) {
             $m_service->amount += $request->amount;
-        }else {
+        } else {
 
             $m_service = new UsersService();
             $m_service->amount = $request->amount;
         }
-            $m_service->mobile_user_id = $user->id;
-            $m_service->company_id = auth()->user()->company_id;
-            $m_service->cs_id = $cs->id;
+        $m_service->mobile_user_id = $user->id;
+        $m_service->company_id = auth()->user()->company_id;
+        $m_service->cs_id = $cs->id;
 
-            $m_service->service_id = $cs->service_id;
-            $m_service->deadline = $cs->deadline;
+        $m_service->service_id = $cs->service_id;
+        $m_service->deadline = $cs->deadline;
 
-            $serv = Service::where('id', $cs->service_id)->first();
-            $partner = Partner::where('id', $serv->partner_id)->first();
-            $subs = UsersSubscriptions::where('mobile_user_id', $user->id)
-                ->where('partner_id', $serv->partner_id)
-                ->first();
-            if(!$subs){
-                $subs = new UsersSubscriptions();
-                $subs->mobile_user_id = $user->id;
-                $subs->partner_id = $serv->partner_id;
-                $subs->save();
-            }
-            $message = new CloudMessage("Вам были отправлены Таконы " . $serv->name, $user->id, "Внимение", $serv->partner_id, $partner->name);
-            $message->sendNotification();
-
-
-            if($m_service->save()){
-                $exactly_service = Service::where('id', '=', $cs->service_id)->first();
-                $parent = Transaction::where('service_id', $exactly_service->id)
-                    ->where('c_r_id', auth()->user()->company_id)
-                    ->where('u_s_id', null)
-                    ->orderBy('created_at', 'desc')->first();
-
-                $model = new Transaction();
-                $model->parent_id = $parent->id;
-                $model->balance = $cs->amount - $request->amount;
-                $model->users_service_id = $m_service->id;
-                $model->type = 1;
-                $model->cs_id = $cs->id;
-                $model->service_id = $cs->service_id;
-                $model->c_s_id = auth()->user()->company_id;
-                $model->u_r_id = $user->id;
-                $model->price = $exactly_service->price;
-                $model->amount = $request->amount;
-                $model->save();
-            }
-
+        $serv = Service::where('id', $cs->service_id)->first();
+        $partner = Partner::where('id', $serv->partner_id)->first();
+        $subs = UsersSubscriptions::where('mobile_user_id', $user->id)
+            ->where('partner_id', $serv->partner_id)
+            ->first();
+        if (!$subs) {
+            $subs = new UsersSubscriptions();
+            $subs->mobile_user_id = $user->id;
+            $subs->partner_id = $serv->partner_id;
+            $subs->save();
+        }
+        $message = new CloudMessage("Вам были отправлены Таконы " . $serv->name, $user->id, "Внимение", $serv->partner_id, $partner->name);
+        $message->sendNotification();
 
         $cs->amount -= $request->amount;
         $cs->save();
+
+        if ($m_service->save()) {
+            $exactly_service = Service::where('id', '=', $cs->service_id)->first();
+            $parent = Transaction::where('service_id', $exactly_service->id)
+                ->where('c_r_id', auth()->user()->company_id)
+                ->where('u_s_id', null)
+                ->orderBy('created_at', 'desc')->first();
+
+            $model = new Transaction();
+            $model->parent_id = $parent->id;
+            $model->balance = $cs->amount - $request->amount;
+            $model->users_service_id = $m_service->id;
+            $model->type = 1;
+            $model->cs_id = $cs->id;
+            $model->service_id = $cs->service_id;
+            $model->c_s_id = auth()->user()->company_id;
+            $model->u_r_id = $user->id;
+            $model->price = $exactly_service->price;
+            $model->amount = $request->amount;
+            $model->save();
+        }
+
 
         toastSuccess('Успешно отправлено!');
         return redirect()->back();
@@ -105,15 +105,17 @@ class MobileUserController extends Controller
     {
         return view('mobile_users/groups');
     }
+
     public function addUser(Request $request)
     {
         return view('mobile_users/add')->with(['id' => $request->id]);
     }
+
     public function addUserGroup(Request $request)
     {
         $GU = GroupsUser::where('group_id', $request->id)->get();
         $arr = [];
-        foreach ($GU as $g){
+        foreach ($GU as $g) {
             array_push($arr, $g->mobile_user_id);
         }
         $users = DB::table('mobile_users')
@@ -123,13 +125,15 @@ class MobileUserController extends Controller
 
         $s = DataTables::of($users)
             ->addColumn('add', function ($group) {
-                return '<button class="btn btn-info" id="'. $group->id .'">Добавить</button>';
+                return '<button class="btn btn-info" id="' . $group->id . '">Добавить</button>';
             })
             ->rawColumns(['add'])->make();
 
         return $s;
     }
-    public function addUserFinish(Request $request){
+
+    public function addUserFinish(Request $request)
+    {
         $id = $request->id;
         $group_id = $request->group_id;
         $g = new GroupsUser();
@@ -142,7 +146,7 @@ class MobileUserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\MobileUser  $mobileUser
+     * @param \App\MobileUser $mobileUser
      * @return \Illuminate\Http\Response
      */
     public function getGroups(Request $request)
@@ -152,25 +156,27 @@ class MobileUserController extends Controller
             ->select('groups.*')
             ->get();
 
-        $s = DataTables::of($groups)->addColumn('checkbox', function ($group) use ($request){
-            return '<a href="/choose-group?id='.$group->id.'&cs_id=' . $request->id. '"><button class="btn btn-success" >Выбрать</button></a>';
+        $s = DataTables::of($groups)->addColumn('checkbox', function ($group) use ($request) {
+            return '<a href="/choose-group?id=' . $group->id . '&cs_id=' . $request->id . '"><button class="btn btn-success" >Выбрать</button></a>';
         })
             ->addColumn('remove', function ($group) {
-                return '<button class="btn btn-danger" id="'. $group->id .'">Удалить группу</button>';
+                return '<button class="btn btn-danger" id="' . $group->id . '">Удалить группу</button>';
             })
             ->rawColumns(['checkbox', 'remove'])->make();
 
         return $s;
     }
 
-    public function removeGroup(Request $request){
+    public function removeGroup(Request $request)
+    {
         $id = $request->id;
         $gr = Group::where('id', $id)->first();
         $gr->delete();
         return ['success' => true];
     }
 
-    public function removeUser(Request $request){
+    public function removeUser(Request $request)
+    {
         $id = $request->id;
         $gr = GroupsUser::where('mobile_user_id', $id)->where('group_id', $request->group_id)->first();
         $gr->delete();
@@ -180,8 +186,8 @@ class MobileUserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\MobileUser  $mobileUser
+     * @param \Illuminate\Http\Request $request
+     * @param \App\MobileUser $mobileUser
      * @return \Illuminate\Http\Response
      */
     public function chooseGroup(Request $request)
@@ -190,16 +196,16 @@ class MobileUserController extends Controller
         $group_id = $request->id;
         $users = GroupsUser::where('group_id', $group_id)->get();
         $string = '';
-        foreach ($users as $user){
+        foreach ($users as $user) {
             $string .= $user->mobile_user_id . ',';
         }
-        return view('mobile_users/send-group')->with(['ids' => $string, 'name' =>$group->name, 'group_id' => $group->id, 'cs_id' => $request->cs_id]);
+        return view('mobile_users/send-group')->with(['ids' => $string, 'name' => $group->name, 'group_id' => $group->id, 'cs_id' => $request->cs_id]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\MobileUser  $mobileUser
+     * @param \App\MobileUser $mobileUser
      * @return \Illuminate\Http\Response
      */
     public function saveGroup(Request $request)
@@ -209,14 +215,14 @@ class MobileUserController extends Controller
         $group = new Group();
         $group->name = $request->name;
         $group->company_id = auth()->user()->company_id;
-        if ($group->save()){
-            foreach ($array as $el){
+        if ($group->save()) {
+            foreach ($array as $el) {
                 $gu = new GroupsUser();
                 $gu->group_id = $group->id;
                 $gu->mobile_user_id = $el;
                 $gu->save();
             }
-        }else{
+        } else {
             $response = ['success' => false];
         }
 
@@ -233,7 +239,8 @@ class MobileUserController extends Controller
         return view('mobile_users/send')->with(['ids' => $ids, 'cs_id' => $request->cs_id]);
     }
 
-    public function getUsersByIds(Request $request){
+    public function getUsersByIds(Request $request)
+    {
         $ids = $request->ids;
         $array = explode(',', $ids);
         $users = DB::table('mobile_users')->whereIn('id', $array)->get();
@@ -242,7 +249,8 @@ class MobileUserController extends Controller
         return $s;
     }
 
-    public function setName(Request $request){
+    public function setName(Request $request)
+    {
         $id = $request->id;
         $name = $request->name;
         $user = MobileUser::where('id', $id)->first();
@@ -251,30 +259,34 @@ class MobileUserController extends Controller
 
     }
 
-    public function createGroup(){
+    public function createGroup()
+    {
         return view('mobile_users/create-group');
     }
 
-    public function searchUser(Request $request){
+    public function searchUser(Request $request)
+    {
 
         $u = MobileUser::where('phone', $request->value)->first();
-        if ($u){
+        if ($u) {
             return ['success' => true, "id" => $u->id, "phone" => $u->phone];
-        }else{
+        } else {
             return ['success' => false];
         }
 
     }
-    public function storeGroup(Request $request){
-        if(!$request->id){
+
+    public function storeGroup(Request $request)
+    {
+        if (!$request->id) {
             toastError("Добавьте пользователей в группу, для этого воспользуйтесь поиском!");
             return redirect()->back();
         }
         $group = new Group();
         $group->name = $request->group_name;
         $group->company_id = auth()->user()->company_id;
-        if ($group->save()){
-            foreach ($request->id as $user_id => $phone){
+        if ($group->save()) {
+            foreach ($request->id as $user_id => $phone) {
 
                 $group_user = new GroupsUser();
                 $group_user->username = $request->name[$user_id];
@@ -286,17 +298,18 @@ class MobileUserController extends Controller
         toastSuccess('Группа пользователей была добавлена');
         return redirect()->route('groups');
     }
-    public function all(){
+
+    public function all()
+    {
 //        $users = MobileUser::all();
         $users = DB::table('mobile_users')->get();
 //        dd($users);
         $s = DataTables::of($users)->addColumn('checkbox', function ($user) {
-                return '<button class="btn btn-info" data-name="'.$user->phone.'" id="'.$user->id.'">Выбрать</button>';
-            })
+            return '<button class="btn btn-info" data-name="' . $user->phone . '" id="' . $user->id . '">Выбрать</button>';
+        })
             ->addColumn('name', function ($user) {
-            return '<input type="text" id="' . $user->id .'" class="name"  value="' . $user->name . '" placeholder="Введите имя">';
-             })
-
+                return '<input type="text" id="' . $user->id . '" class="name"  value="' . $user->name . '" placeholder="Введите имя">';
+            })
             ->rawColumns(['name', 'checkbox'])->make();
         return $s;
     }
