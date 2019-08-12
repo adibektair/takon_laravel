@@ -68,8 +68,8 @@ class MobileUserController extends Controller
             $subs->partner_id = $serv->partner_id;
             $subs->save();
         }
-        $message = new CloudMessage("Вам были отправлены Таконы " . $serv->name, $user->id, "Внимение", $serv->partner_id, $partner->name);
-        $message->sendNotification();
+//        $message = new CloudMessage("Вам были отправлены Таконы " . $serv->name, $user->id, "Внимение", $serv->partner_id, $partner->name);
+//        $message->sendNotification();
 
         $cs->amount -= $request->amount;
         $cs->save();
