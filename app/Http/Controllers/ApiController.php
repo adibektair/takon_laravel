@@ -284,8 +284,8 @@ class ApiController extends Controller
                     $service = Service::where('id', $us->service_id)->first();
                     $partner = Partner::where('id', $service->partner_id)->first();
 
-                    $not = new CloudMessage("С Вашего счета были отправлены таконы " . $service->name, $us->mobile_user_id, "Внимание", $service->partner_id, $partner->name);
-                    $not->sendNotification();
+//                    $not = new CloudMessage("С Вашего счета были отправлены таконы " . $service->name, $us->mobile_user_id, "Внимание", $service->partner_id, $partner->name);
+//                    $not->sendNotification();
                     $subs = UsersSubscriptions::where('mobile_user_id', $user->id)
                         ->where('partner_id', $service->partner_id)
                         ->first();
@@ -392,8 +392,8 @@ class ApiController extends Controller
                 $us->amount -= $amount;
                 if($us->save()){
 
-                    $not = new CloudMessage("На Ваш счет поступили таконы " . $service->name, $reciever->id, "Внимание", $service->partner_id, $partner->name);
-                    $not->sendNotification();
+//                    $not = new CloudMessage("На Ваш счет поступили таконы " . $service->name, $reciever->id, "Внимание", $service->partner_id, $partner->name);
+//                    $not->sendNotification();
 
                     $parent = Transaction::where('service_id', $service->id)
                         ->where('u_r_id', $user->id)
