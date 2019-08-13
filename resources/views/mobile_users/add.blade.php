@@ -9,8 +9,7 @@
             <?php
                 $group = \App\Group::where('id', $id)->first();
             ?>
-            <h5>Пользователи</h5>
-            <h6>Выберите пользователей, которых хотите  добавить в группу <?=$group->id?></h6>
+            <h5>Добавить пльзователей в группу</h5>
 
             <br><br><br>
         </div>
@@ -20,98 +19,65 @@
     <br><br>
     <div class="col-md-12 mt-2">
 
-        <table class="table table-bordered" id="table">
-            <thead>
-            <tr>
+        <div class="col-md-6">
+            <label class="text-black">Введите номер телефона для поиска пользователя в формате: 77075554797</label>
+            <input id="phone" type="number" class="form-control" placeholder="77075554797">
+            <br>
+            <button onclick="search()" class="btn btn-info">ПОИСК</button>
+        </div>
+        <div class="col-md-6">
+            <form action="{{ route('add.users.group') }}" method="post">
+                @csrf
+                <input type="text" hidden name="group_id" value="<?=$group->id?>">
+                <label class="text-black">Пользователи:</label>
+                <div id="users" class="form-group">
+                </div>
+                <button class="btn btn-success" type="submit">Добавить</button>
+            </form>
+        </div>
 
-                <th > Имя</th>
-                <th > Телефон</th>
-                <th > Создан</th>
-                <th > Добавить</th>
-            </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
     </div>
 
 
-
-    <style>
-        table{
-            width: 100% !important;
-            margin: 0 auto !important;
-
-        }
-    </style>
     <script>
+        function search() {
+            var value = document.getElementById("phone").value;
+            $.ajax({
+                type: "POST",
+                url: '/search-user',
+                data: {
+                    value: value,
+                    _token: "{{ csrf_token() }}",
+                    group_id: '<?=$group->id?>'
+                },
+                success: function (data) {
+                    if (data.success == true){
+                        swal("Успешно", "Пользователь добавлен!", "success");
+                        document.getElementById('phone').value = "";
+                        var index = Math.floor(Math.random() * 10000);
+                        var div = document.createElement('div');
+                        div.classList.toggle('form-group');
 
+                        var input = document.createElement('input');
+                        input.classList.toggle('form-group');
+                        input.name = 'id[' + data.id +']';
+                        input.value = data.phone;
+                        var input2 = document.createElement('input');
+                        input2.classList.toggle('form-group');
+                        input2.name = 'name[' + data.id +']';
+                        input2.placeholder = 'Введите имя';
+                        input2.required = true;
 
-        $(function() {
-            var array = [];
-            var names = [];
-            $('#table').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: "/add-user-group?id=<?=$id?>",
-                stateSave: true,
+                        div.appendChild(input);
+                        div.appendChild(input2);
+                        document.getElementById('users').appendChild(div);
 
-                columns: [
-
-                    { data: 'name', name: 'name' },
-                    { data: 'phone', name: 'phone' },
-                    { data: 'created_at', name: 'created_at'},
-                    { data: 'add', name: 'add'},
-
-                ],
-
-            });
-
-            //$('#table tbody').on('change', 'input[type="checkbox"]', function(){
-            $('#table tbody').on('click', 'button', function(){
-                $.ajax({
-                    type: "POST",
-                    url: '/add-user-finish',
-                    data: {
-                        id: this.id,
-                        group_id: '<?=$id?>',
-                        _token: "{{ csrf_token() }}",
-                    },
-                    success: function (data) {
-                        swal("Успешно", "Пользователь добавлен", "success");
-                        location.reload();
-
+                    }else{
+                        swal("Ошибка", "Пользователь не найден", "error");
                     }
-                });
-
+                }
             });
-
-
-
-        });
-
-
-
-        setTimeout(function(){
-            $('input').change(function() {
-
-                $.ajax({
-                    type: "POST",
-                    url: '/set-name',
-                    data: {
-                        name: this.value,
-                        id: this.id,
-                        _token: "{{ csrf_token() }}",
-
-                    },
-                    success: function (data) {
-
-                    }
-                });
-
-            });
-        }, 3000);
-
+        }
 
     </script>
 

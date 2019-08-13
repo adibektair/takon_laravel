@@ -23,6 +23,9 @@ class HomeController extends Controller
      */
     public function index()
     {
+        if(auth()->user()->role_id == 3){
+            return redirect()->route('groups');
+        }
         return view('home');
     }
 }

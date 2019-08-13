@@ -91,6 +91,7 @@ Route::group(['middleware' => ['authenticated']], function () {
     Route::post('/remove-group', ['as' => 'remove.group', 'uses' => 'MobileUserController@removeGroup']);
     Route::get('/create-group', ['as' => 'create.group', 'uses' => 'MobileUserController@createGroup']);
     Route::post('/store-group', ['as' => 'store.group', 'uses' => 'MobileUserController@storeGroup']);
+    Route::post('/add-users-group', ['as' => 'add.users.group', 'uses' => 'MobileUserController@addUserGroup']);
 
     Route::post('/remove-user', ['as' => 'remove.user', 'uses' => 'MobileUserController@removeUser']);
     Route::get('/groups', ['as' => 'groups', 'uses' => 'MobileUserController@groups']);

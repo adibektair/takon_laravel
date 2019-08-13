@@ -24,6 +24,26 @@ class MobileUserController extends Controller
         return view('mobile_users/index')->with(['id' => $request->id]);
     }
 
+
+    public function addUserGroup(Request $request){
+        if (!$request->id) {
+            toastError("Добавьте пользователей в группу, для этого воспользуйтесь поиском!");
+            return redirect()->back();
+        }
+        $group = Group::where('id', $request->group_id)->first();
+
+        foreach ($request->id as $user_id => $phone) {
+                $group_user = new GroupsUser();
+                $group_user->username = $request->name[$user_id];
+                $group_user->mobile_user_id = $user_id;
+                $group_user->group_id = $group->id;
+                $group_user->save();
+            }
+
+        toastSuccess('Пользователи были добавлены в группу');
+        return redirect()->route('groups');
+    }
+
     public function sendUser(Request $request)
     {
         $cs_id = $request->cs_id;
@@ -111,26 +131,26 @@ class MobileUserController extends Controller
         return view('mobile_users/add')->with(['id' => $request->id]);
     }
 
-    public function addUserGroup(Request $request)
-    {
-        $GU = GroupsUser::where('group_id', $request->id)->get();
-        $arr = [];
-        foreach ($GU as $g) {
-            array_push($arr, $g->mobile_user_id);
-        }
-        $users = DB::table('mobile_users')
-            ->whereNotIn('id', $arr)
-            ->select('mobile_users.*')
-            ->get();
-
-        $s = DataTables::of($users)
-            ->addColumn('add', function ($group) {
-                return '<button class="btn btn-info" id="' . $group->id . '">Добавить</button>';
-            })
-            ->rawColumns(['add'])->make();
-
-        return $s;
-    }
+//    public function addUserGroup(Request $request)
+//    {
+//        $GU = GroupsUser::where('group_id', $request->id)->get();
+//        $arr = [];
+//        foreach ($GU as $g) {
+//            array_push($arr, $g->mobile_user_id);
+//        }
+//        $users = DB::table('mobile_users')
+//            ->whereNotIn('id', $arr)
+//            ->select('mobile_users.*')
+//            ->get();
+//
+//        $s = DataTables::of($users)
+//            ->addColumn('add', function ($group) {
+//                return '<button class="btn btn-info" id="' . $group->id . '">Добавить</button>';
+//            })
+//            ->rawColumns(['add'])->make();
+//
+//        return $s;
+//    }
 
     public function addUserFinish(Request $request)
     {
@@ -267,6 +287,19 @@ class MobileUserController extends Controller
     public function searchUser(Request $request)
     {
 
+        if($request->group_id){
+            $GU = GroupsUser::where('group_id', $request->group_id)->get();
+            $arr = [];
+            foreach ($GU as $g){
+                array_push($arr, $g->mobile_user_id);
+            }
+            $u = MobileUser::where('phone', $request->value)->whereNotIn('id', $arr)->first();
+            if ($u) {
+                return ['success' => true, "id" => $u->id, "phone" => $u->phone];
+            } else {
+                return ['success' => false];
+            }
+        }
         $u = MobileUser::where('phone', $request->value)->first();
         if ($u) {
             return ['success' => true, "id" => $u->id, "phone" => $u->phone];
