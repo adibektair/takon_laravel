@@ -59,6 +59,10 @@
 
             <label class="text-semibold">Цена за единицу в тенге для онлайн покупки</label>
             <input required type="number" name="payment_price" placeholder="Цена" value="0" class="form-control">
+            <br>
+
+            <label class="text-semibold">Cрок действия (в днях) для онлайн оплаты</label>
+            <input required type="number" name="payment_deadline" placeholder="10"  class="form-control" >
 
             <br>
             <hr>

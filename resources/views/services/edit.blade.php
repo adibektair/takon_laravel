@@ -66,6 +66,12 @@
             </label>
             Активно
             <br>
+
+
+            <label class="text-semibold">Cрок действия (в днях) для онлайн оплаты</label>
+            <input required type="number" name="payment_deadline" placeholder="10" value="{{ $service->payment_deadline }}" class="form-control" >
+            <br>
+
             <hr>
 
 

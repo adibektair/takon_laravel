@@ -47,6 +47,7 @@ class ServiceController extends Controller
         $model->partner_id = auth()->user()->partner_id;
         if($request->payment){
             $model->payment_enabled = true;
+            $model->payment_deadline = $request->payment_deadline;
             $model->payment_price = $request->payment_price;
         }
         $model->save();
@@ -68,6 +69,7 @@ class ServiceController extends Controller
             $model->status = 4;
         }
         if($request->payment){
+            $model->payment_deadline = $request->payment_deadline;
             $model->payment_enabled = true;
             $model->payment_price = $request->payment_price;
         }
