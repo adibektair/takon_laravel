@@ -292,7 +292,15 @@ class TransactionController extends Controller
             ->leftJoin('companies', 'companies.id', '=', 'transactions.c_s_id')
             ->leftJoin('companies as c', 'c.id', '=', 'transactions.c_r_id')
             ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_r_id')
-            ->select('transactions.*', 'services.name as service', 'companies.name as sender', 'c.name as company', 'mobile_users.phone as user')
+            ->leftJoin('groups_users', 'groups_users.mobile_user_id', '=', 'mobile_users.id')
+            ->join(
+                'groups',
+                'groups.id',
+                '=',
+                'groups_users.group_id'
+            )
+            ->where('groups.company_id', auth()->user()->company_id)
+            ->select('transactions.*', 'services.name as service', 'companies.name as sender', 'c.name as company', 'mobile_users.phone as user', 'groups_users.username as username')
             ->get();
 
 //        }
@@ -307,7 +315,7 @@ class TransactionController extends Controller
                 if($service->company){
                     return $service->company;
                 }
-                return $service->user;
+                return $service->user . ' ' . $service->username;
             })
             ->addColumn('3', function ($service) {
                 if($service->type == 4){
@@ -627,7 +635,7 @@ class TransactionController extends Controller
                     ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
                     ->leftJoin('users', 'users.id', '=', 'transactions.u_r_id')
 //                ->join('companies_services', 'companies_services.id', '=', 'transactions.cs_id')
-                    ->select('transactions.*', 'services.name as service', 'mobile_users.phone as sender', 'users.name as reciever')
+                    ->select('transactions.*', 'services.name as service', 'mobile_users.phone as sender', 'mobile_users.name as username', 'users.name as reciever')
                     ->orderBy('created_at', 'asc')
                     ->get();
 
@@ -636,8 +644,9 @@ class TransactionController extends Controller
                     ->where('transactions.type', 3)
                     ->join('services', 'services.id', '=', 'transactions.service_id')
                     ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
+
                     ->leftJoin('users', 'users.id', '=', 'transactions.u_r_id')
-                    ->select('transactions.*', 'services.name as service', 'mobile_users.phone as sender', 'users.name as reciever')
+                    ->select('transactions.*', 'services.name as service', 'mobile_users.phone as sender', 'mobile_users.name as username', 'users.name as reciever')
                     ->orderBy('created_at', 'asc')
                     ->get();
 
@@ -654,7 +663,15 @@ class TransactionController extends Controller
                     ->join('companies_services', 'companies_services.id', '=', 'transactions.cs_id')
                     ->join('companies', 'companies.id', '=', 'companies_services.company_id')
                     ->where('companies.id', '=', auth()->user()->company_id)
-                    ->select('transactions.*', 'services.name as service', 'mobile_users.phone as sender', 'users.name as reciever')
+                    ->leftJoin('groups_users', 'groups_users.mobile_user_id', '=', 'mobile_users.id')
+                    ->join(
+                        'groups',
+                        'groups.id',
+                        '=',
+                        'groups_users.group_id'
+                    )
+                    ->where('groups.company_id', auth()->user()->company_id)
+                    ->select('transactions.*', 'services.name as service', 'mobile_users.phone as sender', 'groups_users.username as username', 'users.name as reciever')
                     ->orderBy('created_at', 'asc')
                     ->get();
 
@@ -664,7 +681,14 @@ class TransactionController extends Controller
                     ->join('services', 'services.id', '=', 'transactions.service_id')
                     ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
                     ->leftJoin('users', 'users.id', '=', 'transactions.u_r_id')
-                    ->select('transactions.*', 'services.name as service', 'mobile_users.phone as sender', 'users.name as reciever')
+                    ->leftJoin('groups_users', 'groups_users.mobile_user_id', '=', 'mobile_users.id')
+                    ->join(
+                        'groups',
+                        'groups.id',
+                        '=',
+                        'groups_users.group_id'
+                    )
+                    ->select('transactions.*', 'services.name as service','groups_users.username as username',  'mobile_users.phone as sender', 'users.name as reciever')
                     ->join('companies_services', 'companies_services.id', '=', 'transactions.cs_id')
                     ->join('companies', 'companies.id', '=', 'companies_services.company_id')
                     ->where('companies.id', '=', auth()->user()->company_id)

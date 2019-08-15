@@ -29,7 +29,8 @@
             <thead>
             <tr>
                 <th>#</th>
-                <th>Пользователь</th>
+                <th>Телефон</th>
+                <th>Имя</th>
                 <th>Услуга/Товар</th>
                 <th>Использовано</th>
                 <th>Принял</th>
@@ -60,6 +61,8 @@
                 columns: [
                     { data: 'id', name: 'id' },
                     { data: 'sender', name: 'sender' },
+                    { data: 'username', name: 'username' },
+
                     { data: 'service', name: 'service'},
                     { data: 'amount', name: 'amount'},
                     { data: 'reciever', name: 'reciever'},

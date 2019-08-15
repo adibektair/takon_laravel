@@ -588,7 +588,7 @@ class ApiController extends Controller
         $token = $request->token;
         $user = MobileUser::where('token', $token)->first();
         if($user){
-            if($user->phone == "77005554797"){
+            if($user->phone == "77005554797" OR $user->phone == "77777018009"){
                 $result = DB::table('transactions')
                     ->where('transactions.type', 3)
                     ->join('services', 'services.id', '=', 'transactions.service_id')
