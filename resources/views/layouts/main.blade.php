@@ -184,6 +184,10 @@
                             <a href="{{ route('transactions.admin') }}" >Транзакции  </a>
 
                         </li>
+                    <li>
+                        <a href="{{ route('transactions.payments') }}" >Транзакции по онлайн оплате </a>
+
+                    </li>
 
                         <li>
                             <a href="{{ route('transactions.use') }}">Использование таконов</a>

@@ -23,6 +23,12 @@ class TransactionController extends Controller
         return view('transactions/admin');
     }
 
+    public function payments()
+    {
+        return view('transactions/payments');
+    }
+
+
     public function use()
     {
         return view('transactions/use');
@@ -593,6 +599,19 @@ class TransactionController extends Controller
                 return $service->price * $service->amount . ' тенге';
             })
             ->make(true);
+        return $s;
+    }
+
+    public function paymentsAll(){
+        $result = DB::table('transactions')
+            ->where('type', 6)
+            ->join('services', 'services.id', '=', 'transactions.service_id')
+            ->join('mobile_users', 'mobile_users.id', '=', 'transactions.u_r_id')
+            ->select('transactions.*', 'services.name as service', 'mobile_users.phone as sender')
+            ->get();
+
+        $s = DataTables::of($result)->make(true);
+
         return $s;
     }
 

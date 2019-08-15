@@ -852,7 +852,7 @@ class ApiController extends Controller
                 $transaction->amount = intval($payment->amount / $service->payment_price);
                 $transaction->service_id = $payment->service_id;
                 $transaction->price = $payment->amount;
-                $transaction->type = 5;
+                $transaction->type = 6;
                 $transaction->users_service_id = $newService->id;
                 $transaction->save();
 
@@ -925,7 +925,7 @@ class ApiController extends Controller
                 $transaction->amount = $request->amount;
                 $transaction->service_id = $request->service_id;
                 $transaction->price = $request->amount;
-                $transaction->type = 5;
+                $transaction->type = 6;
                 $transaction->users_service_id = $newService->id;
                 $transaction->save();
 

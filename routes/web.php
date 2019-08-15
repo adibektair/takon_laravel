@@ -184,7 +184,9 @@ Route::group(['middleware' => ['authenticated']], function () {
 
     // return
     Route::get('/transactions/return', 'TransactionController@return')->name('transactions.return');
+    Route::get('/transactions/payments', 'TransactionController@payments')->name('transactions.payments');
     Route::get('/transactions/return/all', 'TransactionController@returnAll')->name('transactions.return.all');
+    Route::get('/transactions/payments/all', 'TransactionController@paymentsAll')->name('transactions.payments.all');
 
 
 
