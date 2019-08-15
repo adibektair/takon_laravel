@@ -596,7 +596,7 @@ class ApiController extends Controller
                     ->leftJoin('users', 'users.id', '=', 'transactions.u_r_id')
                     ->select('transactions.created_at as date', 'transactions.amount', 'services.name as service', 'mobile_users.phone as company', 'users.name as contragent')
                     ->orderBy('transactions.created_at', 'asc')
-//                    ->limit(50)
+                    ->limit(50)
                     ->get();
                     return $this->makeResponse(200, true, ['info' => $result]);
 
