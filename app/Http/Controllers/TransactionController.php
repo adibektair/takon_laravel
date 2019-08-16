@@ -292,14 +292,14 @@ class TransactionController extends Controller
             ->leftJoin('companies', 'companies.id', '=', 'transactions.c_s_id')
             ->leftJoin('companies as c', 'c.id', '=', 'transactions.c_r_id')
             ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_r_id')
-            ->leftJoin('groups_users', 'groups_users.mobile_user_id', '=', 'mobile_users.id')
-            ->leftJoin(
-                'groups',
-                'groups.id',
-                '=',
-                'groups_users.group_id'
-            )
-            ->where('groups.company_id', auth()->user()->company_id)
+//            ->leftJoin('groups_users', 'groups_users.mobile_user_id', '=', 'mobile_users.id')
+//            ->leftJoin(
+//                'groups',
+//                'groups.id',
+//                '=',
+//                'groups_users.group_id'
+//            )
+//            ->where('groups.company_id', auth()->user()->company_id)
             ->select('transactions.*', 'services.name as service', 'companies.name as sender', 'c.name as company', 'mobile_users.phone as user', 'groups_users.username as username')
             ->get();
 
