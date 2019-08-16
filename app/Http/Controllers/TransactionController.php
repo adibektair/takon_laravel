@@ -293,7 +293,7 @@ class TransactionController extends Controller
             ->leftJoin('companies as c', 'c.id', '=', 'transactions.c_r_id')
             ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_r_id')
             ->leftJoin('groups_users', 'groups_users.mobile_user_id', '=', 'mobile_users.id')
-            ->join(
+            ->leftJoin(
                 'groups',
                 'groups.id',
                 '=',
