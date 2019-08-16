@@ -664,7 +664,7 @@ class TransactionController extends Controller
                     ->join('companies', 'companies.id', '=', 'companies_services.company_id')
                     ->where('companies.id', '=', auth()->user()->company_id)
                     ->leftJoin('groups_users', 'groups_users.mobile_user_id', '=', 'mobile_users.id')
-                    ->join(
+                    ->leftJoin(
                         'groups',
                         'groups.id',
                         '=',
@@ -682,7 +682,7 @@ class TransactionController extends Controller
                     ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
                     ->leftJoin('users', 'users.id', '=', 'transactions.u_r_id')
                     ->leftJoin('groups_users', 'groups_users.mobile_user_id', '=', 'mobile_users.id')
-                    ->join(
+                    ->leftJoin(
                         'groups',
                         'groups.id',
                         '=',
