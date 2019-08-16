@@ -300,7 +300,7 @@ class TransactionController extends Controller
 //                'groups_users.group_id'
 //            )
 //            ->where('groups.company_id', auth()->user()->company_id)
-            ->select('transactions.*', 'services.name as service', 'companies.name as sender', 'c.name as company', 'mobile_users.phone as user', '"123" as username')
+            ->select('transactions.*', 'services.name as service', 'companies.name as sender', 'c.name as company', 'mobile_users.phone as user')
             ->get();
 
 //        }
@@ -315,7 +315,7 @@ class TransactionController extends Controller
                 if($service->company){
                     return $service->company;
                 }
-                return $service->user . ' ' . $service->username;
+                return $service->user;
             })
             ->addColumn('3', function ($service) {
                 if($service->type == 4){
