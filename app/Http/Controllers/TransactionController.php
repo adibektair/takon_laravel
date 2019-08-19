@@ -505,17 +505,12 @@ class TransactionController extends Controller
                 return $cs->amount;
             })
             ->addColumn('4', function ($service) {
-
                 $tr = Transaction::where('type', 3)->where('cs_id', $service->cs_id)->get();
-
-//                $cs = CompaniesService::where('id', $service->cs_id)->first();
-//
-//                $all = UsersService::where('cs_id', $service->cs_id)->get();
-//                $amount = 0;
+                $a = 0;
                 foreach ($tr as $v){
-                    $v += $v->amount;
+                    $a += $v->amount;
                 }
-                return $v;
+                return $a;
             })
             ->addColumn('5', function ($service) {
                 $cs = CompaniesService::where('id', $service->cs_id)->first();
