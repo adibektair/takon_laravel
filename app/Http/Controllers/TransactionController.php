@@ -488,6 +488,8 @@ class TransactionController extends Controller
             ->join('partners', 'partners.id', '=', 'transactions.p_s_id')
             ->select('transactions.*', 'services.name as service', 'companies.name as company', 'partners.name as partner')
             ->get();
+
+
         $s = DataTables::of($result)
             ->addColumn('1', function ($service) {
                 return '<a href="/transactions/partner/more?id=' . $service->cs_id . '"><button class="btn btn-success">Подробнее</button></a>';
@@ -503,14 +505,17 @@ class TransactionController extends Controller
                 return $cs->amount;
             })
             ->addColumn('4', function ($service) {
-                $cs = CompaniesService::where('id', $service->cs_id)->first();
 
-                $all = UsersService::where('cs_id', $service->cs_id)->get();
-                $amount = 0;
-                foreach ($all as $v){
-                    $amount += $v->amount;
+                $tr = Transaction::where('type', 3)->where('cs_id', $service->cs_id)->get();
+
+//                $cs = CompaniesService::where('id', $service->cs_id)->first();
+//
+//                $all = UsersService::where('cs_id', $service->cs_id)->get();
+//                $amount = 0;
+                foreach ($tr as $v){
+                    $v += $v->amount;
                 }
-                return $service->amount - ($amount + $cs->amount);
+                return $v;
             })
             ->addColumn('5', function ($service) {
                 $cs = CompaniesService::where('id', $service->cs_id)->first();
