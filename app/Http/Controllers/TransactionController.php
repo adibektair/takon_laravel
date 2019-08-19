@@ -483,9 +483,9 @@ class TransactionController extends Controller
             ->where('parent_id', Null)
             ->whereIn('type', [2, 4])
             ->where('p_s_id', auth()->user()->partner_id)
-            ->join('services', 'services.id', '=', 'transactions.service_id')
-            ->join('companies', 'companies.id', '=', 'transactions.c_r_id')
-            ->join('partners', 'partners.id', '=', 'transactions.p_s_id')
+            ->leftJoin('services', 'services.id', '=', 'transactions.service_id')
+            ->leftJoin('companies', 'companies.id', '=', 'transactions.c_r_id')
+            ->leftJoin('partners', 'partners.id', '=', 'transactions.p_s_id')
             ->select('transactions.*', 'services.name as service', 'companies.name as company', 'partners.name as partner')
             ->get();
 
