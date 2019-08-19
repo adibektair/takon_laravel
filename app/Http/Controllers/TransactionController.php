@@ -634,8 +634,9 @@ class TransactionController extends Controller
                     ->join('services', 'services.id', '=', 'transactions.service_id')
                     ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
                     ->leftJoin('users', 'users.id', '=', 'transactions.u_r_id')
-//                ->join('companies_services', 'companies_services.id', '=', 'transactions.cs_id')
-                    ->select('transactions.*', 'services.name as service', 'mobile_users.phone as sender', 'mobile_users.name as username', 'users.name as reciever')
+                    ->leftJoin('companies_services', 'companies_services.id', '=', 'transactions.cs_id')
+                    ->leftJoin('companies', 'companies.id', '=', 'companies_services.company_id')
+                    ->select('transactions.*', 'services.name as service', 'mobile_users.phone as sender', 'mobile_users.name as username', 'users.name as reciever', 'companies.name as company')
                     ->orderBy('created_at', 'asc')
                     ->get();
 
@@ -644,9 +645,10 @@ class TransactionController extends Controller
                     ->where('transactions.type', 3)
                     ->join('services', 'services.id', '=', 'transactions.service_id')
                     ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
-
+                    ->leftJoin('companies_services', 'companies_services.id', '=', 'transactions.cs_id')
+                    ->leftJoin('companies', 'companies.id', '=', 'companies_services.company_id')
                     ->leftJoin('users', 'users.id', '=', 'transactions.u_r_id')
-                    ->select('transactions.*', 'services.name as service', 'mobile_users.phone as sender', 'mobile_users.name as username', 'users.name as reciever')
+                    ->select('transactions.*', 'services.name as service', 'mobile_users.phone as sender', 'mobile_users.name as username', 'users.name as reciever', 'companies.name as company')
                     ->orderBy('created_at', 'asc')
                     ->get();
 

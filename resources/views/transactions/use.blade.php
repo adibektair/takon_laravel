@@ -31,6 +31,13 @@
                 <th>#</th>
                 <th>Телефон</th>
                 <th>Имя</th>
+                <?php
+                if(auth()->user()->role_id == 1){
+                    ?>
+                    <th>Комания</th>
+<?php
+                }
+                ?>
                 <th>Услуга/Товар</th>
                 <th>Использовано</th>
                 <th>Принял</th>
@@ -62,7 +69,14 @@
                     { data: 'id', name: 'id' },
                     { data: 'sender', name: 'sender' },
                     { data: 'username', name: 'username' },
+                    <?php
+                    if(auth()->user()->role_id == 1){
+                    ?>
+                    { data: 'company', name: 'company' },
 
+                    <?php
+                }
+                ?>
                     { data: 'service', name: 'service'},
                     { data: 'amount', name: 'amount'},
                     { data: 'reciever', name: 'reciever'},
