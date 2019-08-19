@@ -674,6 +674,7 @@ class TransactionController extends Controller
                     )
                     ->where('groups.company_id', auth()->user()->company_id)
                     ->select('transactions.*', 'services.name as service', 'mobile_users.phone as sender', 'groups_users.username as username', 'users.name as reciever')
+                    ->selectRaw('distinct(transactions.id) as idd')
                     ->orderBy('created_at', 'asc')
                     ->get();
 
@@ -695,6 +696,7 @@ class TransactionController extends Controller
                     ->join('companies', 'companies.id', '=', 'companies_services.company_id')
                     ->where('companies.id', '=', auth()->user()->company_id)
                     ->orderBy('created_at', 'asc')
+                    ->selectRaw('distinct(transactions.id) as idd')
                     ->get();
 
             }
