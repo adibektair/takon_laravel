@@ -65,7 +65,6 @@
                 buttons : [ {
                     extend : 'excel',
                     action: newExportAction
-
                 } ]
             });
         });
