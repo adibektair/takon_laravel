@@ -99,6 +99,7 @@ class MobileUserController extends Controller
             $parent = Transaction::where('service_id', $exactly_service->id)
                 ->where('c_r_id', auth()->user()->company_id)
                 ->where('u_s_id', null)
+                ->where('cs_id', $cs_id)
                 ->orderBy('created_at', 'desc')->first();
 
             $model = new Transaction();

@@ -181,6 +181,7 @@ class CompanyController extends Controller
                         $parent = Transaction::where('service_id', $exactly_service->id)
                             ->where('c_r_id', auth()->user()->company_id)
                             ->where('u_s_id', null)
+                            ->where('cs_id', $service_ids[$k])
                             ->orderBy('created_at', 'desc')->first();
 
                         $model = new Transaction();

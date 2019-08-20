@@ -698,7 +698,6 @@ class TransactionController extends Controller
                     ->orderBy('created_at', 'asc')
 //                    ->selectRaw('distinct(transactions.id) as idd')
                     ->get();
-
             }
         }
 
