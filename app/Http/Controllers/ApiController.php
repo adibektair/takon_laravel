@@ -537,6 +537,7 @@ class ApiController extends Controller
                 $parent = Transaction::where('service_id', $service->id)
                     ->where('u_r_id', $us->mobile_user_id)
                     ->where('users_service_id', $us->id)
+                    ->where('type', '<>', 3)
                     ->orderBy('created_at', 'desc')->first();
 
                 if($parent){
