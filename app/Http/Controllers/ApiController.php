@@ -397,6 +397,7 @@ class ApiController extends Controller
 
                     $parent = Transaction::where('service_id', $service->id)
                         ->where('u_r_id', $user->id)
+                        ->where('type', '<>', 3)
                         ->where('users_service_id', $us->id)
                         ->orderBy('created_at', 'desc')->first();
 
@@ -407,6 +408,7 @@ class ApiController extends Controller
                     }else{
                         $parent = Transaction::where('service_id', $service->id)
                             ->where('u_r_id', $user->id)
+                            ->where('type', '<>', 3)
                             ->orderBy('created_at', 'desc')->first();
                         $model->parent_id = $parent->parent_id;
 
@@ -545,6 +547,7 @@ class ApiController extends Controller
                 }else{
                     $parent = Transaction::where('service_id', $service->id)
                         ->where('u_r_id', $us->mobile_user_id)
+                        ->where('type', '<>', 3)
                         ->orderBy('created_at', 'desc')->first();
                     $stat->parent_id = $parent->parent_id;
                 }
