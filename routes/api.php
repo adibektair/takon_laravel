@@ -22,6 +22,8 @@ Route::post('/test', ['uses' => 'ApiController@sendTest']);
 
 Route::post('/m_register', ['uses' => 'ApiController@auth']);
 Route::post('/m_login', ['uses' => 'ApiController@checkCode']);
+Route::post('/login', ['uses' => 'ApiController@logIn']);
+
 Route::group(['middleware' => ['token']], function () {
 
     Route::post('/getsubscriptions', ['uses' => 'ApiController@getSubscriptions']);
@@ -33,7 +35,6 @@ Route::group(['middleware' => ['token']], function () {
     Route::post('/scan', ['uses' => 'ApiController@scan']);
     Route::post('/qrgenerate', ['uses' => 'ApiController@generateQR']);
     Route::post('/qr_scan_for_presenting', ['uses' => 'ApiController@scanQR']);
-    Route::post('/login', ['uses' => 'ApiController@logIn']);
     Route::post('/qrscan', ['uses' => 'ApiController@scanCashierQR']);
     Route::post('/gethistory', ['uses' => 'ApiController@getHistory']);
     Route::post('/getarchive', ['uses' => 'ApiController@getArchive']);
