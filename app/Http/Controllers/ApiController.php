@@ -357,6 +357,9 @@ class ApiController extends Controller
             $partner = Partner::where('id', $service->partner_id)->first();
 
             if($reciever){
+                if($reciever->id == $user->id){
+                    return $this->makeResponse(400, false, ['msg' => 'Cannot send takons to yourself']);
+                }
                 if($us->amount < $amount){
                     return $this->makeResponse(400, false, ['msg' => 'Недостаточно таконов']);
                 }
