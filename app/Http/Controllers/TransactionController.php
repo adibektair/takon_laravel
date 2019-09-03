@@ -727,29 +727,31 @@ class TransactionController extends Controller
 
         $s = DataTables::of($res)
             ->addColumn('sender', function ($service) {
-//                if($service->type == 1){
-//                    if ($service->c_s_id){
-//                        $c = Company::where('id', $service->c_s_id)->first();
-//                        return $c->name;
-//                    }else{
-//                        $m = MobileUser::where('id', $service->u_s_id)->first();
-//                        return $m->phone;
-//                    }
-//                }else if($service->type == 2){
+                if($service->type == 1){
+                    if ($service->c_s_id){
+                        $c = Company::where('id', $service->c_s_id)->first();
+                        return $c->name;
+                    }else{
+                        $m = MobileUser::where('id', $service->u_s_id)->first();
+                        return $m->phone;
+                    }
+                }
+//                else if($service->type == 2){
 //                    $p = Partner::where('id', $service->p_s_id)->first();
 //                    return $p->name;
-//                }else if($service->type == 3){
+//                }
+//                else if($service->type == 3){
 //                    $m = MobileUser::where('id', $service->u_s_id)->first();
 //                    return $m->phone;
 //                }
 //                else if($service->type == 5){
 //                    $m = MobileUser::where('id', $service->u_s_id)->first();
 //                    return $m->phone;
-//                }else{
+//                }
+//                else{
 //                    $p = Partner::where('id', $service->p_s_id)->first();
 //                    return $p->name;
 //                }
-                return 'asd';
             })
             ->addColumn('reciever', function ($service) {
                 if($service->type == 1){
