@@ -719,7 +719,9 @@ class TransactionController extends Controller
 
     public function report(Request $request){
         $res = DB::table('transactions')
-            ->where('transactions.cs_id', auth()->user()->company_id)
+            ->join('companies', 'companies.id', '=', auth()->user()->company_id)
+            ->join('companies_services', 'companies.id', '=', 'companies_services.company_id')
+            ->where('transactions.cs_id', 'companies_services.id')
             ->join('services', 'services.id', '=', 'transactions.service_id')
             ->select('transactions.*', 'services.name')
             ->get();

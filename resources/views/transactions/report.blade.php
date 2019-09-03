@@ -45,10 +45,10 @@
                 ajax: "{{ route('transactions.report1') }}",
                 columns: [
                     { data: 'id', name: 'id' },
-                    { data: '0', name: '0' },
-                    { data: 'service', name: 'service'},
+                    { data: 'sender', name: 'sender' },
+                    { data: 'name', name: 'name'},
                     { data: 'amount', name: 'amount'},
-                    { data: '1', name: '1'},
+                    { data: 'reciever', name: 'reciever'},
                     { data: 'created_at', name: 'created_at'},
                 ],
                 dom: 'Bfrtip',
