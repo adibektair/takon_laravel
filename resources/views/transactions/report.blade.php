@@ -100,7 +100,7 @@
 
 
 
-            $('#min, #max').change(function () {
+            $('#min, #max, #service').change(function () {
                 table.draw();
             });
 
