@@ -16,11 +16,11 @@
         <table border="0" cellspacing="5" cellpadding="5">
             <tbody>
             <tr>
-                <td>Minimum Date:</td>
+                <td>C какого числа:</td>
                 <td><input name="min" id="min" type="date"></td>
             </tr>
             <tr>
-                <td>Maximum Date:</td>
+                <td>По какое число:</td>
                 <td><input name="max" id="max" type="date"></td>
             </tr>
             </tbody>

@@ -10,8 +10,8 @@
         <!-- Styles -->
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
-    <link href="{{ asset('css/bootstrap.css')}}" rel="stylesheet">
-{{--    <link href="{{asset('bootstrap.css')}}" rel="stylesheet">--}}
+{{--    <link href="{{ asset('css/bootstrap.css')}}" rel="stylesheet">--}}
+    <link href="{{asset('admin/bower_components/bootstrap/dist/css/bootstrap.css')}}" rel="stylesheet">
     <link href="{{asset('css/popModal.min.css')}}" rel="stylesheet">
     <link href="{{asset('css/popModal.css')}}" rel="stylesheet">
     <script src="{{asset('js/jquery.min.js')}}"></script>
