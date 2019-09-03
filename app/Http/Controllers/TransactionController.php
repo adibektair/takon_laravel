@@ -748,10 +748,7 @@ class TransactionController extends Controller
                     $m = MobileUser::where('id', $service->u_s_id)->first();
                     return $m->phone;
                 }
-//                else{
-//                    $p = Partner::where('id', $service->p_s_id)->first();
-//                    return $p->name;
-//                }
+
 
             })
             ->addColumn('reciever', function ($service) {

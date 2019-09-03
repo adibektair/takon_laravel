@@ -10,8 +10,8 @@
         <!-- Styles -->
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
-    <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
-    <link href="{{asset('css/bootstrap.min.css')}}" rel="stylesheet">
+    <link href="{{ asset('css/bootstrap.css')}}" rel="stylesheet">
+{{--    <link href="{{asset('bootstrap.css')}}" rel="stylesheet">--}}
     <link href="{{asset('css/popModal.min.css')}}" rel="stylesheet">
     <link href="{{asset('css/popModal.css')}}" rel="stylesheet">
     <script src="{{asset('js/jquery.min.js')}}"></script>
@@ -59,9 +59,9 @@
 
 
 {{--    <link rel="stylesheet" type="text/css"--}}
-{{--          href="{{asset("admin/bower_components/datatable/css/dataTables.bootstrap.min.css")}}"/>--}}
+{{--          href="{{asset("admin/bower_components/datatable/css/dataTables.bootstrabootstrap.css-}}
     <link rel="stylesheet" type="text/css"
-          href="{{asset("admin/bower_components/datatable/css/responsive.bootstrap.min.css")}}"/>
+          href="{{asset("bootstrap.css")}}"/>
     <link rel="stylesheet" type="text/css"
           href="{{asset("admin/bower_components/datatable/css/scroller.bootstrap.min.css")}}"/>
     <link rel="stylesheet" type="text/css"
