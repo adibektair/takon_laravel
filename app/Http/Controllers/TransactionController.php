@@ -721,6 +721,7 @@ class TransactionController extends Controller
 
         $minDate = $request->minDate;
         $maxDate = $request->maxDate;
+        $service = $request->service;
 
         $res = DB::table('transactions')->select('transactions.*', 'services.name')
             ->join('companies_services', 'companies_services.id', '=', 'transactions.cs_id')
@@ -735,6 +736,10 @@ class TransactionController extends Controller
         if($maxDate){
             $res = $res->where('transactions.created_at', '<=',$maxDate );
         }
+        if($service){
+            $res = $res->where('transactions.service_id', '=', $service);
+        }
+
         $res = $res->get();
 
         $s = DataTables::of($res)

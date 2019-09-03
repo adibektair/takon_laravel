@@ -23,6 +23,24 @@
                 <td>По какое число:</td>
                 <td><input name="max" id="max" type="date"></td>
             </tr>
+            <tr>
+                <?php
+                $services = \App\Service::all();
+                ?>
+                <td>Услуга:</td>
+                <td>
+                    <select name="service" id="service">
+                        <?php
+                        foreach ($services as $s){
+                            ?>
+                            <option value="<?=$s->id?>"><?=$s->name?></option>
+                        <?php
+                        }
+                        ?>
+                        <option value=""></option>
+                    </select>
+                </td>
+            </tr>
             </tbody>
         </table>
         <table class="table table-bordered" id="table">
@@ -62,6 +80,8 @@
                     "data": function ( d ) {
                         d.minDate = $('#min').val();
                         d.maxDate = $('#max').val();
+                        d.service = $('#service').val();
+
                     }
                 },
                 columns: [
