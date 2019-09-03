@@ -736,10 +736,10 @@ class TransactionController extends Controller
                         return $m->phone;
                     }
                 }
-//                else if($service->type == 2){
-//                    $p = Partner::where('id', $service->p_s_id)->first();
-//                    return $p->name;
-//                }
+                else if($service->type == 2){
+                    $p = Partner::where('id', $service->p_s_id)->first();
+                    return $p->name;
+                }
 //                else if($service->type == 3){
 //                    $m = MobileUser::where('id', $service->u_s_id)->first();
 //                    return $m->phone;
