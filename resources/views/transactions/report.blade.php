@@ -30,7 +30,9 @@
                 <td>Услуга:</td>
                 <td>
                     <select name="service" id="service">
-                        <?php
+                        <option value="">Не выбрано</option>
+
+                    <?php
                         foreach ($services as $s){
                             ?>
                             <option value="<?=$s->id?>"><?=$s->name?></option>
