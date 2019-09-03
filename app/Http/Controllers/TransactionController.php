@@ -727,49 +727,50 @@ class TransactionController extends Controller
 
         $s = DataTables::of($res)
             ->addColumn('sender', function ($service) {
-                if($service->type == 1){
-                    if ($service->c_s_id){
-                        $c = Company::where('id', $service->c_s_id)->first();
-                        return $c->name;
-                    }else{
-                        $m = MobileUser::where('id', $service->u_s_id)->first();
-                        return $m->phone;
-                    }
-                }else if($service->type == 2){
-                    $p = Partner::where('id', $service->p_s_id)->first();
-                    return $p->name;
-                }else if($service->type == 3){
-                    $m = MobileUser::where('id', $service->u_s_id)->first();
-                    return $m->phone;
-                }
-                else if($service->type == 5){
-                    $m = MobileUser::where('id', $service->u_s_id)->first();
-                    return $m->phone;
-                }else{
-                    $p = Partner::where('id', $service->p_s_id)->first();
-                    return $p->name;
-                }
-            })
-            ->addColumn('reciever', function ($service) {
 //                if($service->type == 1){
-//
-//                    $m = MobileUser::where('id', $service->u_r_id)->first();
-//                    return $m->phone;
-//
+//                    if ($service->c_s_id){
+//                        $c = Company::where('id', $service->c_s_id)->first();
+//                        return $c->name;
+//                    }else{
+//                        $m = MobileUser::where('id', $service->u_s_id)->first();
+//                        return $m->phone;
+//                    }
 //                }else if($service->type == 2){
-//                    $p = Company::where('id', $service->c_r_id)->first();
+//                    $p = Partner::where('id', $service->p_s_id)->first();
 //                    return $p->name;
 //                }else if($service->type == 3){
-//                    $m = User::where('id', $service->u_r_id)->first();
-//                    return $m->name;
+//                    $m = MobileUser::where('id', $service->u_s_id)->first();
+//                    return $m->phone;
 //                }
 //                else if($service->type == 5){
-//                    $p = Company::where('id', $service->c_r_id)->first();
-//                    return $p->name;
+//                    $m = MobileUser::where('id', $service->u_s_id)->first();
+//                    return $m->phone;
 //                }else{
-//                    $p = Company::where('id', $service->c_r_id)->first();
+//                    $p = Partner::where('id', $service->p_s_id)->first();
 //                    return $p->name;
 //                }
+                return 'asd';
+            })
+            ->addColumn('reciever', function ($service) {
+                if($service->type == 1){
+
+                    $m = MobileUser::where('id', $service->u_r_id)->first();
+                    return $m->phone;
+
+                }else if($service->type == 2){
+                    $p = Company::where('id', $service->c_r_id)->first();
+                    return $p->name;
+                }else if($service->type == 3){
+                    $m = User::where('id', $service->u_r_id)->first();
+                    return $m->name;
+                }
+                else if($service->type == 5){
+                    $p = Company::where('id', $service->c_r_id)->first();
+                    return $p->name;
+                }else{
+                    $p = Company::where('id', $service->c_r_id)->first();
+                    return $p->name;
+                }
             })
 
             ->make(true);
