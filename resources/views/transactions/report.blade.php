@@ -3,6 +3,8 @@
 @section('content')
 
 
+
+
     <div class="col-md-12 mt-2 mb-3 bg-transparent">
         <div class="float-left">
             <h5>Отчет</h5>
@@ -51,34 +53,17 @@
     <script>
         $(document).ready(function () {
 
-            $.fn.dataTable.ext.search.push(
-                function (settings, data, dataIndex) {
-                    var min = $('#min').datepicker('getDate');
-                    var max = $('#max').datepicker('getDate');
-                    var startDate = new Date(data[4]);
-                    if (min == null && max == null) return true;
-                    if (min == null && startDate <= max) return true;
-                    if (max == null && startDate >= min) return true;
-                    if (startDate <= max && startDate >= min) return true;
-                    return false;
-                }
-            );
 
-            $('#min').datepicker({
-                onSelect: function () {
-                    table.draw();
-                }, changeMonth: true, changeYear: true
-            });
-            $('#max').datepicker({
-                onSelect: function () {
-                    table.draw();
-                }, changeMonth: true, changeYear: true
-            });
-
-            $('#table').DataTable({
+            var table = $('#table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('transactions.report1') }}",
+                ajax: {
+                    url: "{{ route('transactions.report1') }}",
+                    "data": function ( d ) {
+                        d.minDate = $('#min').val();
+                        d.maxDate = $('#max').val();
+                    }
+                },
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'sender', name: 'sender'},
@@ -93,9 +78,12 @@
                 ],
             });
 
+
+
             $('#min, #max').change(function () {
                 table.draw();
             });
+
         });
 
 

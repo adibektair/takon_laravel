@@ -718,12 +718,24 @@ class TransactionController extends Controller
 
 
     public function report(Request $request){
+
+        $minDate = $request->minDate;
+        $maxDate = $request->maxDate;
+
         $res = DB::table('transactions')->select('transactions.*', 'services.name')
             ->join('companies_services', 'companies_services.id', '=', 'transactions.cs_id')
             ->join('companies', 'companies.id', '=', 'companies_services.company_id')
             ->join('services', 'services.id', '=', 'transactions.service_id')
-            ->where('companies.id', auth()->user()->company_id)
-            ->get();
+            ->where('companies.id', auth()->user()->company_id);
+
+        if($minDate){
+            $res = $res->where('transactions.created_at', '>=',$minDate );
+        }
+
+        if($maxDate){
+            $res = $res->where('transactions.created_at', '<=',$maxDate );
+        }
+        $res = $res->get();
 
         $s = DataTables::of($res)
             ->addColumn('sender', function ($service) {

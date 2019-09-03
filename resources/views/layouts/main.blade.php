@@ -33,7 +33,9 @@
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 
         <link  href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+    <script data-require="jqueryui@*" data-semver="1.10.0" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.0/jquery-ui.js"></script>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
         <script defer src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 
@@ -59,7 +61,7 @@
 
 
 {{--    <link rel="stylesheet" type="text/css"--}}
-{{--          href="{{asset("admin/bower_components/datatable/css/dataTables.bootstrabootstrap.css-}}
+{{--          href="{{asset("admin/bower_components/datatable/css/dataTables.bootstrabootstrap.css-}}--}}
     <link rel="stylesheet" type="text/css"
           href="{{asset("bootstrap.css")}}"/>
     <link rel="stylesheet" type="text/css"
@@ -108,23 +110,20 @@
 
 
 
-{{--                            <li class="user-footer">--}}
-{{--                                <div class="pull-left">--}}
-{{--                                    <a href="{{route('self.user.edit')}}" class="btn btn-default btn-flat">Профиль</a>--}}
-{{--                                </div>--}}
-{{--                                <div class="pull-right">--}}
-{{--                                    <a class="btn btn-default btn-flat" href="{{ route('logout') }}"--}}
-{{--                                       onclick="event.preventDefault();--}}
-{{--                                                     document.getElementById('logout-form').submit();">--}}
-{{--                                        Выход--}}
-{{--                                    </a>--}}
+                            <li class="user-footer">
+                                <div class="pull-right">
+                                    <a class="btn btn-default btn-flat" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                        Выход
+                                    </a>
 
-{{--                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"--}}
-{{--                                          style="display: none;">--}}
-{{--                                        @csrf--}}
-{{--                                    </form>--}}
-{{--                                </div>--}}
-{{--                            </li>--}}
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                          style="display: none;">
+                                        @csrf
+                                    </form>
+                                </div>
+                            </li>
                         </ul>
                     </li>
                 </ul>
