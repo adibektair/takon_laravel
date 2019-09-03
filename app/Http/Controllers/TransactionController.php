@@ -722,7 +722,7 @@ class TransactionController extends Controller
             ->join('companies_services', 'companies.id', '=', 'transactions.cs_id')
             ->join('companies', 'companies.id', '=', 'companies_services.company_id')
             ->join('services', 'services.id', '=', 'transactions.service_id')
-            ->where('companies.id', auth()->user()->company_id)
+            ->where('companies_services.company_id', auth()->user()->company_id)
             ->get();
 
         $s = DataTables::of($res)
