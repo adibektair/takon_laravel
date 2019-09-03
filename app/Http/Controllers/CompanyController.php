@@ -76,9 +76,9 @@ class CompanyController extends Controller
      * @param  \App\Company  $company
      * @return \Illuminate\Http\Response
      */
-    public function show(Company $company)
+    public function report()
     {
-        //
+        return view('transactions/report');
     }
 
     /**

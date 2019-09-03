@@ -301,7 +301,6 @@ class ApiController extends Controller
                         ->where('users_service_id', $us->id)
                         ->orderBy('created_at', 'desc')->first();
 
-
                     $model = new Transaction();
                     if($parent){
                         $model->parent_id = $parent->id;

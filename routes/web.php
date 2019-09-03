@@ -61,6 +61,7 @@ Route::group(['middleware' => ['authenticated']], function () {
     Route::get('/get-by-ids', ['as' => 'get.by.ids', 'uses' => 'MobileUserController@getUsersByIds']);
     Route::post('/send-takons', ['as' => 'send.takons', 'uses' => 'CompanyController@sendTakons']);
     Route::get('/generate-qr', ['as' => 'generate-qr', 'uses' => 'UserController@generateQR']);
+    Route::get('/report', ['as' => 'report', 'uses' => 'CompanyController@report']);
 
     Route::get('/company-services', function () {
         return view('companies/services');
@@ -187,6 +188,7 @@ Route::group(['middleware' => ['authenticated']], function () {
     Route::get('/transactions/payments', 'TransactionController@payments')->name('transactions.payments');
     Route::get('/transactions/return/all', 'TransactionController@returnAll')->name('transactions.return.all');
     Route::get('/transactions/payments/all', 'TransactionController@paymentsAll')->name('transactions.payments.all');
+    Route::get('/transactions/report1', 'TransactionController@report')->name('transactions.report1');
 
 
 

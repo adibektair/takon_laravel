@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\CompaniesService;
 use App\Company;
+use App\MobileUser;
 use App\Partner;
 use App\Transaction;
+use App\User;
 use App\UsersService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -713,5 +715,67 @@ class TransactionController extends Controller
 
         return $s;
     }
+
+
+    public function report(Request $request){
+        $res = DB::table('transactions')
+            ->where('transactions.cs_id', auth()->user()->company_id)
+            ->join('services', 'services.id', '=', 'transactions.service_id')
+            ->select('transactions.*', 'services.name')
+            ->get();
+
+        $s = DataTables::of($res)
+            ->addColumn('sender', function ($service) {
+                if($service->type == 1){
+                    if ($service->c_s_id){
+                        $c = Company::where('id', $service->c_s_id)->first();
+                        return $c->name;
+                    }else{
+                        $m = MobileUser::where('id', $service->u_s_id)->first();
+                        return $m->phone;
+                    }
+                }else if($service->type == 2){
+                    $p = Partner::where('id', $service->p_s_id)->first();
+                    return $p->name;
+                }else if($service->type == 3){
+                    $m = MobileUser::where('id', $service->u_s_id)->first();
+                    return $m->phone;
+                }
+                else if($service->type == 5){
+                    $m = MobileUser::where('id', $service->u_s_id)->first();
+                    return $m->phone;
+                }else{
+                    $p = Partner::where('id', $service->p_s_id)->first();
+                    return $p->name;
+                }
+            })
+            ->addColumn('reciever', function ($service) {
+                if($service->type == 1){
+
+                    $m = MobileUser::where('id', $service->u_r_id)->first();
+                    return $m->phone;
+
+                }else if($service->type == 2){
+                    $p = Company::where('id', $service->c_r_id)->first();
+                    return $p->name;
+                }else if($service->type == 3){
+                    $m = User::where('id', $service->u_r_id)->first();
+                    return $m->name;
+                }
+                else if($service->type == 5){
+                    $p = Company::where('id', $service->c_r_id)->first();
+                    return $p->name;
+                }else{
+                    $p = Company::where('id', $service->c_r_id)->first();
+                    return $p->name;
+                }
+            })
+
+            ->make(true);
+
+        return $s;
+
+    }
+
 
 }

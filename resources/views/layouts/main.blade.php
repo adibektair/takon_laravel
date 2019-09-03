@@ -241,6 +241,10 @@
                         </li>
 
                     <li>
+                        <a href="{{ route('report') }}">Отчет</a>
+                    </li>
+
+                    <li>
                         <a href="{{ route('transactions.use') }}">Использование таконов</a>
                     </li>
 
