@@ -793,16 +793,19 @@ class TransactionController extends Controller
             })
             ->addColumn('sender_name', function ($service) {
                 if($service->type == 1){
-                    $m = MobileUser::where('id', $service->u_s_id)->first();
-                    $gr = Group::where('company_id', auth()->user()->company_id)->get();
-                    foreach ($gr as $g){
-                        $gu = GroupsUser::where('group_id', $g->id)
-                            ->where('mobile_user_id', $m->id)
-                            ->first();
-                        if($gu){
-                            return $gu->username;
+                    if (!$service->c_s_id){
+                        $m = MobileUser::where('id', $service->u_s_id)->first();
+                        $gr = Group::where('company_id', auth()->user()->company_id)->get();
+                        foreach ($gr as $g){
+                            $gu = GroupsUser::where('group_id', $g->id)
+                                ->where('mobile_user_id', $m->id)
+                                ->first();
+                            if($gu){
+                                return $gu->username;
+                            }
                         }
                     }
+
 
                 }
 
@@ -835,7 +838,6 @@ class TransactionController extends Controller
             })
             ->addColumn('reciever_name', function ($service) {
                 if($service->type == 1){
-
                     $m = MobileUser::where('id', $service->u_r_id)->first();
                     $gr = Group::where('company_id', auth()->user()->company_id)->get();
                     foreach ($gr as $g){
