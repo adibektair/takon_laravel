@@ -50,9 +50,11 @@
             <tr>
                 <th>#</th>
                 <th>Отправитель</th>
+                <th>Имя отправителя</th>
                 <th>Услуга/Товар</th>
                 <th>Количество</th>
                 <th>Получатель</th>
+                <th>Имя получателя</th>
                 <th>Дата</th>
             </tr>
             </thead>
@@ -89,9 +91,10 @@
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'sender', name: 'sender'},
+                    {data: 'sender_name', name: 'sender_name'},
                     {data: 'name', name: 'name'},
                     {data: 'amount', name: 'amount'},
-                    {data: 'reciever', name: 'reciever'},
+                    {data: 'reciever_name', name: 'reciever_name'},
                     {data: 'created_at', name: 'created_at'},
                 ],
                 dom: 'Bfrtip',
