@@ -42,6 +42,15 @@
                         <option value=""></option>
                     </select>
                 </td>
+            </tr><tr>
+
+                <td>Тип транзакция:</td>
+                <td>
+                    <select name="type" id="type">
+                        <option value="">Не выбрано</option>
+                        <option value="3">Использование таконов</option>
+                    </select>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -85,6 +94,7 @@
                         d.minDate = $('#min').val();
                         d.maxDate = $('#max').val();
                         d.service = $('#service').val();
+                        d.type = $('#type').val();
 
                     }
                 },
@@ -108,7 +118,7 @@
 
 
 
-            $('#min, #max, #service').change(function () {
+            $('#min, #max, #service, #type').change(function () {
                 table.draw();
             });
 
