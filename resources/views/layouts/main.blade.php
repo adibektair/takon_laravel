@@ -198,8 +198,40 @@
                             <a href="{{ route('transactions.return') }}">Транзакции по возвратам</a>
                         </li>
 
+                @elseif(auth()->user()->role_id == 4)
+                    <li>
+                        <a href="{{ route('partners_list') }}" >Партнеры</a>
 
-                        @elseif(auth()->user()->role_id == 2)
+                    </li>
+                    <li>
+                        <a href="/companies" >Юр. лица</a>
+
+                    </li>
+                    <li>
+                        <a href="/mobile_users" >Пользователи</a>
+
+                    </li>
+                    <li>
+                        <a href="{{ route('transactions.admin') }}" >Транзакции  </a>
+
+                    </li>
+                    <li>
+                        <a href="{{ route('transactions.payments') }}" >Транзакции по онлайн оплате </a>
+
+                    </li>
+
+                    <li>
+                        <a href="{{ route('transactions.use') }}">Использование таконов</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('transactions.search') }}">Поиск по транзакциям</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('transactions.return') }}">Транзакции по возвратам</a>
+                    </li>
+
+
+                @elseif(auth()->user()->role_id == 2)
                             <li>
                                 <a href="/profile" >Профиль</a>
 
