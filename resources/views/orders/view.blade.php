@@ -66,7 +66,7 @@
 
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-success btn-lg">Применить</button>
+                    <button id="accept_btn" on-click="disableBtn()" type="submit" class="btn btn-success btn-lg">Применить</button>
                 </div>
 
             </div>
@@ -76,6 +76,10 @@
     <br>
 
     <script>
+        function disableBtn(){
+            document.getElementById('accept_btn').disabled = 'disabled';
+        }
+
         function appendInput() {
             var div = document.getElementById('reason');
             div.innerHTML = '';
