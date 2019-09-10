@@ -66,7 +66,7 @@
 
                 </div>
                 <div class="form-group">
-                    <button id="accept_btn" on-click="disableBtn()" type="submit" class="btn btn-success btn-lg">Применить</button>
+                    <button id="accept_btn" onclick="disableBtn()" type="submit" class="btn btn-success btn-lg">Применить</button>
                 </div>
 
             </div>
