@@ -629,7 +629,7 @@ class TransactionController extends Controller
 
     public function useAll(Request $request){
 
-        if(auth()->user()->role_id == 1){
+        if(auth()->user()->role_id == 1 OR auth()->user()->role_id == 4){
 
             if ($request->id){
                 $result = DB::table('transactions')
