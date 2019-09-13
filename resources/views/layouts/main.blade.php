@@ -251,9 +251,13 @@
 
                         @elseif(auth()->user()->role_id == 3)
                             <li>
-                                <a href="{{ route('company.services') }}" >Товары и услуги</a>
+                                <a href="{{ route('profile.company') }}" >Профиль</a>
 
                             </li>
+                    <li>
+                        <a href="{{ route('company.services') }}" >Товары и услуги</a>
+
+                    </li>
                         <li>
                             <a href="/groups" >Пользователи</a>
 

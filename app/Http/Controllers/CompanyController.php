@@ -87,9 +87,17 @@ class CompanyController extends Controller
      * @param  \App\Company  $company
      * @return \Illuminate\Http\Response
      */
-    public function edit(Company $company)
+    public function edit(Request $request)
     {
-        //
+
+        $c = Company::where('id', $request->id)->first();
+        $c->name = $request->name;
+        $c->phone = $request->phone;
+        $c->address = $request->address;
+        $c->save();
+        toastr()->success('Юр. лицо успешно добавлено!');
+
+        return redirect()->back();
     }
 
     /**
