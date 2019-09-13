@@ -393,9 +393,11 @@ class ApiController extends Controller
 
                 $us->amount -= $amount;
                 if($us->save()){
-
 //                    $not = new CloudMessage("На Ваш счет поступили таконы " . $service->name, $reciever->id, "Внимание", $service->partner_id, $partner->name);
 //                    $not->sendNotification();
+                    $c = new CloudMessage();
+                    $c->sendSilentThroughNode($reciever->push_id, $reciever->platform, "На Ваш счет поступили таконы " . $service->name, 1, "Внимание");
+
 
                     $parent = Transaction::where('service_id', $service->id)
                         ->where('u_r_id', $user->id)

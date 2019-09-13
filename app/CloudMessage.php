@@ -6,55 +6,36 @@ namespace App;
 
 class CloudMessage
 {
-    const API_KEY = 'AIzaSyC8UpS3aECUWjniIYvonDRK1HwQAxHqGZA';
-    private $message;
-    private $title;
-    private $reciever;
-    private $type;
-    private $name;
-    private $platform;
 
 
-    function __construct($message, $reciever,  $title, $type, $name)
-    {
-        $user = MobileUser::where('id', $reciever)->first();
-        $this->reciever = $user->push_id;
-        $this->title = $title;
-        $this->platform = $user->platform;
-        $this->message = $message;
-        $this->type= $type;
-        $this->name= $name;
+    public function sendSilentThroughNode($to, $platform, $message, $type, $title){
 
-    }
 
-    public function setReciever($reciever, $platform){
-        $this->reciever = $reciever;
-        $this->platform = $platform;
-    }
-
-    function sendNotification(){
-        $data = array("text" => $this->message, "type" => $this->type, "title" => $this->title, "name" => $this->name);
-        if($this->platform == 1){
-            $data1 = array('to' => $this->reciever,
-                'notification' => ["title" => $this->title, "body" => $this->message, "sound" => "default"]);
+        $data = array("text" => $message, "type" => $type, "title" => $title);
+        if($platform == 1){
+            $data1 = array('to' => $to,
+                'notification' => ["title" => $title, "body" => $message, "sound" => "default"]);
         }else{
-            $data1 = array('to' => $this->reciever,
+            $data1 = array('to' => $to,
                 "data" => $data);
         }
+//        $info = ['to' => $to,'content_available' => $content_available, 'data' => $data ];
+        $url = "http://localhost:8081";
+        $options = array(
+            'http' => array(
+                'method'  => 'POST',
+                'content' => json_encode( $data1 ),
+                'header'=>  "Content-Type: application/json\r\n" .
+                    "Accept: application/json\r\n"
+            )
+        );
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Content-type: application/json',
-            'Authorization: key='.self::API_KEY
-        ));
-        curl_setopt($ch, CURLOPT_URL,"https://fcm.googleapis.com/fcm/send");
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS,
-            json_encode($data1));
-
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $server_output = curl_exec ($ch);
-        curl_close ($ch);
-
+        $context  = stream_context_create( $options );
+        $result = file_get_contents( $url, false, $context );
+        $response = json_decode( $result );
     }
+
+
+
+
 }
