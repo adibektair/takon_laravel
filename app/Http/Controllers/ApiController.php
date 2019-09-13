@@ -574,14 +574,14 @@ class ApiController extends Controller
 //                $management = new ManagementNotification($user->phone, $amount, $Tair->push_id, $service->name, $Tair->platform);
 //                $management->send();
 
-//                $cashier = User::where('id', $user_id)->first();
-//                if ($cashier){
+                $cashier = User::where('id', $user_id)->first();
+                if ($cashier){
 //                    $message = new CloudMessage("Вам были переведены " . $amount . " таконов", $user->id, "Произведена оплата", "", "");
-//                    if($cashier->push_id){
-//                        $message->setReciever($cashier->push_id, $cashier->platform);
-//                        $message->sendNotification();
-//                    }
-//                }
+                    if($cashier->push_id){
+                        $c = new CloudMessage();
+                        $c->sendSilentThroughNode($cashier->push_id, $cashier->platform, "Вам были переведены " . $amount . " таконов", '', 'Произведена оплата');
+                    }
+                }
 
             }
             return $this->makeResponse(200, true, ['msg' => 'Таконы успешно переданы']);
