@@ -3,15 +3,11 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Takon</title>
-        <link rel="dns-prefetch" href="//fonts.gstatic.com">
-        <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
+    <title>Takon</title>
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
 
-        <!-- Styles -->
-        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-
-{{--    <link href="{{ asset('css/bootstrap.css')}}" rel="stylesheet">--}}
-    <link href="{{asset('admin/bower_components/bootstrap/dist/css/bootstrap.css')}}" rel="stylesheet">
+    <!-- Styles -->
     <link href="{{asset('css/popModal.min.css')}}" rel="stylesheet">
     <link href="{{asset('css/popModal.css')}}" rel="stylesheet">
     <script src="{{asset('js/jquery.min.js')}}"></script>
@@ -22,30 +18,16 @@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 
+    @toastr_css
+    @toastr_js
 
-        @toastr_css
-        @toastr_js
+    <!-- Custom styles for this template -->
+    <link href="{{asset('css/simple-sidebar.css')}}" rel="stylesheet">
 
-        <!-- Custom styles for this template -->
-        <link href="{{asset('css/simple-sidebar.css')}}" rel="stylesheet">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-
-        <link  href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
-    <script data-require="jqueryui@*" data-semver="1.10.0" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.0/jquery-ui.js"></script>
-
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-        <script defer src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-
-    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.js" defer></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.colVis.js" defer></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.js" defer></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.js" defer></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.js" defer></script>
-
+    <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
 
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
@@ -59,17 +41,12 @@
     <link href="{{ asset('css/toastr.css') }}" rel="stylesheet">
 
 
+    {{--    <link rel="stylesheet" type="text/css"--}}
+    {{--          href="{{asset("admin/bower_components/datatable/css/dataTables.bootstrabootstrap.css-}}--}}
 
-{{--    <link rel="stylesheet" type="text/css"--}}
-{{--          href="{{asset("admin/bower_components/datatable/css/dataTables.bootstrabootstrap.css-}}--}}
-    <link rel="stylesheet" type="text/css"
-          href="{{asset("bootstrap.css")}}"/>
-    <link rel="stylesheet" type="text/css"
-          href="{{asset("admin/bower_components/datatable/css/scroller.bootstrap.min.css")}}"/>
-    <link rel="stylesheet" type="text/css"
-          href="{{asset("admin/bower_components/daterangepicker/daterangepicker.css")}}"/>
-
+    <link rel="stylesheet" type="text/css" href="{{asset("admin/bower_components/daterangepicker/daterangepicker.css")}}"/>
     <link href="{{asset("admin/bower_components/select2/select2.css")}}" rel="stylesheet"/>
+
     <style>
         .panel {
             padding: 10px;
@@ -81,7 +58,7 @@
 <div class="wrapper">
 
     <header class="main-header">
-        <a  class="logo">
+        <a class="logo">
             <span class="logo-mini"><b>T</b>ORG</span>
             <span class="logo-lg"><b>TAKON.</b>ORG</span>
         </a>
@@ -107,7 +84,6 @@
 
                                 </p>
                             </li>
-
 
 
                             <li class="user-footer">
@@ -155,139 +131,274 @@
 
                 ?>
 
-                    <li class="header">Настройки</li>
+                <li class="header">Настройки</li>
 
 
-                        @if(auth()->user()->role_id == 1)
-                            <li>
-                                <a href="{{ route('partners_list') }}" >Партнеры</a>
-
-                            </li>
-                        <li>
-                            <a href="/companies" >Юр. лица</a>
-
-                        </li>
-                        <li>
-                            <a href="/mobile_users" >Пользователи</a>
-
-                        </li>
-                        <li>
-                            <a href="/orders" >Заявки (транзакции) <?php if($amount > 0){?> <span class="badge-primary rounded pb-1 pt-1 pr-1 pl-1"><?=$amount?></span> <?php } ?>  </a>
-
-                        </li>
-                        <li>
-                            <a href="{{ route('services.moderation') }}" >Заявки (товары/услуги) <?php if($servicesCount > 0){?> <span class="badge-primary rounded pb-1 pt-1 pr-1 pl-1"><?=$servicesCount?></span> <?php } ?>  </a>
-
-                        </li>
-                        <li>
-                            <a href="{{ route('transactions.admin') }}" >Транзакции  </a>
-
-                        </li>
+                @if(auth()->user()->role_id == 1)
                     <li>
-                        <a href="{{ route('transactions.payments') }}" >Транзакции по онлайн оплате </a>
+                        <a href="{{ route('partners_list') }}">
+                            <i class="fa fa-handshake-o"></i>
+                            <span>Партнеры</span>
+                        </a>
+
+                    </li>
+                    <li>
+                        <a href="/companies">
+                            <i class="fa fa-suitcase"></i>
+                            <span>
+                                Юр. лица
+                            </span>
+                        </a>
+
+                    </li>
+                    <li>
+                        <a href="/mobile_users">
+                            <i class="fa fa-users"></i>
+                            <span>
+                                Пользователи
+                            </span>
+                        </a>
+
+                    </li>
+                    <li>
+                        <a href="/orders">
+                            <i class="fa fa-envelope-square"></i>
+                            <span>
+                                Заявки (транзакции) <?php if($amount > 0){?> <span
+                                        class="badge-primary rounded pb-1 pt-1 pr-1 pl-1"><?=$amount?></span> <?php } ?>
+                            </span>
+                        </a>
+
+                    </li>
+                    <li>
+                        <a href="{{ route('services.moderation') }}">
+                            <i class="fa fa-envelope-open"></i>
+                            <span>
+                                Заявки
+                            (товары/услуги) <?php if($servicesCount > 0){?> <span
+                                        class="badge-primary rounded pb-1 pt-1 pr-1 pl-1"><?=$servicesCount?></span> <?php } ?>
+                            </span>
+                        </a>
+
+                    </li>
+                    <li>
+                        <a href="{{ route('transactions.admin') }}">
+                            <i class="fa fa-exchange"></i>
+                            <span>
+                                Транзакции
+                            </span>
+                        </a>
+
+                    </li>
+                    <li>
+                        <a href="{{ route('transactions.payments') }}">
+                            <i class="fa fa-external-link"></i>
+                            <span>
+                                Транзакции по онлайн оплате
+                            </span>
+                        </a>
 
                     </li>
 
-                        <li>
-                            <a href="{{ route('transactions.use') }}">Использование таконов</a>
-                        </li>
                     <li>
-                        <a href="{{ route('transactions.search') }}">Поиск по транзакциям</a>
+                        <a href="{{ route('transactions.use') }}">
+                            <i class="fa fa-hand-grab-o"></i>
+                            <span>
+                                Использование таконов
+                            </span>
+                        </a>
                     </li>
-                        <li>
-                            <a href="{{ route('transactions.return') }}">Транзакции по возвратам</a>
-                        </li>
+                    <li>
+                        <a href="{{ route('transactions.search') }}">
+                            <i class="fa fa-search"></i>
+                            <span>
+                                Поиск по транзакциям
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('transactions.return') }}">
+                            <i class="fa fa-arrow-circle-left"></i>
+                            <span>
+                                Транзакции по возвратам
+                            </span>
+                        </a>
+                    </li>
 
                 @elseif(auth()->user()->role_id == 4)
                     <li>
-                        <a href="{{ route('partners_list') }}" >Партнеры</a>
+                        <a href="{{ route('partners_list') }}">
+                            <i class="fa fa-handshake-o"></i>
+                            <span>Партнеры</span>
+                        </a>
 
                     </li>
                     <li>
-                        <a href="/companies" >Юр. лица</a>
+                        <a href="/companies">
+                            <i class="fa fa-suitcase"></i>
+                            <span>
+                                Юр. лица
+                            </span>
+                        </a>
 
                     </li>
                     <li>
-                        <a href="/mobile_users" >Пользователи</a>
+                        <a href="/mobile_users">
+                            <i class="fa fa-users"></i>
+                            <span>
+                                Пользователи
+                            </span>
+                        </a>
 
                     </li>
                     <li>
-                        <a href="{{ route('transactions.admin') }}" >Транзакции  </a>
+                        <a href="{{ route('transactions.admin') }}">
+                            <i class="fa fa-exchange"></i>
+                            <span>
+                                Транзакции
+                            </span>
+                        </a>
 
                     </li>
                     <li>
-                        <a href="{{ route('transactions.payments') }}" >Транзакции по онлайн оплате </a>
+                        <a href="{{ route('transactions.payments') }}">
+                            <i class="fa fa-external-link"></i>
+                            <span>
+                                Транзакции по онлайн оплате
+                            </span>
+                        </a>
 
                     </li>
 
                     <li>
-                        <a href="{{ route('transactions.use') }}">Использование таконов</a>
+                        <a href="{{ route('transactions.use') }}">
+                            <i class="fa fa-hand-grab-o"></i>
+                            <span>
+                                Использование таконов
+                            </span>
+                        </a>
                     </li>
                     <li>
-                        <a href="{{ route('transactions.search') }}">Поиск по транзакциям</a>
+                        <a href="{{ route('transactions.search') }}">
+                            <i class="fa fa-search"></i>
+                            <span>
+                                Поиск по транзакциям
+                            </span>
+                        </a>
                     </li>
                     <li>
-                        <a href="{{ route('transactions.return') }}">Транзакции по возвратам</a>
+                        <a href="{{ route('transactions.return') }}">
+                            <i class="fa fa-arrow-circle-left"></i>
+                            <span>
+                                Транзакции по возвратам
+                            </span>
+                        </a>
                     </li>
 
 
                 @elseif(auth()->user()->role_id == 2)
-                            <li>
-                                <a href="/profile" >Профиль</a>
-
-                            </li>
-                        <li>
-                            <a href="/employees">Сотрудники</a>
-
-                        </li>
-                        <li>
-                            <a href="/services">Товары и услуги</a>
-
-                        </li>
-                        <li>
-                            <a href="{{ route('transactions.partner') }}" >Транзакции  </a>
-
-                        </li>
-
-                        @elseif(auth()->user()->role_id == 3)
-                            <li>
-                                <a href="{{ route('profile.company') }}" >Профиль</a>
-
-                            </li>
                     <li>
-                        <a href="{{ route('company.services') }}" >Товары и услуги</a>
+                        <a href="/profile">
+                            <i class="fa fa-user"></i>
+                            <span>Профиль</span>
+                        </a>
 
                     </li>
-                        <li>
-                            <a href="/groups" >Пользователи</a>
-
-                        </li>
-                        <li>
-                            <a href="/return" >Возврат таконов</a>
-
-                        </li>
-                        <li>
-                            <a href="{{ route('transactions.company') }}" >Транзакции  </a>
-
-                        </li>
-                        <li>
-                            <a href="{{ route('transactions.return') }}" >Транзакции по возвратам</a>
-
-                        </li>
-
                     <li>
-                        <a href="{{ route('report') }}">Отчет</a>
+                        <a href="/employees">
+                            <i class="fa fa-users"></i>
+                            <span>Сотрудники</span>
+                        </a>
+
+                    </li>
+                    <li>
+                        <a href="/services">
+                            <i class="fa fa-book"></i>
+                            <span>Товары и услуги</span>
+                        </a>
+
+                    </li>
+                    <li>
+                        <a href="{{ route('transactions.partner') }}">
+                            <i class="fa fa-exchange"></i>
+                            <span>
+                                Транзакции
+                            </span>
+                        </a>
+
+                    </li>
+
+                @elseif(auth()->user()->role_id == 3)
+                    <li>
+                        <a href="{{ route('company.services') }}">
+                            <i class="fa fa-book"></i>
+                            <span>Товары и услуги</span>
+                        </a>
+
+                    </li>
+                    <li>
+                        <a href="/groups">
+                            <i class="fa fa-group"></i>
+                            <span>Пользователи</span>
+                        </a>
+
+                    </li>
+                    <li>
+                        <a href="/return">
+                            <i class="fa fa-dollar"></i>
+                            <span>
+                                Возврат таконов
+                            </span>
+                        </a>
+
+                    </li>
+                    <li>
+                        <a href="{{ route('transactions.company') }}">
+                            <i class="fa fa-book"></i>
+                            <span>Товары и услуги</span>
+                        </a>
+
+                    </li>
+                    <li>
+                        <a href="{{ route('transactions.return') }}">
+                            <i class="fa fa-arrow-circle-left"></i>
+                            <span>
+                                Транзакции по возвратам
+                            </span>
+                        </a>
+
                     </li>
 
                     <li>
-                        <a href="{{ route('transactions.use') }}">Использование таконов</a>
+                        <a href="{{ route('report') }}">
+                            <i class="fa fa-list">
+
+                            </i>
+                            <span>
+                                Отчет
+                            </span>
+                        </a>
                     </li>
 
                     <li>
-                        <a href="{{ route('transactions.search') }}">Поиск по транзакциям</a>
+                        <a href="{{ route('transactions.use') }}">
+                            <i class="fa fa-hand-grab-o"></i>
+                            <span>
+                                Использование таконов
+                            </span>
+                        </a>
                     </li>
 
-                        @endif
+                    <li>
+                        <a href="{{ route('transactions.search') }}">
+                            <i class="fa fa-search"></i>
+                            <span>
+                                Поиск по транзакциям
+                            </span>
+                        </a>
+                    </li>
+
+                @endif
 
             </ul>
         </section>
@@ -309,7 +420,19 @@
         reserved {{date('Y')}}. TAKON.ORG
     </footer>
 </div>
+<script data-require="jqueryui@*" data-semver="1.10.0" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.0/jquery-ui.js"></script>
 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script defer src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.js"
+        defer></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.colVis.js" defer></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.js" defer></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.js" defer></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.js" defer></script>
 
 <script src="{{asset("admin/bower_components/jquery/dist/jquery.min.js")}}"></script>
 <script src="{{asset("admin/bower_components/bootstrap/dist/js/bootstrap.min.js")}}"></script>
