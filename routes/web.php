@@ -66,6 +66,10 @@ Route::group(['middleware' => ['authenticated']], function () {
     Route::get('/company-services', function () {
         return view('companies/services');
     })->name('company.services');
+    Route::get('/company-edit', function () {
+        return view('profile/company');
+    })->name('profile.company');
+    Route::post('/editcompany', ['as' => 'edit.company', 'uses' => 'CompanyController@edit']);
 
     Route::get('/buy-service', function () {
         return view('companies/buy');

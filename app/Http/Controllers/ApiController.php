@@ -393,9 +393,11 @@ class ApiController extends Controller
 
                 $us->amount -= $amount;
                 if($us->save()){
-
 //                    $not = new CloudMessage("На Ваш счет поступили таконы " . $service->name, $reciever->id, "Внимание", $service->partner_id, $partner->name);
 //                    $not->sendNotification();
+                    $c = new CloudMessage();
+                    $c->sendSilentThroughNode($reciever->push_id, $reciever->platform, "На Ваш счет поступили таконы " . $service->name, 1, "Внимание");
+
 
                     $parent = Transaction::where('service_id', $service->id)
                         ->where('u_r_id', $user->id)
@@ -572,14 +574,14 @@ class ApiController extends Controller
 //                $management = new ManagementNotification($user->phone, $amount, $Tair->push_id, $service->name, $Tair->platform);
 //                $management->send();
 
-//                $cashier = User::where('id', $user_id)->first();
-//                if ($cashier){
+                $cashier = User::where('id', $user_id)->first();
+                if ($cashier){
 //                    $message = new CloudMessage("Вам были переведены " . $amount . " таконов", $user->id, "Произведена оплата", "", "");
-//                    if($cashier->push_id){
-//                        $message->setReciever($cashier->push_id, $cashier->platform);
-//                        $message->sendNotification();
-//                    }
-//                }
+                    if($cashier->push_id){
+                        $c = new CloudMessage();
+                        $c->sendSilentThroughNode($cashier->push_id, $cashier->platform, "Вам были переведены " . $amount . " таконов", '', 'Произведена оплата');
+                    }
+                }
 
             }
             return $this->makeResponse(200, true, ['msg' => 'Таконы успешно переданы']);

@@ -91,6 +91,10 @@ class MobileUserController extends Controller
 //        $message = new CloudMessage("Вам были отправлены Таконы " . $serv->name, $user->id, "Внимение", $serv->partner_id, $partner->name);
 //        $message->sendNotification();
 
+        $c = new CloudMessage();
+        $c->sendSilentThroughNode($user->push_id, $user->platform, "Вам были отправлены Таконы " . $serv->name, '', 'Внимение');
+
+
         $cs->amount -= $request->amount;
         $cs->save();
 
