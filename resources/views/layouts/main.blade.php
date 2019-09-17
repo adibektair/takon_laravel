@@ -433,7 +433,7 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.js" defer></script>
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.js" defer></script>
-<script src="{{asset("admin/bower_components/datatable/js/dataTables.responsive.min.js")}}"></script>
+{{--<script src="{{asset("admin/bower_components/datatable/js/dataTables.responsive.min.js")}}"></script>--}}
 <script src="{{asset("admin/bower_components/jquery/dist/jquery.min.js")}}"></script>
 <script src="{{asset("admin/bower_components/bootstrap/dist/js/bootstrap.min.js")}}"></script>
 <script src="{{asset("js/jquery.select.js")}}"></script>
