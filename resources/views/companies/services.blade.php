@@ -53,6 +53,7 @@
         $(document).ready(function () {
             $('#table').DataTable({
                 processing: true,
+                responsive: true,
                 serverSide: true,
                 ajax: "{{ route('company.get.services') }}",
                 columns: [
