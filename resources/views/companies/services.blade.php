@@ -16,24 +16,28 @@
     <br><br>
     <div class="col-md-12 mt-2">
 
-        <table class="table table-bordered" id="table">
-            <thead>
-                <tr>
-                    <th >#</th>
-                    <th >Название</th>
-                    <th >Поставщик</th>
-                    <th >Цена за единицу</th>
-                    <th >Количество</th>
-                    <th >Дата приобретения</th>
-                    <th >Срок действия</th>
+        <div class="card">
+            <div class="card-body">
+                <table class="table table-bordered" id="table">
+                    <thead>
+                    <tr>
+                        <th >#</th>
+                        <th >Название</th>
+                        <th >Поставщик</th>
+                        <th >Цена за единицу</th>
+                        <th >Количество</th>
+                        <th >Дата приобретения</th>
+                        <th >Срок действия</th>
 
-                    <th >Поделиться</th>
+                        <th >Поделиться</th>
 
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
 
