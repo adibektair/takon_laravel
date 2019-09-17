@@ -8,7 +8,7 @@
             <h5>Товары и услуги</h5>
         </div>
     </div>
-    <div class="col-md-12 mt-2 mb-3">
+    <div class="col-md-12 m-3">
         <div class="float-right">
             <a href="{{ route('buy.service') }}"><button class="btn btn-success">Приобрести товар/услугу</button></a>
         </div>
