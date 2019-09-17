@@ -180,10 +180,9 @@ class CompanyController extends Controller
                     $subs->save();
                 }
                 $user = MobileUser::where('id', $v)->first();
-//                $message = new CloudMessage("Вам были отправлены Таконы " . $serv->name, $user->id, "Внимение", $serv->partner_id, $partner->name);
-//                $message->sendNotification();
-                $c = new CloudMessage();
-                $c->sendSilentThroughNode($user->push_id, $user->platform, "Вам были отправлены Таконы " . $serv->name, '', 'Внимение');
+
+//                $c = new CloudMessage();
+//                $c->sendSilentThroughNode($user->push_id, $user->platform, "Вам были отправлены Таконы " . $serv->name, '', 'Внимение');
 
                 if($m_service->save()){
                         $exactly_service = Service::where('id', '=', $c_service->service_id)->first();
