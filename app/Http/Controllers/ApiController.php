@@ -451,10 +451,10 @@ class ApiController extends Controller
             ->where('password', md5($request->password))
             ->first();
         if($user){
-            $token = Str::random(42);
-            $user->token = $token;
-            $user->save();
-            return $this->makeResponse(200, true, ['token' => $token]);
+//            $token = Str::random(42);
+//            $user->token = $token;
+//            $user->save();
+            return $this->makeResponse(200, true, ['token' => $user->token]);
         }
         return $this->makeResponse(401, false, ['hash' => Hash::make($password),'message'=>'Данные для авторизации неверны', 'error' => 'incorrect auth data']);
     }
