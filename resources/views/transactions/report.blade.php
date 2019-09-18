@@ -17,11 +17,11 @@
             <tbody>
             <tr>
                 <td>C какого числа:</td>
-                <td><input name="min" id="min" type="date"></td>
+                <td><input  class="form-control" name="min" id="min" type="date"></td>
             </tr>
             <tr>
                 <td>По какое число:</td>
-                <td><input name="max" id="max" type="date"></td>
+                <td><input class="form-control" name="max" id="max" type="date"></td>
             </tr>
             <tr>
                 <?php
@@ -29,7 +29,7 @@
                 ?>
                 <td>Услуга:</td>
                 <td>
-                    <select name="service" id="service">
+                    <select class="form-control" name="service" id="service">
                         <option value="">Не выбрано</option>
 
                     <?php
@@ -46,7 +46,7 @@
 
                 <td>Тип транзакция:</td>
                 <td>
-                    <select name="type" id="type">
+                    <select class="form-control" name="type" id="type">
                         <option value="">Не выбрано</option>
                         <option value="3">Использование таконов</option>
                     </select>
