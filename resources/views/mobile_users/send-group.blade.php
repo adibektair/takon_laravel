@@ -12,8 +12,8 @@
             $services = \App\CompaniesService::where('company_id', '=', auth()->user()->company_id)->get();
             ?>
             <br>
-            <a href="/add-user?id=<?=$_GET['id']?>">
-                <button id="fav" class="btn btn-outline-info float-right mb-2">Добавить пользователя</button>
+            <a href="/add-user?id=<?=$_GET['id']?>" style="margin: 10px;">
+                <button id="fav" class="btn btn-outline-info float-right ">Добавить пользователя</button>
             </a>
 
         </div>
