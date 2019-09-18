@@ -304,7 +304,7 @@ class TransactionController extends Controller
 //                'groups_users.group_id'
 //            )
 //            ->where('groups.company_id', auth()->user()->company_id)
-            ->select('transactions.*', 'services.name as service', 'companies.name as sender', 'c.name as company', 'mobile_users.phone as user')
+            ->select('transactions.*', 'services.name as service', 'companies.name as sender', 'c.name as company', 'mobile_users.phone as user', 'mobile_users.name as user_name')
             ->get();
 
 //        }
@@ -545,6 +545,7 @@ class TransactionController extends Controller
             ->addColumn('1', function ($service) {
                 return '<a href="/transactions/company/more?id=' . $service->id . '"><button class="btn btn-success">Подробнее</button></a>';
             })
+
             ->addColumn('2', function ($service) {
                 if($service->type == 4){
                     return $service->price * $service->amount . ' (переданные)';
