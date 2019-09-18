@@ -9,28 +9,31 @@
 
     <br><br>
     <div class="col-md-12 mt-2">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table class="table table-bordered" id="table">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Партнер</th>
+                        <th>Товар/Услуга</th>
+                        <th>Количество</th>
+                        <th>Цена</th>
+                        <th>Срок в днях</th>
+                        <th>Управлять</th>
 
-        <table class="table table-bordered" id="table">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>Партнер</th>
-                <th>Товар/Услуга</th>
-                <th>Количество</th>
-                <th>Цена</th>
-                <th>Срок в днях</th>
-                <th>Управлять</th>
-
-            </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
 
     <style>
-        table{
+        table {
             width: 100% !important;
             margin: 0 auto !important;
 
@@ -44,16 +47,20 @@
         $(document).ready(function () {
             $('#table').DataTable({
                 processing: true,
+                responsive: true,
+                language: {
+                    url: '{{asset('admin/bower_components/datatable/js/ru.locale.json')}}',
+                },
                 serverSide: true,
                 ajax: "{{ route('moderation.services') }}",
                 columns: [
-                    { data: 'id', name: 'id' },
-                    { data: 'partner', name: 'partner' },
-                    { data: 'name', name: 'name' },
-                    { data: 'amount', name: 'amount' },
-                    { data: 'price', name: 'price' },
-                    { data: 'deadline', name: 'deadline'},
-                    { data: 'moderate', name: 'moderate' },
+                    {data: 'id', name: 'id'},
+                    {data: 'partner', name: 'partner'},
+                    {data: 'name', name: 'name'},
+                    {data: 'amount', name: 'amount'},
+                    {data: 'price', name: 'price'},
+                    {data: 'deadline', name: 'deadline'},
+                    {data: 'moderate', name: 'moderate'},
 
                 ]
             });

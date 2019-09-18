@@ -11,29 +11,32 @@
 
     <br><br>
     <div class="col-md-12 mt-2">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table class="table table-bordered" id="table">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Отправитель</th>
+                        <th>Получатель</th>
+                        <th>Услуга/Товар</th>
+                        <th>Количество</th>
+                        <th>Сумма</th>
+                        <th>Остаток</th>
 
-        <table class="table table-bordered" id="table">
-            <thead>
-            <tr>
-                <th >#</th>
-                <th >Отправитель</th>
-                <th >Получатель</th>
-                <th >Услуга/Товар</th>
-                <th >Количество</th>
-                <th >Сумма</th>
-                <th >Остаток</th>
-
-                <th >Дата</th>
-            </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+                        <th>Дата</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
 
     <style>
-        table{
+        table {
             width: 100% !important;
             margin: 0 auto !important;
 
@@ -45,24 +48,31 @@
             $('#table').DataTable({
                 processing: true,
                 serverSide: true,
+                language: {
+                    url: '{{asset('admin/bower_components/datatable/js/ru.locale.json')}}',
+                },
+                responsive: true,
                 ajax: "/transactions/partner/etc/get?id=<?=$id?>",
                 columns: [
-                    { data: 'id', name: 'id' },
-                    { data: '1', name: '1' },
-                    { data: '0', name: '0' },
-                    { data: 'service', name: 'service'},
-                    { data: 'amount', name: 'amount'},
-                    { data: '2', name: '2'},
-                    { data: 'balance', name: 'balance'},
+                    {data: 'id', name: 'id'},
+                    {data: '1', name: '1'},
+                    {data: '0', name: '0'},
+                    {data: 'service', name: 'service'},
+                    {data: 'amount', name: 'amount'},
+                    {data: '2', name: '2'},
+                    {data: 'balance', name: 'balance'},
 
-                    { data: 'created_at', name: 'created_at'},
+                    {data: 'created_at', name: 'created_at'},
 
 
                 ],
                 dom: 'Bfrtip',
-                buttons: [
-                    'excel'
-                ],
+                buttons: {
+                    buttons: [
+                        { extend: 'copy', className: 'btn btn-warning' },
+                        { extend: 'excel', className: 'btn btn-success' }
+                    ]
+                },
             });
         });
 

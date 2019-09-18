@@ -11,26 +11,30 @@
 
     <br><br>
     <div class="col-md-12 mt-2">
-        <table class="table table-bordered" id="table">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>Пользователь</th>
-                <th>Услуга/Товар</th>
-                <th>Количество</th>
-                <th>Сумма</th>
-                <th>Дата</th>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table class="table table-bordered" id="table">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Пользователь</th>
+                        <th>Услуга/Товар</th>
+                        <th>Количество</th>
+                        <th>Сумма</th>
+                        <th>Дата</th>
 
-            </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
 
     <style>
-        table{
+        table {
             width: 100% !important;
             margin: 0 auto !important;
 
@@ -39,24 +43,29 @@
 
     <script>
         $(document).ready(function () {
-            var dtListUsers =  $('#table').DataTable({
+            var dtListUsers = $('#table').DataTable({
                 processing: true,
+                language: {
+                    url: '{{asset('admin/bower_components/datatable/js/ru.locale.json')}}',
+                },
+                responsive: true,
                 serverSide: true,
                 ajax: "{{ route('transactions.payments.all') }}",
                 columns: [
-                    { data: 'id', name: 'id' },
-                    { data: 'sender', name: 'sender' },
-                    { data: 'service', name: 'service'},
-                    { data: 'amount', name: 'amount'},
-                    { data: 'price', name: 'price'},
-                    { data: 'created_at', name: 'created_at'},
+                    {data: 'id', name: 'id'},
+                    {data: 'sender', name: 'sender'},
+                    {data: 'service', name: 'service'},
+                    {data: 'amount', name: 'amount'},
+                    {data: 'price', name: 'price'},
+                    {data: 'created_at', name: 'created_at'},
                 ],
                 dom: 'Bfrtip',
-                buttons : [ {
-                    extend : 'excel',
-                    action: newExportAction
-
-                } ]
+                buttons: {
+                    buttons: [
+                        { extend: 'copy', className: 'btn btn-warning' },
+                        { extend: 'excel', className: 'btn btn-success',action: newExportAction }
+                    ]
+                },
             });
             // $('#statusFilter').on('change', function(){
             //     var filter_value = $(this).val();
@@ -64,7 +73,6 @@
             //     dtListUsers.ajax.url(new_url).load();
             // });
         });
-
 
 
         var newExportAction = function (e, dt, button, config) {

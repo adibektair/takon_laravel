@@ -169,7 +169,7 @@ class CompanyController extends Controller
                 $m_service->deadline = $c_service->deadline;
 
                 $serv = Service::where('id', $c_service->service_id)->first();
-                $partner = Partner::where('id', $serv->partner_id)->first();
+//                $partner = Partner::where('id', $serv->partner_id)->first();
                 $subs = UsersSubscriptions::where('mobile_user_id', $v)
                     ->where('partner_id', $serv->partner_id)
                     ->first();
@@ -179,7 +179,7 @@ class CompanyController extends Controller
                     $subs->partner_id = $serv->partner_id;
                     $subs->save();
                 }
-                $user = MobileUser::where('id', $v)->first();
+//                $user = MobileUser::where('id', $v)->first();
 
 //                $c = new CloudMessage();
 //                $c->sendSilentThroughNode($user->push_id, $user->platform, "Вам были отправлены Таконы " . $serv->name, '', 'Внимение');
@@ -228,7 +228,7 @@ class CompanyController extends Controller
             ->get();
 
         $s = DataTables::of($services)->addColumn('checkbox', function ($service) {
-            return '<a href="/groups?id=' . $service->id .'"><button class="btn btn-outline-success">Раздать</button></a>';
+            return '<a class="btn btn-success" href="/groups?id=' . $service->id .'">Раздать</a>';
         })
             // передать юр лицу
             // <a href="/share-services?id=' . $service->id .'"><button class="btn btn-success">Передать</button></a>

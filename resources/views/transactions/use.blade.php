@@ -13,46 +13,49 @@
     <div class="col-md-12 mt-2">
         <label>Товар/услуга</label>
         <select id="statusFilter">
-            <option >Не выбрано</option>
-        <?php
+            <option>Не выбрано</option>
+            <?php
 
             $services = \App\Service::all();
             foreach ($services as $company){
-                ?>
-                <option value="<?=$company->id?>"><?=$company->name?></option>
-<?php
+            ?>
+            <option value="<?=$company->id?>"><?=$company->name?></option>
+            <?php
             }
             ?>
         </select>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table class="table table-bordered" id="table">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Телефон</th>
+                        <th>Имя</th>
+                        <?php
+                        if(auth()->user()->role_id == 1){
+                        ?>
+                        <th>Комания</th>
+                        <?php
+                        }
+                        ?>
+                        <th>Услуга/Товар</th>
+                        <th>Использовано</th>
+                        <th>Принял</th>
+                        <th>Дата</th>
 
-        <table class="table table-bordered" id="table">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>Телефон</th>
-                <th>Имя</th>
-                <?php
-                if(auth()->user()->role_id == 1){
-                    ?>
-                    <th>Комания</th>
-<?php
-                }
-                ?>
-                <th>Услуга/Товар</th>
-                <th>Использовано</th>
-                <th>Принял</th>
-                <th>Дата</th>
-
-            </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
 
     <style>
-        table{
+        table {
             width: 100% !important;
             margin: 0 auto !important;
 
@@ -61,41 +64,49 @@
 
     <script>
         $(document).ready(function () {
-            var dtListUsers =  $('#table').DataTable({
+            var dtListUsers = $('#table').DataTable({
                 processing: true,
+                responsive: true,
                 serverSide: true,
+                language: {
+                    url: '{{asset('admin/bower_components/datatable/js/ru.locale.json')}}',
+                },
                 ajax: "{{ route('transactions.use.all') }}",
                 columns: [
-                    { data: 'id', name: 'id' },
-                    { data: 'sender', name: 'sender' },
-                    { data: 'username', name: 'username' },
-                    <?php
-                    if(auth()->user()->role_id == 1){
-                    ?>
-                    { data: 'company', name: 'company' },
+                    {data: 'id', name: 'id'},
+                    {data: 'sender', name: 'sender'},
+                    {data: 'username', name: 'username'},
+                        <?php
+                        if(auth()->user()->role_id == 1){
+                        ?>
+                    {
+                        data: 'company', name: 'company'
+                    },
 
-                    <?php
-                }
-                ?>
-                    { data: 'service', name: 'service'},
-                    { data: 'amount', name: 'amount'},
-                    { data: 'reciever', name: 'reciever'},
-                    { data: 'created_at', name: 'created_at'},
+                        <?php
+                        }
+                        ?>
+                    {
+                        data: 'service', name: 'service'
+                    },
+                    {data: 'amount', name: 'amount'},
+                    {data: 'reciever', name: 'reciever'},
+                    {data: 'created_at', name: 'created_at'},
                 ],
                 dom: 'Bfrtip',
-                buttons : [ {
-                    extend : 'excel',
-                    action: newExportAction
-
-                } ]
+                buttons: {
+                    buttons: [
+                        { extend: 'copy', className: 'btn btn-warning' },
+                        { extend: 'excel', className: 'btn btn-success',action: newExportAction }
+                    ]
+                },
             });
-            $('#statusFilter').on('change', function(){
+            $('#statusFilter').on('change', function () {
                 var filter_value = $(this).val();
-                var new_url = '/transactions/use/all?id='+filter_value;
+                var new_url = '/transactions/use/all?id=' + filter_value;
                 dtListUsers.ajax.url(new_url).load();
             });
         });
-
 
 
         var newExportAction = function (e, dt, button, config) {

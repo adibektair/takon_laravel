@@ -9,27 +9,30 @@
 
     <br><br>
     <div class="col-md-12 mt-2">
-
-        <table class="table table-bordered" id="table">
-            <thead>
-            <tr>
-                <th >#</th>
-                <th >Покупатель</th>
-                <th >Партнер(продавец)</th>
-                <th >Товар/Услуга</th>
-                <th >Количество и сумма</th>
-                <th >Дата создания</th>
-                <th >Cтатус</th>
-            </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table class="table table-bordered" id="table">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Покупатель</th>
+                        <th>Партнер(продавец)</th>
+                        <th>Товар/Услуга</th>
+                        <th>Количество и сумма</th>
+                        <th>Дата создания</th>
+                        <th>Cтатус</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
 
     <style>
-        table{
+        table {
             width: 100% !important;
             margin: 0 auto !important;
 
@@ -43,16 +46,20 @@
         $(document).ready(function () {
             $('#table').DataTable({
                 processing: true,
+                language: {
+                    url: '{{asset('admin/bower_components/datatable/js/ru.locale.json')}}',
+                },
+                responsive: true,
                 serverSide: true,
                 ajax: "{{ route('all.orders') }}",
                 columns: [
-                    { data: 'id', name: 'id' },
-                    { data: 'username', name: 'username' },
-                    { data: 'partner', name: 'partner' },
-                    { data: 'service', name: 'service' },
-                    { data: 'summ', name: 'summ' },
-                    { data: 'created_at', name: 'created_at' },
-                    { data: 'status', name: 'status' },
+                    {data: 'id', name: 'id'},
+                    {data: 'username', name: 'username'},
+                    {data: 'partner', name: 'partner'},
+                    {data: 'service', name: 'service'},
+                    {data: 'summ', name: 'summ'},
+                    {data: 'created_at', name: 'created_at'},
+                    {data: 'status', name: 'status'},
                     // {"mData": {},
                     //     "mRender": function (data, type, row) {
                     //         return '<label class="text-semibold">'+ data.username + ' ('+ data.userphone +')</label>';
