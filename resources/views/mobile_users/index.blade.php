@@ -48,7 +48,8 @@
 
     <br><br>
     <div class="col-md-12 mt-2">
-
+        <div class="panel panel-default">
+            <div class="panel-body">
         <table class="table table-bordered" id="table">
             <thead>
             <tr>
@@ -61,6 +62,7 @@
             <tbody>
             </tbody>
         </table>
+            </div></div>
     </div>
 
 
@@ -80,6 +82,10 @@
             var names = [];
             $('#table').DataTable({
                 processing: true,
+                responsive : true,
+                language: {
+                    url: '{{asset('admin/bower_components/datatable/js/ru.locale.json')}}',
+                },
                 serverSide: true,
                 ajax: "{{ route('all.mobile_users') }}",
                 stateSave: true,
