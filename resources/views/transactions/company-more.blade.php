@@ -69,10 +69,12 @@
 
                 ],
                 dom: 'Bfrtip',
-                buttons: [{
-                    extend: 'excel',
-                    action: newExportAction
-                }]
+                buttons: {
+                    buttons: [
+                        { extend: 'copy', className: 'btn btn-warning' },
+                        { extend: 'excel', className: 'btn btn-success',action: newExportAction }
+                    ]
+                },
             });
         });
 

@@ -66,9 +66,12 @@
                     {data: '0', name: '0'},
                 ],
                 dom: 'Bfrtip',
-                buttons: [
-                    'excel'
-                ],
+                buttons: {
+                    buttons: [
+                        { extend: 'copy', className: 'btn btn-warning' },
+                        { extend: 'excel', className: 'btn btn-success'}
+                    ]
+                },
             });
         });
 
