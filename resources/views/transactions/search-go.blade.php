@@ -12,26 +12,29 @@
 
     <br><br>
     <div class="col-md-12 mt-2">
-
-        <table class="table table-bordered" id="table">
-            <thead>
-            <tr>
-                <th >#</th>
-                <th >Отравительно</th>
-                <th >Получатель</th>
-                <th >Услуга/Товар</th>
-                <th >Количество</th>
-                <th >Дата</th>
-            </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table class="table table-bordered" id="table">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Отравительно</th>
+                        <th>Получатель</th>
+                        <th>Услуга/Товар</th>
+                        <th>Количество</th>
+                        <th>Дата</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
 
     <style>
-        table{
+        table {
             width: 100% !important;
             margin: 0 auto !important;
 
@@ -42,15 +45,19 @@
         $(document).ready(function () {
             $('#table').DataTable({
                 processing: true,
+                responsive: true,
+                language: {
+                    url: '{{asset('admin/bower_components/datatable/js/ru.locale.json')}}',
+                },
                 serverSide: true,
                 ajax: "/transactions-search-make?phone={{$phone}}",
                 columns: [
-                    { data: 'id', name: 'id' },
-                    { data: 'sender', name: 'sender' },
-                    { data: 'reciever', name: 'reciever' },
-                    { data: 'service', name: 'service'},
-                    { data: 'amount', name: 'amount'},
-                    { data: 'created_at', name: 'created_at'}
+                    {data: 'id', name: 'id'},
+                    {data: 'sender', name: 'sender'},
+                    {data: 'reciever', name: 'reciever'},
+                    {data: 'service', name: 'service'},
+                    {data: 'amount', name: 'amount'},
+                    {data: 'created_at', name: 'created_at'}
                 ],
             });
         });

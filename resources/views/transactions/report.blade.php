@@ -13,63 +13,69 @@
 
     <br><br>
     <div class="col-md-12 mt-2">
-        <table border="0" cellspacing="5" cellpadding="5">
-            <tbody>
-            <tr>
-                <td>C какого числа:</td>
-                <td><input  class="form-control" name="min" id="min" type="date"></td>
-            </tr>
-            <tr>
-                <td>По какое число:</td>
-                <td><input class="form-control" name="max" id="max" type="date"></td>
-            </tr>
-            <tr>
-                <?php
-                $services = \App\Service::all();
-                ?>
-                <td>Услуга:</td>
-                <td>
-                    <select class="form-control" name="service" id="service">
-                        <option value="">Не выбрано</option>
-
-                    <?php
-                        foreach ($services as $s){
-                            ?>
-                            <option value="<?=$s->id?>"><?=$s->name?></option>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table border="0" cellspacing="5" cellpadding="5">
+                    <tbody>
+                    <tr>
+                        <td>C какого числа:</td>
+                        <td><input class="form-control" name="min" id="min" type="date"></td>
+                    </tr>
+                    <tr>
+                        <td>По какое число:</td>
+                        <td><input class="form-control" name="max" id="max" type="date"></td>
+                    </tr>
+                    <tr>
                         <?php
-                        }
+                        $services = \App\Service::all();
                         ?>
-                        <option value=""></option>
-                    </select>
-                </td>
-            </tr><tr>
+                        <td>Услуга:</td>
+                        <td>
+                            <select class="form-control" name="service" id="service">
+                                <option value="">Не выбрано</option>
 
-                <td>Тип транзакция:</td>
-                <td>
-                    <select class="form-control" name="type" id="type">
-                        <option value="">Не выбрано</option>
-                        <option value="3">Использование таконов</option>
-                    </select>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <table class="table table-bordered" id="table">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>Отправитель</th>
-                <th>Имя отправителя</th>
-                <th>Услуга/Товар</th>
-                <th>Количество</th>
-                <th>Получатель</th>
-                <th>Имя получателя</th>
-                <th>Дата</th>
-            </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+                                <?php
+                                foreach ($services as $s){
+                                ?>
+                                <option value="<?=$s->id?>"><?=$s->name?></option>
+                                <?php
+                                }
+                                ?>
+                                <option value=""></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td>Тип транзакция:</td>
+                        <td>
+                            <select class="form-control" name="type" id="type">
+                                <option value="">Не выбрано</option>
+                                <option value="3">Использование таконов</option>
+                            </select>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <table class="table table-bordered" id="table">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Отправитель</th>
+                        <th>Имя отправителя</th>
+                        <th>Услуга/Товар</th>
+                        <th>Количество</th>
+                        <th>Получатель</th>
+                        <th>Имя получателя</th>
+                        <th>Дата</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
 
@@ -87,10 +93,14 @@
 
             var table = $('#table').DataTable({
                 processing: true,
+                responsive: true,
+                language: {
+                    url: '{{asset('admin/bower_components/datatable/js/ru.locale.json')}}',
+                },
                 serverSide: true,
                 ajax: {
                     url: "{{ route('transactions.report1') }}",
-                    "data": function ( d ) {
+                    "data": function (d) {
                         d.minDate = $('#min').val();
                         d.maxDate = $('#max').val();
                         d.service = $('#service').val();
@@ -109,13 +119,12 @@
                     {data: 'created_at', name: 'created_at'},
                 ],
                 dom: 'Bfrtip',
-                buttons : [ {
-                    extend : 'excel',
+                buttons: [{
+                    extend: 'excel',
                     action: newExportAction
 
-                } ]
+                }]
             });
-
 
 
             $('#min, #max, #service, #type').change(function () {
@@ -123,8 +132,6 @@
             });
 
         });
-
-
 
 
         var newExportAction = function (e, dt, button, config) {

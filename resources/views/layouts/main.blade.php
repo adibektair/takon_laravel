@@ -15,9 +15,7 @@
     <script src="{{asset('js/popModal.js')}}"></script>
     <script src="{{asset('js/popModal.min.js')}}"></script>
 
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
-
+    <script src="{{asset('admin/bower_components/sweetalert/sweetalert.min.js')}}"></script>
     @toastr_css
     @toastr_js
 
@@ -27,7 +25,7 @@
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 
-    <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
+    {{--<link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">--}}
 
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
@@ -39,6 +37,11 @@
     <link rel="stylesheet" href="{{asset("admin/dist/css/skins/_all-skins.min.css")}}">
     <link rel="stylesheet" href="{{asset("css/jquery.select.css")}}">
     <link href="{{ asset('css/toastr.css') }}" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{asset("admin/bower_components/datatable/css/dataTables.bootstrap.min.css")}}">
+    <link rel="stylesheet" href="{{asset("admin/bower_components/datatable/css/responsive.bootstrap.min.css")}}">
+    <link rel="stylesheet" href="{{asset("admin/bower_components/datatable/css/scroller.bootstrap.min.css")}}">
+
 
 
     {{--    <link rel="stylesheet" type="text/css"--}}
@@ -422,18 +425,25 @@
 </div>
 <script data-require="jqueryui@*" data-semver="1.10.0" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.0/jquery-ui.js"></script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-<script defer src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+{{--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>--}}
+{{--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>--}}
+{{--<script defer src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>--}}
 
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/dataTables.buttons.js"
-        defer></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.colVis.js" defer></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.js" defer></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.html5.js" defer></script>
-<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.js" defer></script>
-{{--<script src="{{asset("admin/bower_components/datatable/js/dataTables.responsive.min.js")}}"></script>--}}
+
+<script type="text/javascript" src="{{asset('admin/bower_components/datatable/js/jquery.datatables.min.js')}}"defer></script>
+<script type="text/javascript" src="{{asset('admin/bower_components/datatable/js/dataTables.bootstrap.min.js')}}"defer></script>
+<script type="text/javascript" src="{{asset('admin/bower_components/datatable/js/dataTables.fixed-header.min.js')}}"defer></script>
+<script type="text/javascript" src="{{asset('admin/bower_components/datatable/js/dataTables.responsive.min.js')}}"defer></script>
+<script type="text/javascript" src="{{asset('admin/bower_components/datatable/js/dataTables.scroller.min.js')}}"defer></script>
+<script type="text/javascript" src="{{asset('admin/bower_components/datatable/js/responsive.bootstrap.min.js')}}"defer></script>
+
+<script type="text/javascript" src="{{asset('admin/bower_components/datatable/js/dataTables.buttons.js')}}" defer></script>
+<script type="text/javascript" src="{{asset('admin/bower_components/datatable/js/buttons.colVis.js')}}" defer></script>
+<script type="text/javascript" src="{{asset('admin/bower_components/datatable/js/buttons.flash.js')}}" defer></script>
+<script type="text/javascript" src="{{asset('admin/bower_components/datatable/js/jszip.js')}}"></script>
+<script type="text/javascript" src="{{asset('admin/bower_components/datatable/js/buttons.html5.js')}}" defer></script>
+<script type="text/javascript" src="{{asset('admin/bower_components/datatable/js/buttons.print.js')}}" defer></script>
+
 <script src="{{asset("admin/bower_components/jquery/dist/jquery.min.js")}}"></script>
 <script src="{{asset("admin/bower_components/bootstrap/dist/js/bootstrap.min.js")}}"></script>
 <script src="{{asset("js/jquery.select.js")}}"></script>
