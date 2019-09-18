@@ -16,39 +16,52 @@
 
     <div class="align-content-center mt-2">
 
-        <form action="{{ route('buy') }}" method="post">
+        <form action="{{ route('buy') }}" method="post" id="yourFormId">
 
             @csrf
             <label class="text-semibold">Цена за единицу: <?=$service->price?></label>
             <br>
             <label class="text-semibold">Срок в днях: <?=$service->deadline?></label>
             <br>
-            <input type="hidden" value="<?=$service->id?>" name="id" >
+            <input type="hidden" value="<?=$service->id?>" name="id">
             <label class="text-semibold">Введите количество</label>
             <input type="number" id="amount" name="amount" placeholder="Количество" required class="form-control">
             <br>
             <label class="text-semibold">Сумма в тенге</label>
-            <input id="cost" type="text"  placeholder="Сумма в тг" disabled class="form-control">
+            <input id="cost" type="text" placeholder="Сумма в тг" disabled class="form-control">
             <br>
             <hr>
 
 
-            <button type="submit" class="btn btn-success">Приобрести</button>
+            <button type="submit" class="btn btn-success submitBtn" >Приобрести</button>
         </form>
     </div>
 
     <script>
         $(document).ready(function () {
             var price = '<?=$service->price?>';
-            $('#amount').on('keyup paste',username_check);
-            function username_check(){
-                setTimeout( function() {
+            $('#amount').on('keyup paste', username_check);
+
+            function username_check() {
+                setTimeout(function () {
                     var amount = $('#amount').val();
                     var cost = price * amount;
                     document.getElementById('cost').value = cost;
-                },100);
+                }, 100);
             }
         });
+
+
     </script>
 
+@endsection
+
+
+@section('scripts')
+    <script>
+        $("#yourFormId").submit(function () {
+            $(".submitBtn").attr("disabled", true);
+            return true;
+        });
+    </script>
 @endsection
