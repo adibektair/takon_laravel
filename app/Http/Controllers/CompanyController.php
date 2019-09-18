@@ -169,7 +169,7 @@ class CompanyController extends Controller
                 $m_service->deadline = $c_service->deadline;
 
                 $serv = Service::where('id', $c_service->service_id)->first();
-                $partner = Partner::where('id', $serv->partner_id)->first();
+//                $partner = Partner::where('id', $serv->partner_id)->first();
                 $subs = UsersSubscriptions::where('mobile_user_id', $v)
                     ->where('partner_id', $serv->partner_id)
                     ->first();
@@ -179,7 +179,7 @@ class CompanyController extends Controller
                     $subs->partner_id = $serv->partner_id;
                     $subs->save();
                 }
-                $user = MobileUser::where('id', $v)->first();
+//                $user = MobileUser::where('id', $v)->first();
 
 //                $c = new CloudMessage();
 //                $c->sendSilentThroughNode($user->push_id, $user->platform, "Вам были отправлены Таконы " . $serv->name, '', 'Внимение');
