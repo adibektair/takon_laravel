@@ -354,8 +354,8 @@
                     </li>
                     <li>
                         <a href="{{ route('transactions.company') }}">
-                            <i class="fa fa-book"></i>
-                            <span>Товары и услуги</span>
+                            <i class="fa fa-exchange"></i>
+                            <span>Транзакции</span>
                         </a>
 
                     </li>
