@@ -19,6 +19,7 @@
                         <th>#</th>
                         <th>Отправитель</th>
                         <th>Получатель</th>
+                        <th>Имя получателя</th>
                         <th>Услуга/Товар</th>
                         <th>Количество</th>
                         <th>Сумма</th>
@@ -59,6 +60,7 @@
                     {data: 'id', name: 'id'},
                     {data: 'sender', name: 'sender'},
                     {data: '1', name: '1'},
+                    {data: 'user_name', name: 'user_name'},
                     {data: 'service', name: 'service'},
                     {data: 'amount', name: 'amount'},
                     {data: '2', name: '2'},
