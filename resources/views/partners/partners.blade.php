@@ -56,9 +56,13 @@
     <script>
         $(document).ready(function () {
             $('#table').DataTable({
-                buttons: [
-                    'excel', 'pdf'
-                ],
+                buttons: {
+                    buttons: [
+                        { extend: 'copy', className: 'btn btn-warning' },
+                        { extend: 'excel', className: 'btn btn-success' },
+                        { extend: 'pdf', className: 'btn btn-primary' },
+                    ]
+                },
                 dom: 'Bfrtip',
 
                 processing: true,

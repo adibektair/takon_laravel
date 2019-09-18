@@ -94,11 +94,12 @@
                     {data: 'created_at', name: 'created_at'},
                 ],
                 dom: 'Bfrtip',
-                buttons: [{
-                    extend: 'excel',
-                    action: newExportAction
-
-                }]
+                buttons: {
+                    buttons: [
+                        { extend: 'copy', className: 'btn btn-warning' },
+                        { extend: 'excel', className: 'btn btn-success',action: newExportAction }
+                    ]
+                },
             });
             $('#statusFilter').on('change', function () {
                 var filter_value = $(this).val();
