@@ -171,7 +171,7 @@
                             <i class="fa fa-envelope-square"></i>
                             <span>
                                 Заявки (транзакции) <?php if($amount > 0){?> <span
-                                        class="badge-primary rounded pb-1 pt-1 pr-1 pl-1"><?=$amount?></span> <?php } ?>
+                                        class="badge badge-primary rounded pb-1 pt-1 pr-1 pl-1"><?=$amount?></span> <?php } ?>
                             </span>
                         </a>
 
@@ -188,7 +188,7 @@
                             <span>
                                 Заявки
                             (товары/услуги) <?php if($servicesCount > 0){?> <span
-                                        class="badge-primary rounded pb-1 pt-1 pr-1 pl-1"><?=$servicesCount?></span> <?php } ?>
+                                        class="badge badge-primary rounded pb-1 pt-1 pr-1 pl-1"><?=$servicesCount?></span> <?php } ?>
                             </span>
                         </a>
 

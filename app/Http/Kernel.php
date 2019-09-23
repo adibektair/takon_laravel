@@ -64,6 +64,7 @@ class Kernel extends HttpKernel
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'role' => \App\Http\Middleware\CheckRole::class,
+        'any_role' => \App\Http\Middleware\AnyRole::class,
         'token' => \App\Http\Middleware\ApiToken::class,
         'is_company_admin' => \App\Http\Middleware\IsCompanyAdmin::class,
         'is_superadmin' => \App\Http\Middleware\IsSuperAdmin::class,
