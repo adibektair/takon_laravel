@@ -166,6 +166,9 @@
                         </a>
 
                     </li>
+                <?php if(auth()->user()->id == 1){
+                    ?>
+
                     <li>
                         <a href="/orders">
                             <i class="fa fa-envelope-square"></i>
@@ -176,6 +179,12 @@
                         </a>
 
                     </li>
+
+                    <?php
+
+                    }
+                    ?>
+
                     <li>
                         <a href="{{ route('services.moderation') }}">
                             <i class="fa fa-envelope-open"></i>
