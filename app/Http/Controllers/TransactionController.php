@@ -474,7 +474,7 @@ class TransactionController extends Controller
             })
             ->addColumn('3', function ($service) {
                 $cs = CompaniesService::where('id', $service->cs_id)->first();
-                if($cs->amount){
+                if($cs){
                     return $cs->amount;
                 }else{
                     return 0;
