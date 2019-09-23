@@ -56,6 +56,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['middleware' => ['authenticated']], function () {
 
+    Route::get('/account', ['as' => 'account.index', 'uses' => 'AccountController@index']);
+
     Route::group(['middleware' => ['any_role']], function () {
 
 
@@ -137,7 +139,6 @@ Route::group(['middleware' => ['authenticated']], function () {
         Route::get('/all-mobile-users', ['as' => 'all.mobile_users', 'uses' => 'MobileUserController@all']);
         Route::post('/save-group', ['as' => 'save.group', 'uses' => 'MobileUserController@saveGroup']);
         Route::post('/save-user', ['as' => 'store.user', 'uses' => 'UserController@update']);
-
 
 
         Route::group(['middleware' => ['is_superadmin']], function () {

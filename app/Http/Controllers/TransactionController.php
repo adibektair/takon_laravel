@@ -722,6 +722,7 @@ class TransactionController extends Controller
 
     public function report(Request $request){
 
+
         $minDate = $request->minDate;
         $maxDate = $request->maxDate;
         $service = $request->service;
@@ -732,6 +733,7 @@ class TransactionController extends Controller
             ->join('companies', 'companies.id', '=', 'companies_services.company_id')
             ->join('services', 'services.id', '=', 'transactions.service_id')
             ->where('companies.id', auth()->user()->company_id);
+
 
         if($minDate){
             $res = $res->where('transactions.created_at', '>=',$minDate );

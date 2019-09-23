@@ -90,6 +90,9 @@
 
 
                             <li class="user-footer">
+                                {{--<div class="pull-left">--}}
+                                    {{--<a href="{{route('account.index')}}"  class="btn btn-default btn-flat">Аккаунт</a>--}}
+                                {{--</div>--}}
                                 <div class="pull-right">
                                     <a class="btn btn-default btn-flat" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
