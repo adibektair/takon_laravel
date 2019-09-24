@@ -139,7 +139,7 @@ Route::group(['middleware' => ['authenticated']], function () {
         Route::get('/all-mobile-users', ['as' => 'all.mobile_users', 'uses' => 'MobileUserController@all']);
         Route::post('/save-group', ['as' => 'save.group', 'uses' => 'MobileUserController@saveGroup']);
         Route::post('/save-user', ['as' => 'store.user', 'uses' => 'UserController@update']);
-
+        Route::post('/edit-partner', ['as' => 'edit.partner', 'uses' => 'PartnerController@save']);
 
         Route::group(['middleware' => ['is_superadmin']], function () {
 
@@ -159,7 +159,7 @@ Route::group(['middleware' => ['authenticated']], function () {
             //PARTNERS
             Route::post('/store-partner', ['as' => 'store.partner', 'uses' => 'PartnerController@store']);
             Route::post('/partner-share', ['as' => 'partner.share', 'uses' => 'PartnerController@share']);
-            Route::post('/edit-partner', ['as' => 'edit.partner', 'uses' => 'PartnerController@save']);
+
             Route::get('/add-partner', ['as' => 'add.partner', 'uses' => 'PartnerController@create']);
             Route::get('/partners', ['as' => 'partners_list', 'uses' => 'PartnerController@index']);
 
