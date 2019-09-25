@@ -108,8 +108,7 @@ class ApiController extends Controller
                 ->join('partners', 'partners.id', '=', 'users_subscriptions.partner_id')
                  ->leftJoin('services', 'services.partner_id', '=', 'partners.id')
                  ->leftJoin('users_services', 'users_services.service_id', '=', 'services.id')
-                 ->selectRaw('SUM(DISTINCT users_services.amount) as amount')
-                ->select('partners.*')
+                 ->selectRaw('SUM(DISTINCT users_services.amount) as amount, partners.*')
                  ->groupBy('partners.id')
                 ->get();
              return $this->makeResponse(200, true, ['partners' => $res]);
