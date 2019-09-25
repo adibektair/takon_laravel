@@ -104,7 +104,7 @@ class ApiController extends Controller
         $user = MobileUser::where('token', $token)->first();
         if($user){
              $res = DB::table('users_subscriptions')
-                 ->where('mobile_user_id', $user->id)
+                 ->where('users_subscriptions.mobile_user_id', $user->id)
                 ->join('partners', 'partners.id', '=', 'users_subscriptions.partner_id')
                  ->leftJoin('services', 'services.partner_id', '=', 'partners.id')
                  ->leftJoin('users_services', 'users_services.service_id', '=', 'services.id')
