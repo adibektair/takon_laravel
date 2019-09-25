@@ -131,7 +131,10 @@ class ApiController extends Controller
 
             $res = DB::table('partners')
                 ->whereNotIn('id', $id)
+                ->leftJoin('services', 'services.partner_id', '=', 'partners.id')
+                ->leftJoin('users_services', 'users_services.service_id', '=', 'services.id')
                 ->select('partners.*')
+                ->selectRaw('SUM(DISTINCT users_services.amount) as amount')
                 ->get();
             return $this->makeResponse(200, true, ['partners' => $res]);
 
