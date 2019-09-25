@@ -106,6 +106,9 @@ class ApiController extends Controller
              $res = DB::table('users_subscriptions')
                  ->where('mobile_user_id', $user->id)
                 ->join('partners', 'partners.id', '=', 'users_subscriptions.partner_id')
+                 ->leftJoin('services', 'services.partner_id', '=', 'partners.id')
+                 ->leftJoin('users_services', 'users_services.service_id', '=', 'services.id')
+                 ->selectRaw('SUM(DISTINCT users_services.amount) as amount')
                 ->select('partners.*')
                 ->get();
              return $this->makeResponse(200, true, ['partners' => $res]);
@@ -131,10 +134,7 @@ class ApiController extends Controller
 
             $res = DB::table('partners')
                 ->whereNotIn('id', $id)
-                ->leftJoin('services', 'services.partner_id', '=', 'partners.id')
-                ->leftJoin('users_services', 'users_services.service_id', '=', 'services.id')
                 ->select('partners.*')
-                ->selectRaw('SUM(DISTINCT users_services.amount) as amount')
                 ->get();
             return $this->makeResponse(200, true, ['partners' => $res]);
 
