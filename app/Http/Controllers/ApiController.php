@@ -105,12 +105,14 @@ class ApiController extends Controller
         if($user){
              $res = DB::table('users_subscriptions')
                  ->where('users_subscriptions.mobile_user_id', $user->id)
-                ->join('partners', 'partners.id', '=', 'users_subscriptions.partner_id')
+                 ->join('partners', 'partners.id', '=', 'users_subscriptions.partner_id')
                  ->leftJoin('services', 'services.partner_id', '=', 'partners.id')
                  ->leftJoin('users_services', 'users_services.service_id', '=', 'services.id')
                  ->selectRaw('SUM(DISTINCT users_services.amount) as amount, partners.*')
+                 ->where('users_subscriptions.mobile_user_id', 'users_services.mobile_user_id')
                  ->groupBy('partners.id')
-                ->get();
+                 ->get();
+
              return $this->makeResponse(200, true, ['partners' => $res]);
 
         }
