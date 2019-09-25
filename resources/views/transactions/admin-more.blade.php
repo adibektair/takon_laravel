@@ -48,6 +48,7 @@
     <script>
         $(document).ready(function () {
             $('#table').DataTable({
+                dom: 'Bfrltip',
                 processing: true,
                 responsive: true,
                 language: {
@@ -67,7 +68,6 @@
                     {data: 'created_at', name: 'created_at'},
                     {data: '0', name: '0'},
                 ],
-                dom: 'Bfrtip',
                 buttons: {
                     buttons: [
                         { extend: 'copy', className: 'btn btn-warning' },

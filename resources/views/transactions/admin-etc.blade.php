@@ -46,6 +46,7 @@
     <script>
         $(document).ready(function () {
             $('#table').DataTable({
+                dom: 'Bfrltip',
                 processing: true,
                 responsive: true,
                 language: {
@@ -66,7 +67,6 @@
 
 
                 ],
-                dom: 'Bfrtip',
                 buttons: [
                     'excel'
                 ],

@@ -93,7 +93,7 @@
                     {data: 'reciever', name: 'reciever'},
                     {data: 'created_at', name: 'created_at'},
                 ],
-                dom: 'Bfrtip',
+                dom: 'Bfrltip',
                 buttons: {
                     buttons: [
                         { extend: 'copy', className: 'btn btn-warning' },

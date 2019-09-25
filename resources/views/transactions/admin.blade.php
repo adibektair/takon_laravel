@@ -47,11 +47,11 @@
     <script>
         $(document).ready(function () {
             $('#table').DataTable({
-                dom: 'Bfrtip',
+                dom: 'Bfrltip',
                 buttons: {
                     buttons: [
-                        { extend: 'copy', className: 'btn btn-warning' },
-                        { extend: 'excel', className: 'btn btn-success' }
+                        {extend: 'copy', className: 'btn btn-warning'},
+                        {extend: 'excel', className: 'btn btn-success'}
                     ]
                 },
                 processing: true,
