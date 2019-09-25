@@ -109,7 +109,7 @@ class ApiController extends Controller
                  ->leftJoin('services', 'services.partner_id', '=', 'partners.id')
                  ->leftJoin('users_services', 'users_services.service_id', '=', 'services.id')
                  ->selectRaw('SUM(users_services.amount) as amount, partners.*')
-                 ->where('users_subscriptions.mobile_user_id', 'users_services.mobile_user_id')
+//                 ->where('users_subscriptions.mobile_user_id', 'users_services.mobile_user_id')
                  ->groupBy('partners.id')
                  ->get();
 
