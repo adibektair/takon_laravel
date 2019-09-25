@@ -103,24 +103,24 @@ class ApiController extends Controller
         $token = $request->token;
         $user = MobileUser::where('token', $token)->first();
         if($user){
-//             $res = DB::table('users_subscriptions')
-//                 ->where('users_subscriptions.mobile_user_id', $user->id)
-//                 ->join('partners', 'partners.id', '=', 'users_subscriptions.partner_id')
-//                 ->leftJoin('services', 'services.partner_id', '=', 'partners.id')
-//                 ->leftJoin('users_services', 'users_services.service_id', '=', 'services.id')
-//                 ->selectRaw('SUM(users_services.amount) as amount, partners.*')
-////                 ->where('users_subscriptions.mobile_user_id', 'users_services.mobile_user_id')
-//                 ->groupBy('partners.id')
-//                 ->get();
-            $res = DB::table('users_subscriptions')
-                ->join('partners', 'partners.id', '=', 'users_subscriptions.partner_id')
-                ->leftJoin('services', 'services.partner_id', '=', 'partners.id')
-                ->leftJoin('users_services', 'users_services.service_id', '=', 'services.id')
-                ->selectRaw('SUM(users_services.amount) as amount, partners.id')
-                ->where('users_subscriptions.mobile_user_id', $user->id)
-                ->where('users_subscriptions.mobile_user_id', 'users_services.mobile_user_id')
-                ->groupBy('partners.id')
-                ->get();
+             $res = DB::table('users_subscriptions')
+                 ->where('users_subscriptions.mobile_user_id', $user->id)
+                 ->join('partners', 'partners.id', '=', 'users_subscriptions.partner_id')
+                 ->leftJoin('services', 'services.partner_id', '=', 'partners.id')
+                 ->leftJoin('users_services', 'users_services.service_id', '=', 'services.id')
+                 ->selectRaw('SUM(users_services.amount) as amount, partners.*')
+//                 ->where('users_subscriptions.mobile_user_id', 'users_services.mobile_user_id')
+                 ->groupBy('partners.id')
+                 ->get();
+//            $res = DB::table('users_subscriptions')
+//                ->join('partners', 'partners.id', '=', 'users_subscriptions.partner_id')
+//                ->leftJoin('services', 'services.partner_id', '=', 'partners.id')
+//                ->leftJoin('users_services', 'users_services.service_id', '=', 'services.id')
+//                ->selectRaw('SUM(users_services.amount) as amount, partners.id')
+//                ->where('users_subscriptions.mobile_user_id', $user->id)
+//                ->where('users_subscriptions.mobile_user_id', 'users_services.mobile_user_id')
+//                ->groupBy('partners.id')
+//                ->get();
 
              return $this->makeResponse(200, true, ['partners' => $res]);
 
