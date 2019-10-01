@@ -81,6 +81,12 @@ class CompanyController extends Controller
         return view('transactions/report');
     }
 
+
+    public function reportTest()
+    {
+        return view('transactions/report-test');
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

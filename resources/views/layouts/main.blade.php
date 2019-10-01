@@ -394,6 +394,16 @@
                             </span>
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ route('reportTest') }}">
+                            <i class="fa fa-list">
+
+                            </i>
+                            <span>
+                                Отчет тест
+                            </span>
+                        </a>
+                    </li>
 
                     <li>
                         <a href="{{ route('transactions.use') }}">

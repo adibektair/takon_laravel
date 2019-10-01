@@ -86,6 +86,7 @@ Route::group(['middleware' => ['authenticated']], function () {
         Route::post('/transactions-search-go', 'TransactionController@searchGo')->name('transactions.search.go');
         Route::get('/transactions/payments', 'TransactionController@payments')->name('transactions.payments');
         Route::get('/transactions/report1', 'TransactionController@report')->name('transactions.report1');
+        Route::get('/transactions/testReport', 'TransactionController@reportTest')->name('transactions.testReport');
         Route::get('/transactions-search', 'TransactionController@search')->name('transactions.search');
         Route::get('/transactions/return', 'TransactionController@return')->name('transactions.return');
         Route::get('/transactions-search-make', 'TransactionController@searchMake');
@@ -235,6 +236,7 @@ Route::group(['middleware' => ['authenticated']], function () {
 
             //REPORTS
             Route::get('/report', ['as' => 'report', 'uses' => 'CompanyController@report']);
+            Route::get('/test-report', ['as' => 'reportTest', 'uses' => 'CompanyController@reportTest']);
         });
 
 
