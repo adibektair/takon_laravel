@@ -15,6 +15,7 @@ use App\UsersService;
 use App\UsersSubscriptions;
 use Grimthorr\LaravelToast\Toast;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
@@ -84,7 +85,21 @@ class CompanyController extends Controller
 
     public function reportTest()
     {
-        return view('transactions/report-test');
+        $companyId = Auth::user()->company_id;
+        $services = Service::all();
+        $mobileUsers = MobileUser::select('mobile_users.*')
+            ->join('companies_users', 'companies_users.mobile_user_id', '=' , 'mobile_users.id')
+            ->where('companies_users.company_id', '=', $companyId)
+            ->get();
+        $groupUsers = MobileUser::select('mobile_users.*')
+            ->join('groups_users', 'groups_users.mobile_user_id', '=' , 'mobile_users.id')
+            ->join('groups', 'groups_users.group_id', '=' , 'groups.id')
+            ->where('groups.company_id', '=', $companyId)
+            ->get();
+        foreach ($groupUsers as $groupUser){
+            $mobileUsers[] = $groupUser;
+        }
+        return view('transactions/report-test', compact('mobileUsers', 'services'));
     }
 
     /**

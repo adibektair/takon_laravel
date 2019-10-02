@@ -886,6 +886,11 @@ class TransactionController extends Controller
 
         $minDate = $request->minDate;
         $maxDate = $request->maxDate;
+        $mobileUserId = $request->mobileUserId;
+        if ($maxDate) {
+            $maxDate = $maxDate . ' 23:59:59';
+        }
+        $serviceId = $request->serviceId;
 //        $service = $request->service;
 //        $type = $request->type;
 
@@ -897,8 +902,8 @@ class TransactionController extends Controller
                                 when company_sender.id is not null then company_sender.phone
                                 when mobile_user_sender.id is not null then mobile_user_sender.phone
                    end
-                   #          when t.type = 2
-                   #                  then p.name
+                   when t.type = 2
+                         then p.phone
                  when t.type = 3
                          then mobile_user_sender.phone
                  when t.type = 4
@@ -912,6 +917,8 @@ class TransactionController extends Controller
                                 when company_sender.id is not null then company_sender.name
                                 when mobile_user_sender.id is not null then mobile_user_sender.name
                    end
+               when t.type = 2
+                     then p.name
                  when t.type = 3
                          then mobile_user_sender.name
                  when t.type = 4
@@ -925,6 +932,8 @@ class TransactionController extends Controller
                          then t.amount
                    end sent,
                case
+                   when t.type in (2)
+                     then t.amount
                  when t.type in(4, 5)
                          then t.amount
                    end received,
@@ -941,9 +950,11 @@ class TransactionController extends Controller
                left join companies company_sender on company_sender.id = t.c_s_id
         
         WHERE c.id = ?
-          and t.created_at between ? and ?
-          and t.type not in (2)
-        order by t.created_at asc', [Auth::user()->company_id, $minDate, $maxDate]);
+        ' . ($minDate ? ' and t.created_at >=  \'' . $minDate . '\'' : '') . '
+        ' . ($maxDate ? ' and t.created_at <=  \'' . $maxDate . '\'' : '') . '
+        ' . ($mobileUserId ? ' and mobile_user_sender.id =  ' . $mobileUserId : '') . '
+        ' . ($serviceId ? ' and s.id =  ' . $serviceId : '') . '
+        order by t.created_at asc', [Auth::user()->company_id]);
         return DataTables::of($report)->make(true);
 
     }

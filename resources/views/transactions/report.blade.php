@@ -73,6 +73,18 @@
                     </thead>
                     <tbody>
                     </tbody>
+                    <tfoot>
+                    <tr>
+                        <th>#</th>
+                        <th>Отправитель</th>
+                        <th>Имя отправителя</th>
+                        <th>Услуга/Товар</th>
+                        <th>Количество</th>
+                        <th>Получатель</th>
+                        <th>Имя получателя</th>
+                        <th>Дата</th>
+                    </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
@@ -125,6 +137,26 @@
                         { extend: 'excel', className: 'btn btn-success',action: newExportAction }
                     ]
                 },
+                initComplete: function () {
+                    this.api().columns().every( function () {
+                        var column = this;
+                        var select = $('<select><option value=""></option></select>')
+                            .appendTo( $(column.footer()).empty() )
+                            .on( 'change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex(
+                                    $(this).val()
+                                );
+
+                                column
+                                    .search( val ? '^'+val+'$' : '', true, false )
+                                    .draw();
+                            } );
+
+                        column.data().unique().sort().each( function ( d, j ) {
+                            select.append( '<option value="'+d+'">'+d+'</option>' )
+                        } );
+                    } );
+                }
             });
 
 
