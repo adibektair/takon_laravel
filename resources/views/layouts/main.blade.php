@@ -239,6 +239,15 @@
                             </span>
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ route('report.by.company') }}">
+                            <i class="fa fa-file-text"></i>
+                            <span>
+                                Отчеты тест
+                            </span>
+                        </a>
+                    </li>
+
 
                 @elseif(auth()->user()->role_id == 4)
                     <li>
@@ -485,5 +494,17 @@
 
 @yield('scripts')
 
+<script>
+    var master = $('[data-name="master"]'),
+        side = $('[data-name="side"]');
+
+    $('.toggle', master).on('click', function() {
+        master.toggleClass('slide');
+        side.toggleClass('pop');
+    });
+</script>
+<script>
+
+</script>
 </body>
 </html>

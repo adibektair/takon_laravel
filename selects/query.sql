@@ -56,3 +56,38 @@ WHERE c.id = 8
 #   and t.created_at between '2019-09-01' and '2019-09-30'
     # group by s.id
 order by t.created_at asc;
+
+
+
+select t.amount + t.balance, min_balance.*
+from transactions t
+       inner join (select s.id, s.name, min(t.created_at) min_created
+                   from transactions t
+                          inner join services s on t.service_id = s.id
+                          inner join companies_services cs on s.id = cs.service_id
+                          inner join companies c on cs.company_id = c.id
+                   where c.id = 8
+                     and t.c_s_id = c.id
+                     and t.created_at between '2019-08-01' and '2019-09-01'
+                   group by s.name, s.id) min_balance on t.created_at = min_balance.min_created;
+
+
+select t.amount, t.balance, min_balance.*
+from transactions t
+       inner join (select s.id, s.name, max(t.created_at) min_created
+                   from transactions t
+                          inner join services s on t.service_id = s.id
+                          inner join companies_services cs on s.id = cs.service_id
+                          inner join companies c on cs.company_id = c.id
+                   where c.id = 8
+                     and t.c_s_id = c.id
+                     and t.created_at between '2019-08-01' and '2019-09-01'
+                   group by s.name, s.id) min_balance on t.created_at = min_balance.min_created;
+
+
+select s.name, sum(cs.amount)
+from services s
+       inner join companies_services cs on s.id = cs.service_id
+       inner join companies c on cs.company_id = c.id
+where c.id = 8
+group by s.name;

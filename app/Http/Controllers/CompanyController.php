@@ -49,7 +49,7 @@ class CompanyController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -58,7 +58,7 @@ class CompanyController extends Controller
         $model->name = $request->name;
         $model->phone = $request->phone;
         $model->address = $request->address;
-        if($model->save()){
+        if ($model->save()) {
             $user = new User;
             $user->role_id = 3;
             $user->company_id = $model->id;
@@ -74,7 +74,7 @@ class CompanyController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Company  $company
+     * @param  \App\Company $company
      * @return \Illuminate\Http\Response
      */
     public function report()
@@ -88,15 +88,15 @@ class CompanyController extends Controller
         $companyId = Auth::user()->company_id;
         $services = Service::all();
         $mobileUsers = MobileUser::select('mobile_users.*')
-            ->join('companies_users', 'companies_users.mobile_user_id', '=' , 'mobile_users.id')
+            ->join('companies_users', 'companies_users.mobile_user_id', '=', 'mobile_users.id')
             ->where('companies_users.company_id', '=', $companyId)
             ->get();
         $groupUsers = MobileUser::select('mobile_users.*')
-            ->join('groups_users', 'groups_users.mobile_user_id', '=' , 'mobile_users.id')
-            ->join('groups', 'groups_users.group_id', '=' , 'groups.id')
+            ->join('groups_users', 'groups_users.mobile_user_id', '=', 'mobile_users.id')
+            ->join('groups', 'groups_users.group_id', '=', 'groups.id')
             ->where('groups.company_id', '=', $companyId)
             ->get();
-        foreach ($groupUsers as $groupUser){
+        foreach ($groupUsers as $groupUser) {
             $mobileUsers[] = $groupUser;
         }
         return view('transactions/report-test', compact('mobileUsers', 'services'));
@@ -105,7 +105,7 @@ class CompanyController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Company  $company
+     * @param  \App\Company $company
      * @return \Illuminate\Http\Response
      */
     public function edit(Request $request)
@@ -124,8 +124,8 @@ class CompanyController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Company  $company
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Company $company
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Company $company)
@@ -136,46 +136,48 @@ class CompanyController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Company  $company
+     * @param  \App\Company $company
      * @return \Illuminate\Http\Response
      */
     public function destroy(Company $company)
     {
         //
     }
-    public function sendTakons(Request $request){
+
+    public function sendTakons(Request $request)
+    {
 
         $service_ids = $request->service_id;
         $user_ids = $request->id;
         $r_s = array();
-        foreach ($service_ids as $key => $id){
-            if(array_key_exists($id, $r_s)){
+        foreach ($service_ids as $key => $id) {
+            if (array_key_exists($id, $r_s)) {
                 $r_s[$id] += $request->amount[$key];
-            }else{
+            } else {
                 $r_s[$id] = $request->amount[$key];
             }
         }
-        foreach ($r_s as $key => $value){
+        foreach ($r_s as $key => $value) {
             $service = CompaniesService::where('id', '=', $key)->first();
-            if($service->amount < $value){
-                 toast()->error('У Вас недостаточно таконов для данной операции!');
-                 return view('mobile_users/index');
+            if ($service->amount < $value) {
+                toast()->error('У Вас недостаточно таконов для данной операции!');
+                return view('mobile_users/index');
             }
         }
 
 
-        foreach ($user_ids as $k => $v){
-            if($request->amount[$k] > 0){
+        foreach ($user_ids as $k => $v) {
+            if ($request->amount[$k] > 0) {
                 $c_service = CompaniesService::where('id', '=', $service_ids[$k])->first();
                 $m_service = UsersService::where('service_id', $c_service->service_id)
                     ->where('mobile_user_id', $v)
                     ->where('deadline', $c_service->deadline)
                     ->where('company_id', auth()->user()->company_id)
                     ->first();
-                if($m_service){
+                if ($m_service) {
                     $m_service->amount += $request->amount[$k];
 
-                }else{
+                } else {
 
                     $m_service = new UsersService();
                     $m_service->amount = $request->amount[$k];
@@ -194,7 +196,7 @@ class CompanyController extends Controller
                 $subs = UsersSubscriptions::where('mobile_user_id', $v)
                     ->where('partner_id', $serv->partner_id)
                     ->first();
-                if(!$subs){
+                if (!$subs) {
                     $subs = new UsersSubscriptions();
                     $subs->mobile_user_id = $v;
                     $subs->partner_id = $serv->partner_id;
@@ -205,30 +207,30 @@ class CompanyController extends Controller
 //                $c = new CloudMessage();
 //                $c->sendSilentThroughNode($user->push_id, $user->platform, "Вам были отправлены Таконы " . $serv->name, '', 'Внимение');
 
-                if($m_service->save()){
-                        $exactly_service = Service::where('id', '=', $c_service->service_id)->first();
-                        $parent = Transaction::where('service_id', $exactly_service->id)
-                            ->where('c_r_id', auth()->user()->company_id)
-                            ->where('u_s_id', null)
-                            ->where('cs_id', $service_ids[$k])
-                            ->orderBy('created_at', 'desc')->first();
+                if ($m_service->save()) {
+                    $exactly_service = Service::where('id', '=', $c_service->service_id)->first();
+                    $parent = Transaction::where('service_id', $exactly_service->id)
+                        ->where('c_r_id', auth()->user()->company_id)
+                        ->where('u_s_id', null)
+                        ->where('cs_id', $service_ids[$k])
+                        ->orderBy('created_at', 'desc')->first();
 
-                        $model = new Transaction();
+                    $model = new Transaction();
 //                        if ($parent->parent_id){
 //                            $model->parent_id = $parent->parent_id;
 //                        }else{
-                       $model->parent_id = $parent->id;
+                    $model->parent_id = $parent->id;
 //                        }
-                        $model->balance = $c_service->amount - $request->amount[$k];
-                        $model->users_service_id = $m_service->id;
-                        $model->type = 1;
-                        $model->cs_id = $c_service->id;
-                        $model->service_id = $c_service->service_id;
-                        $model->c_s_id = auth()->user()->company_id;
-                        $model->u_r_id = $v;
-                        $model->price = $exactly_service->price;
-                        $model->amount = $request->amount[$k];
-                        $model->save();
+                    $model->balance = $c_service->amount - $request->amount[$k];
+                    $model->users_service_id = $m_service->id;
+                    $model->type = 1;
+                    $model->cs_id = $c_service->id;
+                    $model->service_id = $c_service->service_id;
+                    $model->c_s_id = auth()->user()->company_id;
+                    $model->u_r_id = $v;
+                    $model->price = $exactly_service->price;
+                    $model->amount = $request->amount[$k];
+                    $model->save();
                 }
                 $c_service->amount -= $request->amount[$k];
                 $c_service->save();
@@ -240,20 +242,22 @@ class CompanyController extends Controller
 
     }
 
-    public function getServices(){
+    public function getServices()
+    {
 
         $services = DB::table('companies_services')->where('company_id', '=', auth()->user()->company_id)
             ->join('services', 'services.id', '=', 'companies_services.service_id')
             ->join('partners', 'partners.id', '=', 'services.partner_id')
             ->select('companies_services.*', 'partners.name as partner', 'services.name as service', 'services.price')
+            ->where('companies_services.amount','<>',0)
             ->get();
 
         $s = DataTables::of($services)->addColumn('checkbox', function ($service) {
-            return '<a class="btn btn-success" href="/groups?id=' . $service->id .'">Раздать</a>';
+            return '<a class="btn btn-success" href="/groups?id=' . $service->id . '">Раздать</a>';
         })
             // передать юр лицу
             // <a href="/share-services?id=' . $service->id .'"><button class="btn btn-success">Передать</button></a>
-            ->addColumn('return', function($user){
+            ->addColumn('return', function ($user) {
                 $date = date('Y-m-d', $user->deadline);
                 return $date;
             })
@@ -261,26 +265,25 @@ class CompanyController extends Controller
             ->make(true);
 
 
-
-
-
         return $s;
     }
 
     // Share takons with other companies
-    public function shareServices(Request $request){
+    public function shareServices(Request $request)
+    {
         $id = $request->id;
         $company_service = CompaniesService::where('id', '=', $id)->first();
         $service = Service::where('id', '=', $company_service->service_id)->first();
         return view('companies/share')->with(['com_ser' => $company_service, 'service' => $service]);
     }
 
-    public function share(Request $request){
+    public function share(Request $request)
+    {
         $com_ser = CompaniesService::where('id', '=', $request->id)->first();
         $service = Service::where('id', '=', $com_ser->service_id)->first();
         $company = Company::where('id', '=', auth()->user()->company_id)->first();
         $reciever = Company::where('id', '=', $request->company_id)->first();
-        if($com_ser->amount < $request->amount){
+        if ($com_ser->amount < $request->amount) {
             toastr()->error('Ошибка. У Вас недостаточно таконов для данной операции');
             return redirect()->back();
         }
@@ -291,9 +294,9 @@ class CompanyController extends Controller
             ->where('company_id', '=', $request->company_id)
             ->where('deadline', $com_ser->deadline)
             ->first();
-        if($rec_ser){
+        if ($rec_ser) {
             $rec_ser->amount += $request->amount;
-        }else{
+        } else {
             $rec_ser = new CompaniesService();
             $rec_ser->service_id = $com_ser->service_id;
             $rec_ser->amount = $request->amount;
@@ -302,16 +305,16 @@ class CompanyController extends Controller
 
         }
 
-        if($rec_ser->save()){
+        if ($rec_ser->save()) {
             $parent = Transaction::where('service_id', $service->id)
                 ->where('c_r_id', auth()->user()->company_id)
                 ->orderBy('created_at', 'desc')->first();
 
 
             $model = new Transaction();
-            if ($parent->parent_id){
+            if ($parent->parent_id) {
                 $model->parent_id = $parent->parent_id;
-            }else{
+            } else {
                 $model->parent_id = $parent->id;
             }
             $model->type = 4;
@@ -331,13 +334,14 @@ class CompanyController extends Controller
 
 
         $not1 = new Notification();
-        $not1->make('info', 'Внимание!',  $request->amount . ' таконов товара/услуги ' . $service->name . ' от компании ' . $company->name . ' были отправлены ' . $reciever->name,
+        $not1->make('info', 'Внимание!', $request->amount . ' таконов товара/услуги ' . $service->name . ' от компании ' . $company->name . ' были отправлены ' . $reciever->name,
             null, $request->company_id, true);
 
         return view('companies/services');
     }
 
-    public function getReturn(){
+    public function getReturn()
+    {
         $users = DB::table('users_services')
             ->where('company_id', auth()->user()->company_id)
             ->where('users_services.amount', '<>', 0)
@@ -346,20 +350,21 @@ class CompanyController extends Controller
             ->select('users_services.*', 'mobile_users.phone', 'services.name as service')->get();
 
         return Datatables::of($users)
-            ->addColumn('return', function($user){
+            ->addColumn('return', function ($user) {
                 return '<a href="/return-takon?id=' . $user->id . '"><button class="btn btn-success">Возврат</button></a>';
             })
             ->rawColumns(['return'])
             ->make(true);
     }
 
-    public function finish(Request $request){
+    public function finish(Request $request)
+    {
 
         $us = UsersService::where('id', $request->id)->first();
         $user = MobileUser::where('id', $us->mobile_user_id)->first();
         $service = Service::where('id', $us->service_id)->first();
         $company = Company::where('id', auth()->user()->company_id)->first();
-        if($us->amount < $request->amount){
+        if ($us->amount < $request->amount) {
             toastr()->error('Введите корректные данные');
             return \redirect()->back();
         }
@@ -370,9 +375,9 @@ class CompanyController extends Controller
             ->where('deadline', $us->deadline)
             ->first();
 
-        if($us->save()){
+        if ($us->save()) {
             $model = new Transaction();
-            $model->u_s_id =$user->id;
+            $model->u_s_id = $user->id;
             $model->balance = $us->amount;
             $model->c_r_id = $company->id;
             $model->amount = $request->amount;
@@ -385,9 +390,9 @@ class CompanyController extends Controller
 
         }
 
-        if($cs){
+        if ($cs) {
             $cs->amount += $request->amount;
-        }else{
+        } else {
             toastr()->error('Произошла непредвиденная ошибка, обратитесь к администратору приложения');
             return \redirect()->back();
         }
@@ -398,24 +403,26 @@ class CompanyController extends Controller
 
     }
 
-    public function returnTakon(Request $request){
+    public function returnTakon(Request $request)
+    {
         $us = UsersService::where('id', $request->id)->first();
         $user = MobileUser::where('id', $us->mobile_user_id)->first();
         $service = Service::where('id', $us->service_id)->first();
         return view('companies/finish-return')->with(['us' => $us, 'user' => $user, 'service' => $service]);
     }
 
-    public function all(){
+    public function all()
+    {
 
-            $companies = Company::all();
-            return Datatables::of($companies)
-                ->addColumn('email', function($company){
-                    $user = User::where('role_id', 3)->where('company_id', $company->id)->first();
-                    return $user->email;
+        $companies = Company::all();
+        return Datatables::of($companies)
+            ->addColumn('email', function ($company) {
+                $user = User::where('role_id', 3)->where('company_id', $company->id)->first();
+                return $user->email;
 
-                })
-                ->rawColumns(['email'])
-                ->make(true);
+            })
+            ->rawColumns(['email'])
+            ->make(true);
 //            return datatables($companies)->toJson();
     }
 }

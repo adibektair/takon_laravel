@@ -144,6 +144,9 @@ Route::group(['middleware' => ['authenticated']], function () {
 
         Route::group(['middleware' => ['is_superadmin']], function () {
 
+            //REPORTS
+            Route::get('/report-by-company', ['as' => 'report.by.company', 'uses' => 'ReportController@reportByCompany']);
+            Route::get('/api/report-by-company', ['as' => 'ajax.report.by.company', 'uses' => 'Ajax\ReportController@reportByCompany']);
 
             //SERVICES
             Route::get('/services/moderation', function () {
