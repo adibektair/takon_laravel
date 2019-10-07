@@ -466,9 +466,11 @@ class ApiController extends Controller
             ->where('password', md5($request->password))
             ->first();
         if($user){
-//            $token = Str::random(42);
-//            $user->token = $token;
-//            $user->save();
+            if($user->token == NULL){
+                $token = Str::random(42);
+                $user->token = $token;
+                $user->save();
+            }
             return $this->makeResponse(200, true, ['token' => $user->token]);
         }
         return $this->makeResponse(401, false, ['hash' => Hash::make($password),'message'=>'Данные для авторизации неверны', 'error' => 'incorrect auth data']);
@@ -643,7 +645,6 @@ class ApiController extends Controller
                         's_users.id as s_user_id', 'r_users.id as r_user_id', 'partners.name as creater', 'return.name as ret_name', 'transactions.type as ttype')
                     ->selectRaw('IFNULL(s_company.name, "TAKON.ORG") AS s_company')
                     ->orderBy('transactions.id', 'asc')
-//                    ->limit(50)
                     ->get();
 
                 $result = [];
