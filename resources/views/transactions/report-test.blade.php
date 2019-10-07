@@ -15,76 +15,61 @@
     <div class="col-md-12 mt-2">
         <div class="panel panel-default">
             <div class="panel-body">
-                <table border="0" cellspacing="5" cellpadding="5">
-                    <tbody>
-                    <tr>
-                        <td>C какого числа:</td>
-                        <td><input class="form-control" name="min" id="min" type="date"></td>
-                    </tr>
-                    <tr>
-                        <td>По какое число:</td>
-                        <td><input class="form-control" name="max" id="max" type="date"></td>
-                    </tr>
-                    <tr>
-                        <?php
-                        $services = \App\Service::all();
-                        ?>
-                        <td>Услуга:</td>
-                        <td>
+                <form>
+                    <div class="row" style="margin: 10px">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>C какого числа:</label>
+                                <input class="form-control" name="min" id="min" type="date">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>По какое число:</label>
+                                <input class="form-control" name="max" id="max" type="date">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Услуга:</label>
+
                             <select class="form-control" name="service" id="service">
                                 <option value="">Не выбрано</option>
-
-                                <?php
-                                foreach ($services as $s){
-                                ?>
-                                <option value="<?=$s->id?>"><?=$s->name?></option>
-                                <?php
-                                }
-                                ?>
+                                @foreach($services as $s)
+                                    <option value="{{$s->id}}">{{$s->name}}</option>
+                                @endforeach
                                 <option value=""></option>
                             </select>
-                        </td>
-                    </tr>
-                    <tr>
+                        </div>
+                        <div class="col-sm-6">
 
-                        <td>Тип транзакция:</td>
-                        <td>
-                            <select class="form-control" name="type" id="type">
+                            <label>Наименования:</label>
+
+                            <select class="form-control" name="mobileUser" id="mobileUser">
                                 <option value="">Не выбрано</option>
-                                <option value="3">Использование таконов</option>
+                                @foreach($mobileUsers as $mu)
+                                    <option value="{{$mu->id}}">{{$mu->phone}} {{$mu->name}}</option>
+                                @endforeach
+                                <option value=""></option>
                             </select>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                        </div>
+                    </div>
+                </form>
+
 
                 <table class="table table-bordered" id="table">
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th>Отправитель</th>
-                        <th>Имя отправителя</th>
                         <th>Услуга/Товар</th>
-                        <th>Количество</th>
-                        <th>Получатель</th>
-                        <th>Имя получателя</th>
+                        <th>Наименование</th>
+                        <th>Имя</th>
+                        <th>Получено</th>
+                        <th>Отправлено</th>
                         <th>Дата</th>
                     </tr>
                     </thead>
                     <tbody>
                     </tbody>
-                    <tfoot>
-                    <tr>
-                        <th>#</th>
-                        <th>Отправитель</th>
-                        <th>Имя отправителя</th>
-                        <th>Услуга/Товар</th>
-                        <th>Количество</th>
-                        <th>Получатель</th>
-                        <th>Имя получателя</th>
-                        <th>Дата</th>
-                    </tr>
-                    </tfoot>
                 </table>
             </div>
         </div>
@@ -111,55 +96,33 @@
                 },
                 serverSide: true,
                 ajax: {
-                    url: "{{ route('transactions.report1') }}",
+                    url: "{{ route('transactions.testReport') }}",
                     "data": function (d) {
                         d.minDate = $('#min').val();
                         d.maxDate = $('#max').val();
-                        d.service = $('#service').val();
-                        d.type = $('#type').val();
-
+                        d.serviceId = $('#service').val();
+                        d.mobileUserId = $('#mobileUser').val();
                     }
                 },
                 columns: [
                     {data: 'id', name: 'id'},
+                    {data: 'service_name', name: 'service_name'},
                     {data: 'sender', name: 'sender'},
                     {data: 'sender_name', name: 'sender_name'},
-                    {data: 'name', name: 'name'},
-                    {data: 'amount', name: 'amount'},
-                    {data: 'reciever', name: 'reciever'},
-                    {data: 'reciever_name', name: 'reciever_name'},
+                    {data: 'sent', name: 'sent'},
+                    {data: 'received', name: 'received'},
                     {data: 'created_at', name: 'created_at'},
                 ],
                 dom: 'Bfrltip',
                 buttons: {
                     buttons: [
-                        { extend: 'excel', className: 'btn btn-success',action: newExportAction }
+                        {extend: 'excel', className: 'btn btn-success', action: newExportAction}
                     ]
                 },
-                initComplete: function () {
-                    this.api().columns().every( function () {
-                        var column = this;
-                        var select = $('<select class="form-control"><option value=""></option></select>')
-                            .appendTo( $(column.footer()).empty() )
-                            .on( 'change', function () {
-                                var val = $.fn.dataTable.util.escapeRegex(
-                                    $(this).val()
-                                );
-
-                                column
-                                    .search( val ? '^'+val+'$' : '', true, false )
-                                    .draw();
-                            } );
-
-                        column.data().unique().sort().each( function ( d, j ) {
-                            select.append( '<option value="'+d+'">'+d+'</option>' )
-                        } );
-                    } );
-                }
             });
 
 
-            $('#min, #max, #service, #type').change(function () {
+            $('#min, #max, #service, #mobileUser').change(function () {
                 table.draw();
             });
 

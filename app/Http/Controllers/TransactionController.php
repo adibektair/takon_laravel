@@ -12,6 +12,7 @@ use App\Transaction;
 use App\User;
 use App\UsersService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 
@@ -37,17 +38,20 @@ class TransactionController extends Controller
     {
         return view('transactions/use');
     }
+
     public function search()
     {
         return view('transactions/search');
     }
+
     public function searchGo(Request $request)
     {
         return view('transactions/search-go')->with(['phone' => $request->phone]);
     }
+
     public function searchMake(Request $request)
     {
-        if(auth()->user()->role_id == 3){
+        if (auth()->user()->role_id == 3) {
             $phone = $request->phone;
             $result = DB::table('transactions')
                 ->where('users.phone', $phone)
@@ -61,17 +65,17 @@ class TransactionController extends Controller
                 ->get();
             $s = DataTables::of($result)
                 ->addColumn('reciever', function ($service) {
-                    if($service->type == 3){
+                    if ($service->type == 3) {
                         return 'Использовано';
-                    }else{
+                    } else {
                         return $service->muserphone;
                     }
                 })
-                ->addColumn('sender', function ($service) use($phone) {
-                    if($service->c_s_id){
+                ->addColumn('sender', function ($service) use ($phone) {
+                    if ($service->c_s_id) {
                         $c = Company::where('id', $service->c_s_id)->first();
                         return $c->name;
-                    }else{
+                    } else {
                         return $service->sender;
                     }
 
@@ -79,7 +83,7 @@ class TransactionController extends Controller
                 ->rawColumns(['reciever', 'sender'])
                 ->make(true);
             return $s;
-        }else{
+        } else {
             $phone = $request->phone;
             $result = DB::table('transactions')
                 ->where('users.phone', $phone)
@@ -91,17 +95,17 @@ class TransactionController extends Controller
                 ->get();
             $s = DataTables::of($result)
                 ->addColumn('reciever', function ($service) {
-                    if($service->type == 3){
+                    if ($service->type == 3) {
                         return 'Использовано';
-                    }else{
+                    } else {
                         return $service->muserphone;
                     }
                 })
-                ->addColumn('sender', function ($service) use($phone) {
-                    if($service->c_s_id){
+                ->addColumn('sender', function ($service) use ($phone) {
+                    if ($service->c_s_id) {
                         $c = Company::where('id', $service->c_s_id)->first();
                         return $c->name;
-                    }else{
+                    } else {
                         return $service->sender;
                     }
 
@@ -112,7 +116,6 @@ class TransactionController extends Controller
         }
 
     }
-
 
 
     /**
@@ -128,7 +131,7 @@ class TransactionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -139,7 +142,7 @@ class TransactionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Transaction  $transaction
+     * @param  \App\Transaction $transaction
      * @return \Illuminate\Http\Response
      */
     public function show(Transaction $transaction)
@@ -150,7 +153,7 @@ class TransactionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Transaction  $transaction
+     * @param  \App\Transaction $transaction
      * @return \Illuminate\Http\Response
      */
     public function edit(Transaction $transaction)
@@ -161,8 +164,8 @@ class TransactionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Transaction  $transaction
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Transaction $transaction
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Transaction $transaction)
@@ -173,40 +176,51 @@ class TransactionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Transaction  $transaction
+     * @param  \App\Transaction $transaction
      * @return \Illuminate\Http\Response
      */
     public function partner()
     {
         return view('transactions/partners');
     }
+
     public function company()
     {
         return view('transactions/company');
     }
+
     public function companyMore(Request $request)
     {
         return view('transactions/company-more')->with(['id' => $request->id]);
     }
-    public function partnerMore(Request $request){
+
+    public function partnerMore(Request $request)
+    {
         return view('transactions/partner-more')->with(['id' => $request->id]);
     }
-    public function adminMore(Request $request){
+
+    public function adminMore(Request $request)
+    {
         return view('transactions/admin-more')->with(['id' => $request->id]);
     }
 
-    public function adminEtc(Request $request){
+    public function adminEtc(Request $request)
+    {
         return view('transactions/admin-etc')->with(['id' => $request->id]);
     }
 
-    public function partnerEtc(Request $request){
+    public function partnerEtc(Request $request)
+    {
         return view('transactions/partner-etc')->with(['id' => $request->id]);
     }
-    public function companyEtc(Request $request){
+
+    public function companyEtc(Request $request)
+    {
         return view('transactions/company-etc')->with(['id' => $request->id]);
     }
 
-    public function adminMoreGet(Request $request){
+    public function adminMoreGet(Request $request)
+    {
 
         $result = DB::table('transactions')
             ->where('parent_id', $request->id)
@@ -220,19 +234,19 @@ class TransactionController extends Controller
 
         $s = DataTables::of($result)
             ->addColumn('1', function ($service) {
-                if($service->user) {
+                if ($service->user) {
                     return '<a href="/transactions/admin/etc?id=' . $service->id . '"><button class="btn btn-success">Подробнее</button></a>';
                 }
 //                    return '<a href="/transactions/admin/etc?id=' . $service->id . '"><button class="btn btn-success">Подробнее</button></a>';
             })
             ->addColumn('2', function ($service) {
-                if($service->company){
+                if ($service->company) {
                     return $service->company;
                 }
                 return $service->user;
             })
             ->addColumn('3', function ($service) {
-                if($service->type == 4){
+                if ($service->type == 4) {
                     return $service->price * $service->amount . ' тенге' . ' (Перевод)';
                 }
                 return $service->price * $service->amount . ' тенге';
@@ -242,7 +256,8 @@ class TransactionController extends Controller
         return $s;
     }
 
-    public function partnerMoreGet(Request $request){
+    public function partnerMoreGet(Request $request)
+    {
 
         $result = DB::table('transactions')
             ->where('cs_id', $request->id)
@@ -256,7 +271,7 @@ class TransactionController extends Controller
 
         $s = DataTables::of($result)
             ->addColumn('1', function ($service) {
-                if($service->user) {
+                if ($service->user) {
                     return '<a href="/transactions/partner/etc?id=' . $service->id . '"><button class="btn btn-success">Подробнее</button></a>';
                 }
             })
@@ -265,7 +280,7 @@ class TransactionController extends Controller
                 return $service->user;
             })
             ->addColumn('3', function ($service) {
-                if($service->type == 4){
+                if ($service->type == 4) {
                     return $service->price * $service->amount . ' тенге' . ' (Перевод)';
                 }
                 return $service->price * $service->amount . ' тенге';
@@ -274,7 +289,9 @@ class TransactionController extends Controller
 
         return $s;
     }
-    public function companyMoreGet(Request $request){
+
+    public function companyMoreGet(Request $request)
+    {
 
 //        $tr = Transaction::where('id', $request->id)->first();
 //        if($tr->parent_id){
@@ -311,18 +328,18 @@ class TransactionController extends Controller
 
         $s = DataTables::of($result)
             ->addColumn('1', function ($service) {
-                if($service->user) {
+                if ($service->user) {
                     return '<a href="/transactions/company/etc?id=' . $service->id . '"><button class="btn btn-success">Подробнее</button></a>';
                 }
             })
             ->addColumn('2', function ($service) {
-                if($service->company){
+                if ($service->company) {
                     return $service->company;
                 }
                 return $service->user;
             })
             ->addColumn('3', function ($service) {
-                if($service->type == 4){
+                if ($service->type == 4) {
                     return $service->price * $service->amount . ' тенге' . ' (Перевод)';
                 }
                 return $service->price * $service->amount . ' тенге';
@@ -332,7 +349,9 @@ class TransactionController extends Controller
         return $s;
 
     }
-    public function adminEtcGet(Request $request){
+
+    public function adminEtcGet(Request $request)
+    {
 
         $result = DB::table('transactions')
             ->where('parent_id', $request->id)
@@ -347,22 +366,22 @@ class TransactionController extends Controller
         $s = DataTables::of($result)
             ->addColumn('1', function ($service) {
 
-                if($service->type == 3){
+                if ($service->type == 3) {
                     $partner = Partner::where('id', $service->partner_id)->first();
 
                     return 'Потрачено у ' . $partner->name;
                 }
-                if($service->c2){
+                if ($service->c2) {
                     return $service->c2;
                 }
                 return $service->u1;
 
             })
             ->addColumn('2', function ($service) {
-                if($service->c1){
-                    return  $service->c1;
+                if ($service->c1) {
+                    return $service->c1;
                 }
-                return $service->u2 ;
+                return $service->u2;
             })
             ->addColumn('3', function ($service) {
                 return $service->price * $service->amount . ' тенге';
@@ -372,7 +391,8 @@ class TransactionController extends Controller
         return $s;
     }
 
-    public function partnerEtcGet(Request $request){
+    public function partnerEtcGet(Request $request)
+    {
 
         $result = DB::table('transactions')
             ->where('parent_id', $request->id)
@@ -387,22 +407,22 @@ class TransactionController extends Controller
         $s = DataTables::of($result)
             ->addColumn('1', function ($service) {
 
-                if($service->type == 3){
+                if ($service->type == 3) {
                     $partner = Partner::where('id', $service->partner_id)->first();
 
                     return 'Потрачено у ' . $partner->name;
                 }
-                if($service->c2){
+                if ($service->c2) {
                     return $service->c2;
                 }
                 return $service->u1;
 
             })
             ->addColumn('2', function ($service) {
-                if($service->c1){
-                    return  $service->c1;
+                if ($service->c1) {
+                    return $service->c1;
                 }
-                return $service->u2 ;
+                return $service->u2;
             })
             ->addColumn('3', function ($service) {
                 return $service->price * $service->amount . ' тенге';
@@ -413,7 +433,8 @@ class TransactionController extends Controller
     }
 
 
-    public function companyEtcGet(Request $request){
+    public function companyEtcGet(Request $request)
+    {
 
         $result = DB::table('transactions')
             ->where('parent_id', $request->id)
@@ -428,22 +449,22 @@ class TransactionController extends Controller
         $s = DataTables::of($result)
             ->addColumn('1', function ($service) {
 
-                if($service->type == 3){
+                if ($service->type == 3) {
                     $partner = Partner::where('id', $service->partner_id)->first();
 
                     return 'Потрачено у ' . $partner->name;
                 }
-                if($service->c2){
+                if ($service->c2) {
                     return $service->c2;
                 }
                 return $service->u1;
 
             })
             ->addColumn('2', function ($service) {
-                if($service->c1){
-                    return  $service->c1;
+                if ($service->c1) {
+                    return $service->c1;
                 }
-                return $service->u2 ;
+                return $service->u2;
             })
             ->addColumn('3', function ($service) {
                 return $service->price * $service->amount . ' тенге';
@@ -453,7 +474,8 @@ class TransactionController extends Controller
         return $s;
     }
 
-    public function adminAll(){
+    public function adminAll()
+    {
         $result = DB::table('transactions')
             ->where('parent_id', Null)
             ->where('type', 2)
@@ -464,19 +486,19 @@ class TransactionController extends Controller
             ->get();
         $s = DataTables::of($result)
             ->addColumn('1', function ($service) {
-                    return '<a href="/transactions/admin/more?id=' . $service->id . '"><button class="btn btn-success">Подробнее</button></a>';
-                })
+                return '<a href="/transactions/admin/more?id=' . $service->id . '"><button class="btn btn-success">Подробнее</button></a>';
+            })
             ->addColumn('2', function ($service) {
-                if($service->type == 4){
+                if ($service->type == 4) {
                     return $service->price * $service->amount . ' (переданные)';
                 }
                 return $service->price * $service->amount . ' тенге';
             })
             ->addColumn('3', function ($service) {
                 $cs = CompaniesService::where('id', $service->cs_id)->first();
-                if($cs){
+                if ($cs) {
                     return $cs->amount;
-                }else{
+                } else {
                     return 0;
                 }
 
@@ -486,7 +508,8 @@ class TransactionController extends Controller
     }
 
 
-    public function partnerAll(){
+    public function partnerAll()
+    {
         $result = DB::table('transactions')
             ->where('parent_id', Null)
             ->whereIn('type', [2, 4])
@@ -503,7 +526,7 @@ class TransactionController extends Controller
                 return '<a href="/transactions/partner/more?id=' . $service->cs_id . '"><button class="btn btn-success">Подробнее</button></a>';
             })
             ->addColumn('2', function ($service) {
-                if($service->type == 4){
+                if ($service->type == 4) {
                     return $service->price * $service->amount . ' (переданные)';
                 }
                 return $service->price * $service->amount . ' тенге';
@@ -515,7 +538,7 @@ class TransactionController extends Controller
             ->addColumn('4', function ($service) {
                 $tr = Transaction::where('type', 3)->where('cs_id', $service->cs_id)->get();
                 $a = 0;
-                foreach ($tr as $v){
+                foreach ($tr as $v) {
                     $a += $v->amount;
                 }
                 return $a;
@@ -525,7 +548,7 @@ class TransactionController extends Controller
 
                 $all = UsersService::where('cs_id', $service->cs_id)->get();
                 $amount = 0;
-                foreach ($all as $v){
+                foreach ($all as $v) {
                     $amount += $v->amount;
                 }
                 return $amount + $cs->amount;
@@ -535,8 +558,8 @@ class TransactionController extends Controller
     }
 
 
-
-    public function companyAll(){
+    public function companyAll()
+    {
         $result = DB::table('transactions')
             ->whereIn('type', [2, 4])
             ->where('c_r_id', auth()->user()->company_id)
@@ -549,9 +572,8 @@ class TransactionController extends Controller
             ->addColumn('1', function ($service) {
                 return '<a href="/transactions/company/more?id=' . $service->id . '"><button class="btn btn-success">Подробнее</button></a>';
             })
-
             ->addColumn('2', function ($service) {
-                if($service->type == 4){
+                if ($service->type == 4) {
                     return $service->price * $service->amount . ' (переданные)';
                 }
                 return $service->price * $service->amount . ' тенге';
@@ -561,7 +583,7 @@ class TransactionController extends Controller
 
                 $all = UsersService::where('cs_id', $service->cs_id)->get();
                 $amount = 0;
-                foreach ($all as $v){
+                foreach ($all as $v) {
                     $amount += $v->amount;
                 }
                 return $amount + $cs->amount;
@@ -577,21 +599,20 @@ class TransactionController extends Controller
 
                 $all = UsersService::where('cs_id', $service->cs_id)->get();
                 $amount = 0;
-                foreach ($all as $v){
+                foreach ($all as $v) {
                     $amount += $v->amount;
                 }
                 return $service->amount - ($amount + $cs->amount);
             })
-
             ->make(true);
         return $s;
     }
 
 
+    public function returnAll()
+    {
 
-    public function returnAll(){
-
-        if(auth()->user()->role_id == 1){
+        if (auth()->user()->role_id == 1) {
             $result = DB::table('transactions')
                 ->where('type', 5)
                 ->join('services', 'services.id', '=', 'transactions.service_id')
@@ -599,7 +620,7 @@ class TransactionController extends Controller
                 ->join('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
                 ->select('transactions.*', 'services.name as service', 'companies.name as company', 'mobile_users.phone as user')
                 ->get();
-        }else{
+        } else {
             $result = DB::table('transactions')
                 ->where('type', 5)
                 ->where('transactions.c_r_id', auth()->user()->company_id)
@@ -619,7 +640,8 @@ class TransactionController extends Controller
         return $s;
     }
 
-    public function paymentsAll(){
+    public function paymentsAll()
+    {
         $result = DB::table('transactions')
             ->where('type', 6)
             ->join('services', 'services.id', '=', 'transactions.service_id')
@@ -632,11 +654,12 @@ class TransactionController extends Controller
         return $s;
     }
 
-    public function useAll(Request $request){
+    public function useAll(Request $request)
+    {
 
-        if(auth()->user()->role_id == 1 OR auth()->user()->role_id == 4){
+        if (auth()->user()->role_id == 1 OR auth()->user()->role_id == 4) {
 
-            if ($request->id){
+            if ($request->id) {
                 $result = DB::table('transactions')
                     ->where('transactions.type', 3)
                     ->where('transactions.service_id', $request->id)
@@ -647,10 +670,9 @@ class TransactionController extends Controller
                     ->leftJoin('companies', 'companies.id', '=', 'companies_services.company_id')
                     ->select('transactions.*', 'services.name as service', 'mobile_users.phone as sender', 'mobile_users.name as username', 'users.name as reciever', 'companies.name as company')
                     ->orderBy('created_at', 'asc')
-
                     ->get();
 
-            }else{
+            } else {
                 $result = DB::table('transactions')
                     ->where('transactions.type', 3)
                     ->join('services', 'services.id', '=', 'transactions.service_id')
@@ -660,13 +682,12 @@ class TransactionController extends Controller
                     ->leftJoin('users', 'users.id', '=', 'transactions.u_r_id')
                     ->select('transactions.*', 'services.name as service', 'mobile_users.phone as sender', 'mobile_users.name as username', 'users.name as reciever', 'companies.name as company')
                     ->orderBy('created_at', 'asc')
-
                     ->get();
 
             }
-        }else{
+        } else {
 
-            if ($request->id){
+            if ($request->id) {
                 $result = DB::table('transactions')
                     ->where('transactions.type', 3)
                     ->where('transactions.service_id', $request->id)
@@ -690,7 +711,7 @@ class TransactionController extends Controller
                     ->orderBy('created_at', 'asc')
                     ->get();
 
-            }else{
+            } else {
                 $result = DB::table('transactions')
                     ->where('transactions.type', 3)
                     ->join('services', 'services.id', '=', 'transactions.service_id')
@@ -703,13 +724,12 @@ class TransactionController extends Controller
                         '=',
                         'groups_users.group_id'
                     )
-                    ->select('transactions.*', 'services.name as service','groups_users.username as username',  'mobile_users.phone as sender', 'users.name as reciever')
+                    ->select('transactions.*', 'services.name as service', 'groups_users.username as username', 'mobile_users.phone as sender', 'users.name as reciever')
                     ->join('companies_services', 'companies_services.id', '=', 'transactions.cs_id')
                     ->join('companies', 'companies.id', '=', 'companies_services.company_id')
                     ->where('companies.id', '=', auth()->user()->company_id)
                     ->orderBy('created_at', 'asc')
                     ->groupBy('transactions.id')
-
                     //                    ->seletRaw('distinct(transactions.id) as idd')
                     ->get();
             }
@@ -717,14 +737,14 @@ class TransactionController extends Controller
 
 
         $s = DataTables::of($result)
-
             ->make(true);
 
         return $s;
     }
 
 
-    public function report(Request $request){
+    public function report(Request $request)
+    {
 
 
         $minDate = $request->minDate;
@@ -739,41 +759,38 @@ class TransactionController extends Controller
             ->where('companies.id', auth()->user()->company_id);
 
 
-        if($minDate){
-            $res = $res->where('transactions.created_at', '>=',$minDate );
+        if ($minDate) {
+            $res = $res->where('transactions.created_at', '>=', $minDate);
         }
 
-        if($maxDate){
-            $res = $res->where('transactions.created_at', '<=',$maxDate );
+        if ($maxDate) {
+            $res = $res->where('transactions.created_at', '<=', $maxDate);
         }
-        if($service){
+        if ($service) {
             $res = $res->where('transactions.service_id', '=', $service);
         }
-        if($type){
+        if ($type) {
             $res = $res->where('transactions.type', '=', $type);
         }
         $res = $res->get();
 
         $s = DataTables::of($res)
             ->addColumn('sender', function ($service) {
-                if($service->type == 1){
-                    if ($service->c_s_id){
+                if ($service->type == 1) {
+                    if ($service->c_s_id) {
                         $c = Company::where('id', $service->c_s_id)->first();
                         return $c->name;
-                    }else{
+                    } else {
                         $m = MobileUser::where('id', $service->u_s_id)->first();
                         return $m->phone;
                     }
-                }
-                else if($service->type == 2){
+                } else if ($service->type == 2) {
                     $p = Partner::where('id', $service->p_s_id)->first();
                     return $p->name;
-                }
-                else if($service->type == 3){
+                } else if ($service->type == 3) {
                     $m = MobileUser::where('id', $service->u_s_id)->first();
                     return $m->phone;
-                }
-                else if($service->type == 5){
+                } else if ($service->type == 5) {
                     $m = MobileUser::where('id', $service->u_s_id)->first();
                     return $m->phone;
                 }
@@ -781,64 +798,60 @@ class TransactionController extends Controller
 
             })
             ->addColumn('reciever', function ($service) {
-                if($service->type == 1){
+                if ($service->type == 1) {
 
                     $m = MobileUser::where('id', $service->u_r_id)->first();
                     return $m->phone;
 
-                }else if($service->type == 2){
+                } else if ($service->type == 2) {
                     $p = Company::where('id', $service->c_r_id)->first();
                     return $p->name;
-                }else if($service->type == 3){
+                } else if ($service->type == 3) {
                     $m = User::where('id', $service->u_r_id)->first();
                     return $m->name;
-                }
-                else if($service->type == 5){
+                } else if ($service->type == 5) {
                     $p = Company::where('id', $service->c_r_id)->first();
                     return $p->name;
-                }else{
+                } else {
                     $p = Company::where('id', $service->c_r_id)->first();
                     return $p->name;
                 }
             })
             ->addColumn('sender_name', function ($service) {
-                if($service->type == 1){
-                    if (!$service->c_s_id){
+                if ($service->type == 1) {
+                    if (!$service->c_s_id) {
                         $m = MobileUser::where('id', $service->u_s_id)->first();
                         $gr = Group::where('company_id', auth()->user()->company_id)->get();
-                        foreach ($gr as $g){
+                        foreach ($gr as $g) {
                             $gu = GroupsUser::where('group_id', $g->id)
                                 ->where('mobile_user_id', $m->id)
                                 ->first();
-                            if($gu){
+                            if ($gu) {
                                 return $gu->username;
                             }
                         }
                     }
 
 
-                }
-
-                else if($service->type == 3){
+                } else if ($service->type == 3) {
                     $m = MobileUser::where('id', $service->u_s_id)->first();
                     $gr = Group::where('company_id', auth()->user()->company_id)->get();
-                    foreach ($gr as $g){
+                    foreach ($gr as $g) {
                         $gu = GroupsUser::where('group_id', $g->id)
                             ->where('mobile_user_id', $m->id)
                             ->first();
-                        if($gu){
+                        if ($gu) {
                             return $gu->username;
                         }
                     }
-                }
-                else if($service->type == 5){
+                } else if ($service->type == 5) {
                     $m = MobileUser::where('id', $service->u_s_id)->first();
                     $gr = Group::where('company_id', auth()->user()->company_id)->get();
-                    foreach ($gr as $g){
+                    foreach ($gr as $g) {
                         $gu = GroupsUser::where('group_id', $g->id)
                             ->where('mobile_user_id', $m->id)
                             ->first();
-                        if($gu){
+                        if ($gu) {
                             return $gu->username;
                         }
                     }
@@ -847,25 +860,102 @@ class TransactionController extends Controller
 
             })
             ->addColumn('reciever_name', function ($service) {
-                if($service->type == 1){
+                if ($service->type == 1) {
                     $m = MobileUser::where('id', $service->u_r_id)->first();
                     $gr = Group::where('company_id', auth()->user()->company_id)->get();
-                    foreach ($gr as $g){
+                    foreach ($gr as $g) {
                         $gu = GroupsUser::where('group_id', $g->id)
                             ->where('mobile_user_id', $m->id)
                             ->first();
-                        if($gu){
+                        if ($gu) {
                             return $gu->username;
                         }
                     }
 
                 }
             })
-
-
             ->make(true);
 
         return $s;
+
+    }
+
+    public function reportTest(Request $request)
+    {
+
+
+        $minDate = $request->minDate;
+        $maxDate = $request->maxDate;
+        $mobileUserId = $request->mobileUserId;
+        if ($maxDate) {
+            $maxDate = $maxDate . ' 23:59:59';
+        }
+        $serviceId = $request->serviceId;
+//        $service = $request->service;
+//        $type = $request->type;
+
+        $report = DB::select('select
+              t.id,
+               case
+                 when t.type = 1
+                         then case
+                                when company_sender.id is not null then company_sender.phone
+                                when mobile_user_sender.id is not null then mobile_user_sender.phone
+                   end
+                   when t.type = 2
+                         then p.phone
+                 when t.type = 3
+                         then mobile_user_sender.phone
+                 when t.type = 4
+                         then p.phone
+                 when t.type = 5
+                         then mobile_user_sender.phone
+                   end sender,
+               case
+                 when t.type = 1
+                         then case
+                                when company_sender.id is not null then company_sender.name
+                                when mobile_user_sender.id is not null then mobile_user_sender.name
+                   end
+               when t.type = 2
+                     then p.name
+                 when t.type = 3
+                         then mobile_user_sender.name
+                 when t.type = 4
+                         then p.name
+                 when t.type = 5
+                         then mobile_user_sender.phone
+                   end sender_name,
+               s.name  service_name,
+               case
+                 when t.type in (1,3)
+                         then t.amount
+                   end sent,
+               case
+                   when t.type in (2)
+                     then t.amount
+                 when t.type in(4, 5)
+                         then t.amount
+                   end received,
+               t.created_at
+        from transactions t
+               inner join companies_services cs on t.cs_id = cs.id
+               inner join services s on cs.service_id = s.id
+               inner join companies c on cs.company_id = c.id
+               left join partners p on t.p_s_id = p.id
+               left join mobile_users mobile_user_receiver on mobile_user_receiver.id = t.u_r_id
+               left join users cashier_user_receiver on cashier_user_receiver.id = t.u_r_id
+               left join companies company_receiver on company_receiver.id = t.c_r_id
+               left join mobile_users mobile_user_sender on mobile_user_sender.id = t.u_s_id
+               left join companies company_sender on company_sender.id = t.c_s_id
+        
+        WHERE c.id = ?
+        ' . ($minDate ? ' and t.created_at >=  \'' . $minDate . '\'' : '') . '
+        ' . ($maxDate ? ' and t.created_at <=  \'' . $maxDate . '\'' : '') . '
+        ' . ($mobileUserId ? ' and mobile_user_sender.id =  ' . $mobileUserId : '') . '
+        ' . ($serviceId ? ' and s.id =  ' . $serviceId : '') . '
+        order by t.created_at asc', [Auth::user()->company_id]);
+        return DataTables::of($report)->make(true);
 
     }
 
