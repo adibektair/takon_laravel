@@ -344,7 +344,7 @@ class ApiController extends Controller
                 $cashier = User::where('hash', $string)->first();
                 if($cashier){
                     $partner = Partner::where('id', $cashier->partner_id)->first();
-                    return $this->makeResponse(200, true, ['partner_id' => $partner->id, 'partner_name' => $partner->name, 'user_id' => $cashier->id]);
+                    return $this->makeResponse(200, true, ['partner_id' => $partner->id, 'partner_name' => $partner->name, 'user_id' => $cashier->id, 'partner' => $partner]);
                 }
                 return $this->makeResponse(400, false, ['msg' => 'QR код недействительный']);
 
