@@ -1032,7 +1032,18 @@ class ApiController extends Controller
                 })
                 ->whereIn('transactions.type', [1, 5, 3])
                 ->get();
-            return $this->makeResponse(200, true, ['transactions' => $transactions]);
+
+            $arr = [];
+            foreach ($transactions as $transaction) {
+                if (!array_key_exists($transaction->created_at->todatestring(), $arr)) {
+                    $arr[$transaction->created_at->todatestring()] = [$transaction];
+                } else {
+                    $arr[$transaction->created_at->todatestring()][] = $transaction;
+                }
+
+
+            }
+            return $this->makeResponse(200, true, ['history' => ['transactions' => $arr]]);
         } else {
             return $this->makeResponse(401, false, []);
         }
