@@ -17,6 +17,7 @@ use App\Transaction;
 use App\User;
 use App\UsersService;
 use App\UsersSubscriptions;
+use Carbon\Carbon;
 use Couchbase\UserSettings;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -1005,43 +1006,107 @@ class ApiController extends Controller
     {
         $user = MobileUser::where('token', $request->token)->first();
         if ($user) {
-            $transactions = Transaction::select(
-                'transactions.*',
-                'receiver.name as receiver_company_name',
-                'receiver.phone as receiver_company_phone',
-                'sender.name as sender_company_name',
-                'sender.phone as sender_company_phone',
-                'mobile_user_receiver.name as mobile_user_receiver_name',
-                'mobile_user_receiver.phone as mobile_user_receiver_phone',
-                'mobile_user_sender.name as mobile_user_sender_name',
-                'mobile_user_sender.phone as mobile_user_sender_phone'
-            )
-                ->leftJoin('companies as receiver', 'receiver.id', '=', 'transactions.c_r_id')
-                ->leftJoin('companies as sender', 'sender.id', '=', 'transactions.c_s_id')
-                ->leftJoin('mobile_users as mobile_user_receiver', function ($join) use ($user) {
-                    $join->on('mobile_user_receiver.id', '=', 'transactions.u_r_id');
-                    $join->on('mobile_user_receiver.id', '<>', DB::raw($user->id));
-                })
-                ->leftJoin('mobile_users as mobile_user_sender', function ($join) use ($user) {
-                    $join->on('mobile_user_sender.id', '=', 'transactions.u_s_id');
-                    $join->on('mobile_user_sender.id', '<>', DB::raw($user->id));
-                })
-                ->where(function ($query) use ($user) {
-                    $query->where('transactions.u_r_id', '=', $user->id)
-                        ->orWhere('transactions.u_s_id', '=', $user->id);
-                })
-                ->whereIn('transactions.type', [1, 5, 3])
+//            $transactions = Transaction::select(
+//                'transactions.*',
+//                'receiver.name as receiver_company_name',
+//                'receiver.phone as receiver_company_phone',
+//                'sender.name as sender_company_name',
+//                'sender.phone as sender_company_phone',
+//                'mobile_user_receiver.name as mobile_user_receiver_name',
+//                'mobile_user_receiver.phone as mobile_user_receiver_phone',
+//                'mobile_user_sender.name as mobile_user_sender_name',
+//                'mobile_user_sender.phone as mobile_user_sender_phone'
+//            )
+//                ->leftJoin('companies as receiver', 'receiver.id', '=', 'transactions.c_r_id')
+//                ->leftJoin('companies as sender', 'sender.id', '=', 'transactions.c_s_id')
+//                ->leftJoin('mobile_users as mobile_user_receiver', function ($join) use ($user) {
+//                    $join->on('mobile_user_receiver.id', '=', 'transactions.u_r_id');
+//                    $join->on('mobile_user_receiver.id', '<>', DB::raw($user->id));
+//                })
+//                ->leftJoin('mobile_users as mobile_user_sender', function ($join) use ($user) {
+//                    $join->on('mobile_user_sender.id', '=', 'transactions.u_s_id');
+//                    $join->on('mobile_user_sender.id', '<>', DB::raw($user->id));
+//                })
+//                ->where(function ($query) use ($user) {
+//                    $query->where('transactions.u_r_id', '=', $user->id)
+//                        ->orWhere('transactions.u_s_id', '=', $user->id);
+//                })
+//                ->whereIn('transactions.type', [1, 5, 3])
+//                ->get();
+            $model = DB::table('transactions')
+                ->where('u_s_id', $user->id)
+                ->orWhere('u_r_id', $user->id)
+                ->join('services', 'services.id', '=', 'transactions.service_id')
+                ->leftJoin('partners', 'partners.id', '=', 'services.partner_id')
+                ->leftJoin('mobile_users as s_users', 's_users.id', '=', 'transactions.u_s_id')
+                ->leftJoin('mobile_users as r_users', 'r_users.id', '=', 'transactions.u_r_id')
+                ->leftJoin('companies as s_company', 's_company.id', '=', 'transactions.c_s_id')
+                ->leftJoin('companies as return', 'return.id', '=', 'transactions.c_r_id')
+                ->leftJoin('companies_services as cs', 'cs.id', '=', 'transactions.cs_id')
+                ->leftJoin('companies as company', 'cs.company_id', '=', 'company.id')
+                ->select('company.name as company', 's_company.name as s_company', 'transactions.*',
+                    'services.name as service', 's_users.phone as s_user_phone', 'r_users.phone as r_user_phone',
+                    's_users.id as s_user_id', 'r_users.id as r_user_id', 'partners.name as creater', 'return.name as ret_name', 'transactions.type as ttype')
+                ->selectRaw('IFNULL(s_company.name, "TAKON.ORG") AS s_company')
+                ->orderBy('transactions.id', 'asc')
                 ->get();
 
-            $arr = [];
-            foreach ($transactions as $transaction) {
-                if (!array_key_exists($transaction->created_at->todatestring(), $arr)) {
-                    $arr[$transaction->created_at->todatestring()] = [$transaction];
+            $result = [];
+            foreach ($model as $value) {
+
+//                    if($value->id == 51){
+//                        dd($value);
+//                    }
+                if ($value->ttype == 3 AND $user->phone == $value->r_user_phone) {
+
                 } else {
-                    $arr[$transaction->created_at->todatestring()][] = $transaction;
+                    $el["service"] = $value->service;
+//                    $el["company"] = $value->company;
+                    $el["date"] = $value->created_at;
+                    $el["company"] = $value->creater;
+
+                    if ($user->phone == $value->s_user_phone) {
+                        $el["amount"] = -$value->amount;
+                        if ($value->r_user_id) {
+                            if ($value->ttype == 3) {
+                                $suser = User::where('id', $value->r_user_id)->first();
+                                $partner = Partner::where('id', $suser->partner_id)->first();
+                                $el['contragent'] = $partner->name . " (" . $suser->name . ")";
+                            } else {
+                                $el['contragent'] = $value->r_user_phone;
+                            }
+
+                        } else {
+                            if ($value->ttype == 3) {
+                                $suser = User::where('id', $value->u_r_id)->first();
+                                $partner = Partner::where('id', $suser->partner_id)->first();
+                                $el['contragent'] = $partner->name . " (" . $suser->name . ")";
+                            }
+                        }
+                        if ($value->ttype == 5) {
+                            $el['contragent'] = $value->ret_name;
+                        }
+                    } else {
+                        $el["amount"] = +$value->amount;
+                        if ($value->s_user_phone) {
+                            $el['contragent'] = $value->s_user_phone;
+                        } else {
+                            $el['contragent'] = $value->s_company;
+                        }
+                    }
+
+                    array_push($result, $el);
                 }
 
+            }
 
+            $arr = [];
+            foreach ($result as $transaction) {
+                if (!array_key_exists($this->getDateFrom($transaction['date'])->todatestring(), $arr)) {
+                    $arr[$this->getDateFrom($transaction['date'])->todatestring()] = [$transaction];
+                } else {
+                    $arr[$this->getDateFrom($transaction['date'])->todatestring()][] = $transaction;
+                }
             }
             return $this->makeResponse(200, true, ['history' => ['transactions' => $arr]]);
         } else {
@@ -1049,6 +1114,10 @@ class ApiController extends Controller
         }
     }
 
+    public function getDateFrom($time)
+    {
+        return Carbon::parse($time);
+    }
 
     public function complete(Request $request)
     {
