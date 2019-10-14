@@ -89,7 +89,6 @@ class OrderController extends Controller
      */
     public function destroy(Order $order)
     {
-        //
     }
 
     public function all(){
@@ -100,8 +99,6 @@ class OrderController extends Controller
             ->join('partners', 'partners.id', '=', 'services.partner_id')
             ->select('users.name as username', 'companies.phone as userphone', 'partners.name as partner', 'partners.phone as partner_phone', 'services.name as service', 'orders.*')
             ->orderBy('orders.status', 'asc');
-
-
 
 
             return Datatables::of($orders)
@@ -134,8 +131,8 @@ class OrderController extends Controller
 
         $service = Service::where('id', '=', $order->service_id)->first();
         if($order->save()){
-            $message = new Notification();
-            $message1 = new Notification();
+//            $message = new Notification();
+//            $message1 = new Notification();
             if($request->confirm == 3){
 
 
@@ -156,30 +153,30 @@ class OrderController extends Controller
                     $model->save();
                 }
 
-                $message->status = 'success';
-                $message->title = 'Товар или услуга успешно были успешно приобретены';
-                $message->message = $service->name . ' был(а) успешно приобретен(а)';
-                $message->reciever_company_id = $company->id;
-
-                $message1->status = 'success';
-                $message1->title = 'Товар или услуга успешно были успешно проданы';
-                $message1->message = $service->name . ' был(а) успешно продан(а)';
-                $message1->reciever_partner_id = $service->partner_id;
+//                $message->status = 'success';
+//                $message->title = 'Товар или услуга успешно были успешно приобретены';
+//                $message->message = $service->name . ' был(а) успешно приобретен(а)';
+//                $message->reciever_company_id = $company->id;
+//
+//                $message1->status = 'success';
+//                $message1->title = 'Товар или услуга успешно были успешно проданы';
+//                $message1->message = $service->name . ' был(а) успешно продан(а)';
+//                $message1->reciever_partner_id = $service->partner_id;
             }else{
 
-                $message->status = 'error';
-                $message->title = 'Транзакция не прошла модерацию';
-                $message->message = $service->name . ' не был(а) приобретен(а) по причине - ' . $request->reason;
-                $message->reciever_company_id  = $company->id;
-
-                $message1->status = 'error';
-                $message1->title = 'Транзакция не прошла модерацию';
-                $message1->message = $service->name . ' не был(а) продан(а) по причине - ' . $request->reason;
-                $message1->reciever_partner_id = $service->partner_id;
+//                $message->status = 'error';
+//                $message->title = 'Транзакция не прошла модерацию';
+//                $message->message = $service->name . ' не был(а) приобретен(а) по причине - ' . $request->reason;
+//                $message->reciever_company_id  = $company->id;
+//
+//                $message1->status = 'error';
+//                $message1->title = 'Транзакция не прошла модерацию';
+//                $message1->message = $service->name . ' не был(а) продан(а) по причине - ' . $request->reason;
+//                $message1->reciever_partner_id = $service->partner_id;
             }
-
-            $message->save();
-            $message1->save();
+//
+//            $message->save();
+//            $message1->save();
 
             return view('orders/index');
         }else{
