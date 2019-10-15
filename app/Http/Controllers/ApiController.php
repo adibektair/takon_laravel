@@ -1104,9 +1104,13 @@ class ApiController extends Controller
             $arr = [];
             foreach ($result as $transaction) {
                 if (!array_key_exists($this->getDateFrom($transaction['date'])->todatestring(), $arr)) {
-                    $arr[$this->getDateFrom($transaction['date'])->todatestring()] = [$transaction];
+                    $arr["date"] = $this->getDateFrom($transaction['date'])->todatestring();
+                    // $arr[$this->getDateFrom($transaction['date'])->todatestring()] = [$transaction];
+                    $arr["transaction"] = [$transaction];
                 } else {
-                    $arr[$this->getDateFrom($transaction['date'])->todatestring()][] = $transaction;
+                    $arr["date"] = $this->getDateFrom($transaction['date'])->todatestring();
+                    //$arr[$this->getDateFrom($transaction['date'])->todatestring()][] = $transaction;
+                    $arr["transaction"][] = $transaction;
                 }
             }
             return $this->makeResponse(200, true, ['history' => ['transactions' => $arr]]);
