@@ -347,7 +347,7 @@ class CompanyController extends Controller
             ->where('users_services.amount', '<>', 0)
             ->join('services', 'services.id', '=', 'users_services.service_id')
             ->join('mobile_users', 'mobile_users.id', '=', 'users_services.mobile_user_id')
-            ->select('users_services.*', 'mobile_users.phone', 'services.name as service')->get();
+            ->select('users_services.*', 'mobile_users.phone','mobile_users.name as m_name', 'services.name as service')->get();
 
         return Datatables::of($users)
             ->addColumn('return', function ($user) {

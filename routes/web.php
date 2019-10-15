@@ -147,6 +147,7 @@ Route::group(['middleware' => ['authenticated']], function () {
             //REPORTS
             Route::get('/report-by-company', ['as' => 'report.by.company', 'uses' => 'ReportController@reportByCompany']);
             Route::get('/api/report-by-company', ['as' => 'ajax.report.by.company', 'uses' => 'Ajax\ReportController@reportByCompany']);
+            Route::post('/api/report-by-company-json', ['as' => 'ajax.report.by.companyJson', 'uses' => 'Ajax\ReportController@reportByCompanyAjax']);
 
             //SERVICES
             Route::get('/services/moderation', function () {

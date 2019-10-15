@@ -94,45 +94,45 @@
 
                 <div class="row">
 
-                    <input type="button" id="test" onClick="fnExcelReport();" value="download" />
+                    <input type="button" id="test" onClick="fnExcelReport();" value="download"/>
 
                     <div id='MessageHolder'></div>
 
                     <a href="#" id="testAnchor"></a>
 
                     {{--<div class="col-md-6">--}}
-                        {{--<table class="table table-bordered" id="report1">--}}
-                            {{--<thead>--}}
-                            {{--<tr>--}}
-                                {{--<th>#</th>--}}
-                                {{--<th>Топливо</th>--}}
-                                {{--<th>Баланс на начало</th>--}}
-                                {{--<th>Пополнено</th>--}}
-                                {{--<th>Отправлено</th>--}}
-                                {{--<th>Возврат</th>--}}
-                                {{--<th>Баланс на конец</th>--}}
-                            {{--</tr>--}}
-                            {{--</thead>--}}
-                            {{--<tbody>--}}
-                            {{--</tbody>--}}
-                        {{--</table>--}}
+                    {{--<table class="table table-bordered" id="report1">--}}
+                    {{--<thead>--}}
+                    {{--<tr>--}}
+                    {{--<th>#</th>--}}
+                    {{--<th>Топливо</th>--}}
+                    {{--<th>Баланс на начало</th>--}}
+                    {{--<th>Пополнено</th>--}}
+                    {{--<th>Отправлено</th>--}}
+                    {{--<th>Возврат</th>--}}
+                    {{--<th>Баланс на конец</th>--}}
+                    {{--</tr>--}}
+                    {{--</thead>--}}
+                    {{--<tbody>--}}
+                    {{--</tbody>--}}
+                    {{--</table>--}}
                     {{--</div>--}}
                     {{--<div class="col-md-6">--}}
-                        {{--<table class="table table-bordered" id="report2">--}}
-                            {{--<thead>--}}
-                            {{--<tr>--}}
-                                {{--<th>#</th>--}}
-                                {{--<th>Отправитель</th>--}}
-                                {{--<th>Имя отправителя</th>--}}
-                                {{--<th>Услуга/Товар</th>--}}
-                                {{--<th>Получено</th>--}}
-                                {{--<th>Отправлено</th>--}}
-                                {{--<th>Дата</th>--}}
-                            {{--</tr>--}}
-                            {{--</thead>--}}
-                            {{--<tbody>--}}
-                            {{--</tbody>--}}
-                        {{--</table>--}}
+                    {{--<table class="table table-bordered" id="report2">--}}
+                    {{--<thead>--}}
+                    {{--<tr>--}}
+                    {{--<th>#</th>--}}
+                    {{--<th>Отправитель</th>--}}
+                    {{--<th>Имя отправителя</th>--}}
+                    {{--<th>Услуга/Товар</th>--}}
+                    {{--<th>Получено</th>--}}
+                    {{--<th>Отправлено</th>--}}
+                    {{--<th>Дата</th>--}}
+                    {{--</tr>--}}
+                    {{--</thead>--}}
+                    {{--<tbody>--}}
+                    {{--</tbody>--}}
+                    {{--</table>--}}
                     {{--</div>--}}
                     <div class="col-sm-12">
                         <table class="table table-bordered" id="table">
@@ -436,10 +436,23 @@
 
         function fetchDataForReport() {
             showOverlay();
-
-            fetchFirst();
-            fetchSecond();
-
+            var arr = [];
+            arr[0] = fetchFirst();
+            arr[1] = fetchSecond();
+            $.ajax({
+                url: '{{route('ajax.report.by.companyJson')}}',
+                type: 'post',
+                async:false,
+                data: {
+                    data:  arr[0]
+                },
+                success: (resp) => {
+                    console.log(resp);
+                },
+                error: (resp) => {
+                    console.log(resp);
+                }
+            });
             hideOverlay();
         }
 
