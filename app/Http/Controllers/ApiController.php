@@ -1104,7 +1104,6 @@ class ApiController extends Controller
             $arr = [];
             foreach ($result as $transaction) {
                 if (!array_key_exists($this->getDateFrom($transaction['date'])->todatestring(), $arr)) {
-                    $arr["date"] = $this->getDateFrom($transaction['date'])->todatestring();
                     $arr[$this->getDateFrom($transaction['date'])->todatestring()] = [$transaction];
                 } else {
                     $arr[$this->getDateFrom($transaction['date'])->todatestring()][] = $transaction;
