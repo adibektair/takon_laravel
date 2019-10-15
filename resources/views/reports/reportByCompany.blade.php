@@ -86,49 +86,54 @@
                         <div class="col-sm-6">
                             <label>Получить данные </label>
                             <br>
-                            <a class="btn btn-danger m-1" onclick="fetchDataForReport1()">Отчет 1<span
-                                        class="fa fa-file-o"></span></a>
-                            <a class="btn btn-danger m-1" onclick="fetchDataForReport2()">Отчет 2<span
+                            <a class="btn btn-danger m-1" onclick="fetchDataForReport()">Отчет<span
                                         class="fa fa-file-o"></span></a>
                         </div>
                     </div>
                 </form>
 
                 <div class="row">
-                    <div class="col-md-6">
-                        <table class="table table-bordered" id="report1">
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Топливо</th>
-                                <th>Баланс на начало</th>
-                                <th>Пополнено</th>
-                                <th>Отправлено</th>
-                                <th>Возврат</th>
-                                <th>Баланс на конец</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="col-md-6">
-                        <table class="table table-bordered" id="report2">
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Отправитель</th>
-                                <th>Имя отправителя</th>
-                                <th>Услуга/Товар</th>
-                                <th>Получено</th>
-                                <th>Отправлено</th>
-                                <th>Дата</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </div>
+
+                    <input type="button" id="test" onClick="fnExcelReport();" value="download" />
+
+                    <div id='MessageHolder'></div>
+
+                    <a href="#" id="testAnchor"></a>
+
+                    {{--<div class="col-md-6">--}}
+                        {{--<table class="table table-bordered" id="report1">--}}
+                            {{--<thead>--}}
+                            {{--<tr>--}}
+                                {{--<th>#</th>--}}
+                                {{--<th>Топливо</th>--}}
+                                {{--<th>Баланс на начало</th>--}}
+                                {{--<th>Пополнено</th>--}}
+                                {{--<th>Отправлено</th>--}}
+                                {{--<th>Возврат</th>--}}
+                                {{--<th>Баланс на конец</th>--}}
+                            {{--</tr>--}}
+                            {{--</thead>--}}
+                            {{--<tbody>--}}
+                            {{--</tbody>--}}
+                        {{--</table>--}}
+                    {{--</div>--}}
+                    {{--<div class="col-md-6">--}}
+                        {{--<table class="table table-bordered" id="report2">--}}
+                            {{--<thead>--}}
+                            {{--<tr>--}}
+                                {{--<th>#</th>--}}
+                                {{--<th>Отправитель</th>--}}
+                                {{--<th>Имя отправителя</th>--}}
+                                {{--<th>Услуга/Товар</th>--}}
+                                {{--<th>Получено</th>--}}
+                                {{--<th>Отправлено</th>--}}
+                                {{--<th>Дата</th>--}}
+                            {{--</tr>--}}
+                            {{--</thead>--}}
+                            {{--<tbody>--}}
+                            {{--</tbody>--}}
+                        {{--</table>--}}
+                    {{--</div>--}}
                     <div class="col-sm-12">
                         <table class="table table-bordered" id="table">
                             <thead>
@@ -326,8 +331,8 @@
         // then 'p2c'
         // when t.type = 5
         // then 'return'
-        function fetchDataForReport1() {
-            showOverlay();
+
+        function fetchFirst() {
             var names = [];
             var data = table.rows().data();
             var map = [];
@@ -386,36 +391,11 @@
             for (var key in map) {
                 data.push(map[key]);
             }
-            $("#report1").dataTable().fnDestroy()
 
-            $('#report1').DataTable({
-                "data": data,
-                responsive: true,
-                columns: [
-                    {"data": "itemId"},
-                    {"data": "itemName"},
-                    {"data": "startBalance"},
-                    {"data": "givenBalance"},
-                    {"data": "sent"},
-                    {"data": "returned"},
-                    {"data": "lastBalance"}
-                ],
-                language: {
-                    url: '{{asset('admin/bower_components/datatable/js/ru.locale.json')}}',
-                },
-                buttons: {
-                    buttons: [
-                        {extend: 'excel', className: 'btn btn-success'}
-                    ]
-                },
-                dom: 'Bfrltip',
-            });
-            hideOverlay();
-
+            return data;
         }
 
-        function fetchDataForReport2() {
-            showOverlay();
+        function fetchSecond() {
             var names = [];
             var data = table.rows().data();
             var map = [];
@@ -428,7 +408,7 @@
 
                 if (cell.c_s_id == $('#company').val()) {
                     var secondResponse = new SecondReport(++index);
-                    secondResponse.sender = cell.receiver  ? cell.receiver : '';
+                    secondResponse.sender = cell.receiver ? cell.receiver : '';
                     secondResponse.senderName = cell.reciever_name ? cell.reciever_name : '';
                     secondResponse.itemId = cell.service_id;
                     secondResponse.item = cell.name;
@@ -440,7 +420,7 @@
 
                 if (cell.c_r_id == $('#company').val()) {
                     var secondResponse = new SecondReport(++index);
-                    secondResponse.sender = cell.sender  ? cell.sender : '';
+                    secondResponse.sender = cell.sender ? cell.sender : '';
                     secondResponse.senderName = cell.sender_name ? cell.sender_name : '';
                     secondResponse.itemId = cell.service_id;
                     secondResponse.item = cell.name;
@@ -450,33 +430,17 @@
                     info.push(secondResponse);
                 }
             }
-            console.log(info)
-            $("#report2").dataTable().fnDestroy()
 
-            $('#report2').DataTable({
-                "data": info,
-                responsive: true,
-                columns: [
-                    {"data": "number"},
-                    {"data": "sender"},
-                    {"data": "senderName"},
-                    {"data": "item"},
-                    {"data": "sent"},
-                    {"data": "received"},
-                    {"data": "created_at"}
-                ],
-                language: {
-                    url: '{{asset('admin/bower_components/datatable/js/ru.locale.json')}}',
-                },
-                buttons: {
-                    buttons: [
-                        {extend: 'excel', className: 'btn btn-success'}
-                    ]
-                },
-                dom: 'Bfrltip',
-            });
+            return info;
+        }
+
+        function fetchDataForReport() {
+            showOverlay();
+
+            fetchFirst();
+            fetchSecond();
+
             hideOverlay();
-
         }
 
         function showOverlay() {
