@@ -93,47 +93,6 @@
                 </form>
 
                 <div class="row">
-
-                    <input type="button" id="test" onClick="fnExcelReport();" value="download"/>
-
-                    <div id='MessageHolder'></div>
-
-                    <a href="#" id="testAnchor"></a>
-
-                    {{--<div class="col-md-6">--}}
-                    {{--<table class="table table-bordered" id="report1">--}}
-                    {{--<thead>--}}
-                    {{--<tr>--}}
-                    {{--<th>#</th>--}}
-                    {{--<th>Топливо</th>--}}
-                    {{--<th>Баланс на начало</th>--}}
-                    {{--<th>Пополнено</th>--}}
-                    {{--<th>Отправлено</th>--}}
-                    {{--<th>Возврат</th>--}}
-                    {{--<th>Баланс на конец</th>--}}
-                    {{--</tr>--}}
-                    {{--</thead>--}}
-                    {{--<tbody>--}}
-                    {{--</tbody>--}}
-                    {{--</table>--}}
-                    {{--</div>--}}
-                    {{--<div class="col-md-6">--}}
-                    {{--<table class="table table-bordered" id="report2">--}}
-                    {{--<thead>--}}
-                    {{--<tr>--}}
-                    {{--<th>#</th>--}}
-                    {{--<th>Отправитель</th>--}}
-                    {{--<th>Имя отправителя</th>--}}
-                    {{--<th>Услуга/Товар</th>--}}
-                    {{--<th>Получено</th>--}}
-                    {{--<th>Отправлено</th>--}}
-                    {{--<th>Дата</th>--}}
-                    {{--</tr>--}}
-                    {{--</thead>--}}
-                    {{--<tbody>--}}
-                    {{--</tbody>--}}
-                    {{--</table>--}}
-                    {{--</div>--}}
                     <div class="col-sm-12">
                         <table class="table table-bordered" id="table">
                             <thead>
@@ -171,6 +130,7 @@
 @endsection
 
 @section('scripts')
+    <script src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
     <script>
         var table;
         $(document).ready(function () {
@@ -246,7 +206,6 @@
                 }
             });
         })
-        ;
 
 
         var newExportAction = function (e, dt, button, config) {
@@ -320,17 +279,6 @@
                 this.created_at = ''
             }
         }
-
-        // when t.type = 1
-        // then 'u(c)2u'
-        // when t.type = 2
-        // then 'order'
-        // when t.type = 3
-        // then 'use'
-        // when t.type = 4
-        // then 'p2c'
-        // when t.type = 5
-        // then 'return'
 
         function fetchFirst() {
             var names = [];
@@ -436,23 +384,55 @@
 
         function fetchDataForReport() {
             showOverlay();
-            var arr = [];
-            arr[0] = fetchFirst();
-            arr[1] = fetchSecond();
-            $.ajax({
-                url: '{{route('ajax.report.by.companyJson')}}',
-                type: 'post',
-                async:false,
-                data: {
-                    data:  arr[0]
-                },
-                success: (resp) => {
-                    console.log(resp);
-                },
-                error: (resp) => {
-                    console.log(resp);
-                }
-            });
+
+            var header = [
+                '#',
+                'Топливо',
+                'Баланс на начало',
+                'Пополнено',
+                'Отправлено',
+                'Возврат',
+                'Баланс на конец'
+            ];
+            var report = fetchFirst();
+            var rows = [];
+            for (var i = 0; i < report.length; i++) {
+                rows.push({
+                    '#': report[i].id,
+                    'Топливо': report[i].itemName,
+                    'Баланс на начало': report[i].startBalance,
+                    'Пополнено': report[i].givenBalance,
+                    'Отправлено': report[i].sent,
+                    'Возврат': report[i].returned,
+                    'Баланс на конец': report[i].lastBalance,
+                })
+            }
+            var header1 = [
+                '#',
+                'Отправитель',
+                'Имя отправителя',
+                'Услуга/Товар',
+                'Получено',
+                'Отправлено',
+                'Дата'
+            ];
+
+            var report1 = fetchSecond();
+            var rows1 = [];
+            for (var i = 0; i < report1.length; i++) {
+                rows1.push({
+                    '#': report1[i].number,
+                    'Отправитель': report1[i].sender,
+                    'Имя отправителя': report1[i].senderName,
+                    'Услуга/Товар': report1[i].item,
+                    'Получено': report1[i].received,
+                    'Отправлено': report1[i].sent,
+                    'Дата': report1[i].created_at,
+                })
+            }
+
+            var text = `Отчет по '${$('#company option:selected').text()}' с ${$('#min').val()} по ${$('#max').val()}`;
+            excel([[text], header, header1,], [[], rows, rows1]);
             hideOverlay();
         }
 
@@ -462,6 +442,44 @@
 
         function hideOverlay() {
             $('#overlay').fadeOut();
+        }
+
+        function excel(xlsHeaders, xlsRows) {
+            var createXLSLFormatObj = [];
+
+
+            if (xlsHeaders.length == xlsRows.length) {
+
+                for (var i = 0; i < xlsHeaders.length; i++) {
+
+                    createXLSLFormatObj.push(xlsHeaders[i]);
+                    $.each(xlsRows[i], function (index, value) {
+                        var innerRowData = [];
+                        $.each(value, function (ind, val) {
+
+                            innerRowData.push(val);
+                        });
+                        createXLSLFormatObj.push(innerRowData);
+                    });
+                    createXLSLFormatObj.push([]);
+                    createXLSLFormatObj.push([]);
+
+                }
+
+            } else {
+                throw Error('Rows and headers not suffice');
+            }
+
+            /* File Name */
+            var filename = "Отчет.xlsx";
+
+            /* Sheet Name */
+            var ws_name = "Отчет";
+
+            var wb = XLSX.utils.book_new(),
+                ws = XLSX.utils.aoa_to_sheet(createXLSLFormatObj);
+            XLSX.utils.book_append_sheet(wb, ws, ws_name);
+            XLSX.writeFile(wb, filename);
         }
     </script>
 
