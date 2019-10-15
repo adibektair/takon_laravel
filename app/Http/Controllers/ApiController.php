@@ -624,7 +624,7 @@ class ApiController extends Controller
         $token = $request->token;
         $user = MobileUser::where('token', $token)->first();
         if ($user) {
-            if ($user->phone == "77005554797" OR $user->phone == "77777018009") {
+            if ($user->phone == "77005554797") {
                 $result = DB::table('transactions')
                     ->where('transactions.type', 3)
                     ->join('services', 'services.id', '=', 'transactions.service_id')
@@ -1046,7 +1046,7 @@ class ApiController extends Controller
                 ->leftJoin('companies as company', 'cs.company_id', '=', 'company.id')
                 ->select('company.name as company', 's_company.name as s_company', 'transactions.*',
                     'services.name as service', 's_users.phone as s_user_phone', 'r_users.phone as r_user_phone',
-                    's_users.id as s_user_id', 'r_users.id as r_user_id', 'partners.name as creater', 'return.name as ret_name', 'transactions.type as ttype')
+                    's_users.id as s_user_id', 'r_users.id as r_user_id', 'partners.name as creater', 'partners.image_path as image', 'return.name as ret_name', 'transactions.type as ttype')
                 ->selectRaw('IFNULL(s_company.name, "TAKON.ORG") AS s_company')
                 ->orderBy('transactions.id', 'asc')
                 ->get();
@@ -1064,6 +1064,7 @@ class ApiController extends Controller
 //                    $el["company"] = $value->company;
                     $el["date"] = $value->created_at;
                     $el["company"] = $value->creater;
+                    $el["image_path"] = $value->image;
 
                     if ($user->phone == $value->s_user_phone) {
                         $el["amount"] = -$value->amount;
