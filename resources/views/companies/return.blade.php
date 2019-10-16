@@ -23,6 +23,7 @@
             <thead>
             <tr>
                 <th >#</th>
+                <th >Имя</th>
                 <th >Телефон</th>
                 <th >Услуга</th>
                 <th >Количество</th>
@@ -56,6 +57,7 @@
                 ajax: "{{ route('get.return') }}",
                 columns: [
                     { data: 'id', name: 'id' },
+                    { data: 'm_name', name: 'm_name' },
                     { data: 'phone', name: 'namephone' },
                     { data: 'service', name: 'service' },
                     { data: 'amount', name: 'amount'},

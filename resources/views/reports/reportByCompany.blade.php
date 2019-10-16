@@ -86,49 +86,13 @@
                         <div class="col-sm-6">
                             <label>Получить данные </label>
                             <br>
-                            <a class="btn btn-danger m-1" onclick="fetchDataForReport1()">Отчет 1<span
-                                        class="fa fa-file-o"></span></a>
-                            <a class="btn btn-danger m-1" onclick="fetchDataForReport2()">Отчет 2<span
+                            <a class="btn btn-danger m-1" onclick="fetchDataForReport()">Отчет<span
                                         class="fa fa-file-o"></span></a>
                         </div>
                     </div>
                 </form>
 
                 <div class="row">
-                    <div class="col-md-6">
-                        <table class="table table-bordered" id="report1">
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Топливо</th>
-                                <th>Баланс на начало</th>
-                                <th>Пополнено</th>
-                                <th>Отправлено</th>
-                                <th>Возврат</th>
-                                <th>Баланс на конец</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="col-md-6">
-                        <table class="table table-bordered" id="report2">
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Отправитель</th>
-                                <th>Имя отправителя</th>
-                                <th>Услуга/Товар</th>
-                                <th>Получено</th>
-                                <th>Отправлено</th>
-                                <th>Дата</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </div>
                     <div class="col-sm-12">
                         <table class="table table-bordered" id="table">
                             <thead>
@@ -166,6 +130,7 @@
 @endsection
 
 @section('scripts')
+    <script src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
     <script>
         var table;
         $(document).ready(function () {
@@ -241,7 +206,6 @@
                 }
             });
         })
-        ;
 
 
         var newExportAction = function (e, dt, button, config) {
@@ -316,18 +280,7 @@
             }
         }
 
-        // when t.type = 1
-        // then 'u(c)2u'
-        // when t.type = 2
-        // then 'order'
-        // when t.type = 3
-        // then 'use'
-        // when t.type = 4
-        // then 'p2c'
-        // when t.type = 5
-        // then 'return'
-        function fetchDataForReport1() {
-            showOverlay();
+        function fetchFirst() {
             var names = [];
             var data = table.rows().data();
             var map = [];
@@ -386,36 +339,11 @@
             for (var key in map) {
                 data.push(map[key]);
             }
-            $("#report1").dataTable().fnDestroy()
 
-            $('#report1').DataTable({
-                "data": data,
-                responsive: true,
-                columns: [
-                    {"data": "itemId"},
-                    {"data": "itemName"},
-                    {"data": "startBalance"},
-                    {"data": "givenBalance"},
-                    {"data": "sent"},
-                    {"data": "returned"},
-                    {"data": "lastBalance"}
-                ],
-                language: {
-                    url: '{{asset('admin/bower_components/datatable/js/ru.locale.json')}}',
-                },
-                buttons: {
-                    buttons: [
-                        {extend: 'excel', className: 'btn btn-success'}
-                    ]
-                },
-                dom: 'Bfrltip',
-            });
-            hideOverlay();
-
+            return data;
         }
 
-        function fetchDataForReport2() {
-            showOverlay();
+        function fetchSecond() {
             var names = [];
             var data = table.rows().data();
             var map = [];
@@ -428,7 +356,7 @@
 
                 if (cell.c_s_id == $('#company').val()) {
                     var secondResponse = new SecondReport(++index);
-                    secondResponse.sender = cell.receiver  ? cell.receiver : '';
+                    secondResponse.sender = cell.receiver ? cell.receiver : '';
                     secondResponse.senderName = cell.reciever_name ? cell.reciever_name : '';
                     secondResponse.itemId = cell.service_id;
                     secondResponse.item = cell.name;
@@ -440,7 +368,7 @@
 
                 if (cell.c_r_id == $('#company').val()) {
                     var secondResponse = new SecondReport(++index);
-                    secondResponse.sender = cell.sender  ? cell.sender : '';
+                    secondResponse.sender = cell.sender ? cell.sender : '';
                     secondResponse.senderName = cell.sender_name ? cell.sender_name : '';
                     secondResponse.itemId = cell.service_id;
                     secondResponse.item = cell.name;
@@ -450,33 +378,62 @@
                     info.push(secondResponse);
                 }
             }
-            console.log(info)
-            $("#report2").dataTable().fnDestroy()
 
-            $('#report2').DataTable({
-                "data": info,
-                responsive: true,
-                columns: [
-                    {"data": "number"},
-                    {"data": "sender"},
-                    {"data": "senderName"},
-                    {"data": "item"},
-                    {"data": "sent"},
-                    {"data": "received"},
-                    {"data": "created_at"}
-                ],
-                language: {
-                    url: '{{asset('admin/bower_components/datatable/js/ru.locale.json')}}',
-                },
-                buttons: {
-                    buttons: [
-                        {extend: 'excel', className: 'btn btn-success'}
-                    ]
-                },
-                dom: 'Bfrltip',
-            });
+            return info;
+        }
+
+        function fetchDataForReport() {
+            showOverlay();
+
+            var header = [
+                '#',
+                'Топливо',
+                'Баланс на начало',
+                'Пополнено',
+                'Отправлено',
+                'Возврат',
+                'Баланс на конец'
+            ];
+            var report = fetchFirst();
+            var rows = [];
+            for (var i = 0; i < report.length; i++) {
+                rows.push({
+                    '#': report[i].id,
+                    'Топливо': report[i].itemName,
+                    'Баланс на начало': report[i].startBalance,
+                    'Пополнено': report[i].givenBalance,
+                    'Отправлено': report[i].sent,
+                    'Возврат': report[i].returned,
+                    'Баланс на конец': report[i].lastBalance,
+                })
+            }
+            var header1 = [
+                '#',
+                'Отправитель',
+                'Имя отправителя',
+                'Услуга/Товар',
+                'Получено',
+                'Отправлено',
+                'Дата'
+            ];
+
+            var report1 = fetchSecond();
+            var rows1 = [];
+            for (var i = 0; i < report1.length; i++) {
+                rows1.push({
+                    '#': report1[i].number,
+                    'Отправитель': report1[i].sender,
+                    'Имя отправителя': report1[i].senderName,
+                    'Услуга/Товар': report1[i].item,
+                    'Получено': report1[i].received,
+                    'Отправлено': report1[i].sent,
+                    'Дата': report1[i].created_at,
+                })
+            }
+
+            var text = `Отчет по '${$('#company option:selected').text()}' с ${$('#min').val()} по ${$('#max').val()}`;
+            excel([[text], header, header1,], [[], rows, rows1]);
             hideOverlay();
-
         }
 
         function showOverlay() {
@@ -485,6 +442,44 @@
 
         function hideOverlay() {
             $('#overlay').fadeOut();
+        }
+
+        function excel(xlsHeaders, xlsRows) {
+            var createXLSLFormatObj = [];
+
+
+            if (xlsHeaders.length == xlsRows.length) {
+
+                for (var i = 0; i < xlsHeaders.length; i++) {
+
+                    createXLSLFormatObj.push(xlsHeaders[i]);
+                    $.each(xlsRows[i], function (index, value) {
+                        var innerRowData = [];
+                        $.each(value, function (ind, val) {
+
+                            innerRowData.push(val);
+                        });
+                        createXLSLFormatObj.push(innerRowData);
+                    });
+                    createXLSLFormatObj.push([]);
+                    createXLSLFormatObj.push([]);
+
+                }
+
+            } else {
+                throw Error('Rows and headers not suffice');
+            }
+
+            /* File Name */
+            var filename = "Отчет.xlsx";
+
+            /* Sheet Name */
+            var ws_name = "Отчет";
+
+            var wb = XLSX.utils.book_new(),
+                ws = XLSX.utils.aoa_to_sheet(createXLSLFormatObj);
+            XLSX.utils.book_append_sheet(wb, ws, ws_name);
+            XLSX.writeFile(wb, filename);
         }
     </script>
 

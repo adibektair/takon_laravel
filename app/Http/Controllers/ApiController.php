@@ -1109,7 +1109,11 @@ class ApiController extends Controller
                     $arr[$this->getDateFrom($transaction['date'])->todatestring()][] = $transaction;
                 }
             }
-            return $this->makeResponse(200, true, ['history' => ['transactions' => $arr]]);
+            $newarr = [];
+            foreach ($arr as $key => $value){
+                $newarr[] = ['date' => $key, 'transactions' => $value];
+            }
+            return $this->makeResponse(200, true, ['history' => $newarr]);
         } else {
             return $this->makeResponse(401, false, []);
         }

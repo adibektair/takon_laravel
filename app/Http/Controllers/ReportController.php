@@ -12,4 +12,5 @@ class ReportController extends Controller
         $companies = Company::all();
         return view('reports.reportByCompany', compact('companies'));
     }
+
 }
