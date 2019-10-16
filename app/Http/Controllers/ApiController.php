@@ -92,7 +92,7 @@ class ApiController extends Controller
                 }
                 $user->save();
 
-                return $this->makeResponse(200, true, ["token" => $token]);
+                return $this->makeResponse(200, true, ["token" => $token, "user" => $user]);
             } else {
                 return $this->makeResponse(401, false, ["message" => 'wrong code']);
             }
