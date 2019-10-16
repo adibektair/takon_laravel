@@ -1131,6 +1131,16 @@ class ApiController extends Controller
         $user->save();
         return $this->makeResponse(200, true, ["user" => $user]);
     }
+    public function removeCardById(Request $request){
+        $user = MobileUser::where("token", $request->token)->first();
+        $card = Card::where("id", $request->id)->where("mobile_user_id", $user->id)->first();
+        if ($card){
+            $card->delete();
+            return $this->makeResponse(200, true, []);
+        }else{
+            return $this->makeResponse(200, false, []);
+        }
+    }
 
     public function getDateFrom($time)
     {
