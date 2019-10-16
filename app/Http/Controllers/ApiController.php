@@ -1119,6 +1119,19 @@ class ApiController extends Controller
         }
     }
 
+    public function getProfile(Request $request){
+        $user = MobileUser::where('token', $request->token)->first();
+        return $this->makeResponse(200, true, ["user" => $user]);
+    }
+    public function setProfile(Request $request){
+        $user = MobileUser::where('token', $request->token)->first();
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        $user->iin = $request->iin;
+        $user->save();
+        return $this->makeResponse(200, true, ["user" => $user]);
+    }
+
     public function getDateFrom($time)
     {
         return Carbon::parse($time);
