@@ -92,7 +92,7 @@ class ApiController extends Controller
                 }
                 $user->save();
 
-                return $this->makeResponse(200, true, ["token" => $token]);
+                return $this->makeResponse(200, true, ["token" => $token, "user" => $user]);
             } else {
                 return $this->makeResponse(401, false, ["message" => 'wrong code']);
             }
@@ -1116,6 +1116,29 @@ class ApiController extends Controller
             return $this->makeResponse(200, true, ['history' => $newarr]);
         } else {
             return $this->makeResponse(401, false, []);
+        }
+    }
+
+    public function getProfile(Request $request){
+        $user = MobileUser::where('token', $request->token)->first();
+        return $this->makeResponse(200, true, ["user" => $user]);
+    }
+    public function setProfile(Request $request){
+        $user = MobileUser::where('token', $request->token)->first();
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        $user->iin = $request->iin;
+        $user->save();
+        return $this->makeResponse(200, true, ["user" => $user]);
+    }
+    public function removeCardById(Request $request){
+        $user = MobileUser::where("token", $request->token)->first();
+        $card = Card::where("id", $request->id)->where("mobile_user_id", $user->id)->first();
+        if ($card){
+            $card->delete();
+            return $this->makeResponse(200, true, []);
+        }else{
+            return $this->makeResponse(200, false, []);
         }
     }
 
