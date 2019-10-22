@@ -1157,7 +1157,7 @@ class ApiController extends Controller
             }
             array_push($array, $obj);
         }
-        return $this->makeResponse(200, true, $array);
+        return $this->makeResponse(200, true, ["partners" => $array]);
     }
     public function getDateFrom($time)
     {
