@@ -50,6 +50,7 @@ Route::group(['middleware' => ['token']], function () {
     Route::post('/get-profile', ['uses' => 'ApiController@getProfile']);
     Route::post('/remove-card', ['uses' => 'ApiController@removeCardById']);
     Route::post('/set-profile', ['uses' => 'ApiController@setProfile']);
+    Route::post('/get-partners', ['uses' => 'ApiController@getPartnersList']);
 
 });
 
