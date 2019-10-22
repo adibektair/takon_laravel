@@ -1142,6 +1142,23 @@ class ApiController extends Controller
         }
     }
 
+    public function getPartnersList(Request $request){
+        $user = MobileUser::where('token', $request->token)->first();
+        $subs = UsersSubscriptions::where('mobile_user_id', $user->id)->get();
+        $partners = Partner::all();
+        $array = [];
+        foreach ($partners as $partner){
+            $sub = $subs->where('partner_id', $partner->id)->first();
+            $obj = $partner;
+            if($sub){
+                $obj['has'] = 1;
+            }else{
+                $obj['has'] = 0;
+            }
+            array_push($array, $obj);
+        }
+        return $this->makeResponse(200, true, $array);
+    }
     public function getDateFrom($time)
     {
         return Carbon::parse($time);
