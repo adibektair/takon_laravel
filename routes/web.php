@@ -196,6 +196,15 @@ Route::group(['middleware' => ['authenticated']], function () {
             Route::get('/moderation-services', ['as' => 'moderation.services', 'uses' => 'ServiceController@moderationList']);
             Route::post('/moderate-service', ['as' => 'moderate.service', 'uses' => 'ServiceController@moderate']);
             Route::get('/services/view', ['as' => 'services.view', 'uses' => 'ServiceController@show']);
+
+            //PARTNERS_LOCATION
+            Route::get('/partners/location/{id}', ['as' => 'partners.location', 'uses' => 'PartnersLocationController@index'])->where(['id' => '[0-9]+']);
+            Route::get('/partners/location/create/{id}', ['as' => 'partners.location.create', 'uses' => 'PartnersLocationController@create'])->where(['id' => '[0-9]+']);
+            Route::post('/partners/location/create/{id}', ['as' => 'partners.location.store', 'uses' => 'PartnersLocationController@store'])->where(['id' => '[0-9]+']);
+            Route::post('/partners/location/delete/{id}', ['as' => 'partners.location.delete', 'uses' => 'PartnersLocationController@delete'])->where(['id' => '[0-9]+']);
+            Route::get('/partners/location/edit/{id}', ['as' => 'partners.location.edit', 'uses' => 'PartnersLocationController@edit'])->where(['id' => '[0-9]+']);
+            Route::post('/partners/location/update/{id}', ['as' => 'partners.location.update', 'uses' => 'PartnersLocationController@update'])->where(['id' => '[0-9]+']);
+
         });
 
 
