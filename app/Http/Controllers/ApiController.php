@@ -119,13 +119,14 @@ class ApiController extends Controller
             $res = DB::table('users_subscriptions')
                 ->join('partners', 'partners.id', '=', 'users_subscriptions.partner_id')
                 ->leftJoin('services', 'services.partner_id', '=', 'partners.id')
-                ->leftJoin('users_services', 'users_services.service_id', '=', 'services.id')
+                ->leftJoin('users_services', function ($join) use ($user) {
+                    $join->on('users_services.service_id', '=', 'services.id');
+                    $join->on('users_services.mobile_user_id', '=', DB::raw($user->id));
+                })
                 ->selectRaw('SUM(users_services.amount) as amount, partners.*')
                 ->where('users_subscriptions.mobile_user_id', $user->id)
-                ->where('users_services.mobile_user_id', $user->id)
                 ->groupBy('partners.id')
                 ->get();
-
             return $this->makeResponse(200, true, ['partners' => $res]);
 
         }
@@ -1110,7 +1111,7 @@ class ApiController extends Controller
                 }
             }
             $newarr = [];
-            foreach ($arr as $key => $value){
+            foreach ($arr as $key => $value) {
                 $newarr[] = ['date' => $key, 'transactions' => $value];
             }
             return $this->makeResponse(200, true, ['history' => $newarr]);
@@ -1119,11 +1120,14 @@ class ApiController extends Controller
         }
     }
 
-    public function getProfile(Request $request){
+    public function getProfile(Request $request)
+    {
         $user = MobileUser::where('token', $request->token)->first();
         return $this->makeResponse(200, true, ["user" => $user]);
     }
-    public function setProfile(Request $request){
+
+    public function setProfile(Request $request)
+    {
         $user = MobileUser::where('token', $request->token)->first();
         $user->first_name = $request->first_name;
         $user->last_name = $request->last_name;
@@ -1131,13 +1135,15 @@ class ApiController extends Controller
         $user->save();
         return $this->makeResponse(200, true, ["user" => $user]);
     }
-    public function removeCardById(Request $request){
+
+    public function removeCardById(Request $request)
+    {
         $user = MobileUser::where("token", $request->token)->first();
         $card = Card::where("id", $request->id)->where("mobile_user_id", $user->id)->first();
-        if ($card){
+        if ($card) {
             $card->delete();
             return $this->makeResponse(200, true, []);
-        }else{
+        } else {
             return $this->makeResponse(200, false, []);
         }
     }
