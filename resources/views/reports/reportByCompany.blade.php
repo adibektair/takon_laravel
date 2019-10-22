@@ -94,34 +94,55 @@
 
                 <div class="row">
                     <div class="col-sm-12">
-                        <table class="table table-bordered" id="table">
-                            <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Отправитель</th>
-                                <th>Имя отправителя</th>
-                                <th>Услуга/Товар</th>
-                                <th>Количество</th>
-                                <th>Получатель</th>
-                                <th>Имя получателя</th>
-                                <th>Дата</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                            <tfoot>
-                            <tr>
-                                <th>#</th>
-                                <th>Отправитель</th>
-                                <th>Имя отправителя</th>
-                                <th>Услуга/Товар</th>
-                                <th>Количество</th>
-                                <th>Получатель</th>
-                                <th>Имя получателя</th>
-                                <th>Дата</th>
-                            </tr>
-                            </tfoot>
-                        </table>
+
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a data-toggle="tab" href="#home">Главная</a></li>
+                            <li><a data-toggle="tab" href="#menu1">Отчет</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div id="home" class="tab-pane fade in active">
+                                <h3>Главная</h3>
+
+                                <table class="table table-bordered" id="table">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Отправитель</th>
+                                        <th>Имя отправителя</th>
+                                        <th>Услуга/Товар</th>
+                                        <th>Количество</th>
+                                        <th>Получатель</th>
+                                        <th>Имя получателя</th>
+                                        <th>Дата</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Отправитель</th>
+                                        <th>Имя отправителя</th>
+                                        <th>Услуга/Товар</th>
+                                        <th>Количество</th>
+                                        <th>Получатель</th>
+                                        <th>Имя получателя</th>
+                                        <th>Дата</th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <div id="menu1" class="tab-pane fade">
+                                <h3>Отчет</h3>
+                                <div class="table-responsive">
+                                    <table id="report" class="table">
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -132,6 +153,7 @@
 @section('scripts')
     <script src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
     <script>
+
         var table;
         $(document).ready(function () {
             table = $('#table').DataTable({
@@ -383,7 +405,9 @@
         }
 
         function fetchDataForReport() {
+
             showOverlay();
+            var reportTable = document.getElementById("report");
 
             var header = [
                 '#',
@@ -407,6 +431,10 @@
                     'Баланс на конец': report[i].lastBalance,
                 })
             }
+            var div = createTable(header, report);
+            reportTable.innerText = '';
+            reportTable.appendChild(div);
+
             var header1 = [
                 '#',
                 'Отправитель',
@@ -430,11 +458,116 @@
                     'Дата': report1[i].created_at,
                 })
             }
-
+            div = createTable2(header1, report1);
+            reportTable.appendChild(div);
             var text = `Отчет по '${$('#company option:selected').text()}' с ${$('#min').val()} по ${$('#max').val()}`;
             excel([[text], header, header1,], [[], rows, rows1]);
+
+
             hideOverlay();
         }
+
+        function createTable(header, body) {
+            var div = document.createElement("div");
+            var thead = document.createElement("thead");
+            var trh = document.createElement("tr");
+            thead.appendChild(trh);
+            for (var i = 0; i < header.length; i++) {
+                var th = document.createElement("th");
+                th.innerText = header[i];
+                trh.appendChild(th);
+            }
+
+            var tbody = document.createElement("tbody");
+            for (var i = 0; i < body.length; i++) {
+                var tr = document.createElement("tr");
+                var td1 = document.createElement("td");
+                td1.innerText = body[i].id;
+                tr.appendChild(td1);
+
+                var td2 = document.createElement("td");
+                td2.innerText = body[i].itemName;
+                tr.appendChild(td2);
+
+                var td3 = document.createElement("td");
+                td3.innerText = body[i].startBalance;
+                tr.appendChild(td3);
+
+                var td4 = document.createElement("td");
+                td4.innerText = body[i].givenBalance;
+                tr.appendChild(td4);
+
+                var td5 = document.createElement("td");
+                td5.innerText = body[i].sent;
+                tr.appendChild(td5);
+
+                var td6 = document.createElement("td");
+                td6.innerText = body[i].returned;
+                tr.appendChild(td6);
+
+                var td7 = document.createElement("td");
+                td7.innerText = body[i].lastBalance;
+                tr.appendChild(td7);
+
+                tbody.appendChild(tr);
+            }
+
+            div.appendChild(thead);
+            div.appendChild(tbody);
+
+            return div;
+        }
+
+        function createTable2(header, body) {
+            var div = document.createElement("div");
+            var thead = document.createElement("thead");
+            var trh = document.createElement("tr");
+            thead.appendChild(trh);
+            for (var i = 0; i < header.length; i++) {
+                var th = document.createElement("th");
+                th.innerText = header[i];
+                trh.appendChild(th);
+            }
+            var tbody = document.createElement("tbody");
+            for (var i = 0; i < body.length; i++) {
+                var tr = document.createElement("tr");
+                var td1 = document.createElement("td");
+                td1.innerText = body[i].number;
+                tr.appendChild(td1);
+
+                var td2 = document.createElement("td");
+                td2.innerText = body[i].sender;
+                tr.appendChild(td2);
+
+                var td3 = document.createElement("td");
+                td3.innerText = body[i].senderName;
+                tr.appendChild(td3);
+
+                var td4 = document.createElement("td");
+                td4.innerText = body[i].item;
+                tr.appendChild(td4);
+
+                var td5 = document.createElement("td");
+                td5.innerText = body[i].received;
+                tr.appendChild(td5);
+
+                var td6 = document.createElement("td");
+                td6.innerText = body[i].sent;
+                tr.appendChild(td6);
+
+                var td7 = document.createElement("td");
+                td7.innerText = body[i].created_at;
+                tr.appendChild(td7);
+
+                tbody.appendChild(tr);
+            }
+
+            div.appendChild(thead);
+            div.appendChild(tbody);
+
+            return div;
+        }
+
 
         function showOverlay() {
             $('#overlay').fadeIn();
