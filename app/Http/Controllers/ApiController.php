@@ -1072,10 +1072,10 @@ class ApiController extends Controller
                             if ($value->ttype == 3) {
                                 $suser = User::where('id', $value->r_user_id)->first();
                                 $partner = Partner::where('id', $suser->partner_id)->first();
-                                if($suser->name){
+                                if($partner->name){
                                     $el['contragent'] = $partner->name . " (" . $suser->name . ")";
                                 }else{
-                                    $el['contragent'] = $partner->name;
+                                    $el['contragent'] = $suser->name;
                                 }
 
                             } else {
