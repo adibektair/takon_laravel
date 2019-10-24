@@ -979,7 +979,7 @@ class ApiController extends Controller
                 return $this->makeResponse(200, true, []);
 
             } else {
-                return $this->makeResponse(200, false, []);
+                return $this->makeResponse(200, false, ['data' => $s]);
             }
         } else {
             return $this->makeResponse(200, false, []);
