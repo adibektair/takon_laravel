@@ -779,20 +779,40 @@ class TransactionController extends Controller
                 if ($service->type == 1) {
                     if ($service->c_s_id) {
                         $c = Company::where('id', $service->c_s_id)->first();
-                        return $c->name;
+                        if($c){
+                            return $c->name;
+                        }else{
+                            return '';
+                        }
                     } else {
                         $m = MobileUser::where('id', $service->u_s_id)->first();
-                        return $m->phone;
+                        if($m){
+                            return $m->phone;
+                        }else{
+                            return '';
+                        }
                     }
                 } else if ($service->type == 2) {
                     $p = Partner::where('id', $service->p_s_id)->first();
-                    return $p->name;
+                    if($p){
+                        return $p->name;
+                    }else{
+                        return '';
+                    }
                 } else if ($service->type == 3) {
                     $m = MobileUser::where('id', $service->u_s_id)->first();
-                    return $m->phone;
+                    if($m){
+                        return $m->phone;
+                    }else{
+                        return '';
+                    }
                 } else if ($service->type == 5) {
                     $m = MobileUser::where('id', $service->u_s_id)->first();
-                    return $m->phone;
+                    if($m){
+                        return $m->phone;
+                    }else{
+                        return '';
+                    }
                 }
 
 
@@ -801,20 +821,40 @@ class TransactionController extends Controller
                 if ($service->type == 1) {
 
                     $m = MobileUser::where('id', $service->u_r_id)->first();
-                    return $m->phone;
+                    if ($m) {
+                        return $m->name;
+                    } else {
+                        return '';
+                    }
 
                 } else if ($service->type == 2) {
                     $p = Company::where('id', $service->c_r_id)->first();
-                    return $p->name;
+                    if ($p) {
+                        return $p->name;
+                    } else {
+                        return '';
+                    }
                 } else if ($service->type == 3) {
                     $m = User::where('id', $service->u_r_id)->first();
-                    return $m->name;
+                    if ($m) {
+                        return $m->name;
+                    } else {
+                        return '';
+                    }
                 } else if ($service->type == 5) {
                     $p = Company::where('id', $service->c_r_id)->first();
-                    return $p->name;
+                    if ($p) {
+                        return $p->name;
+                    } else {
+                        return '';
+                    }
                 } else {
                     $p = Company::where('id', $service->c_r_id)->first();
-                    return $p->name;
+                    if ($p) {
+                        return $p->name;
+                    } else {
+                        return '';
+                    }
                 }
             })
             ->addColumn('sender_name', function ($service) {

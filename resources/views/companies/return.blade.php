@@ -58,7 +58,7 @@
                 columns: [
                     { data: 'id', name: 'id' },
                     { data: 'm_name', name: 'm_name' },
-                    { data: 'phone', name: 'namephone' },
+                    { data: 'phone', name: 'phone' },
                     { data: 'service', name: 'service' },
                     { data: 'amount', name: 'amount'},
                     { data: 'return', name: 'return'},
