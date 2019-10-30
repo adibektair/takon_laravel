@@ -11,6 +11,7 @@ use App\Mail\DemoEmail;
 use App\ManagementNotification;
 use App\MobileUser;
 use App\Partner;
+use App\PartnersLocation;
 use App\QrCode;
 use App\Service;
 use App\Transaction;
@@ -1170,6 +1171,15 @@ class ApiController extends Controller
         }
         return $this->makeResponse(200, true, ["partners" => $array]);
     }
+
+    public function getPartnersLocations(Request $request){
+        $id = $request->id;
+        $pl = PartnersLocation::where('partner_id', $id)->get();
+        return $this->makeResponse(200, true, ['locations' => $pl]);
+
+    }
+
+
     public function getDateFrom($time)
     {
         return Carbon::parse($time);
