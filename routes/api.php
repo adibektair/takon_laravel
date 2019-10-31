@@ -51,6 +51,7 @@ Route::group(['middleware' => ['token']], function () {
     Route::post('/remove-card', ['uses' => 'ApiController@removeCardById']);
     Route::post('/set-profile', ['uses' => 'ApiController@setProfile']);
     Route::post('/get-partners', ['uses' => 'ApiController@getPartnersList']);
+    Route::post('/get-partners-locations', ['uses' => 'ApiController@getPartnersLocations']);
 
 });
 
