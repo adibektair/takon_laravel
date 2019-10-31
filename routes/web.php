@@ -142,12 +142,13 @@ Route::group(['middleware' => ['authenticated']], function () {
         Route::post('/save-user', ['as' => 'store.user', 'uses' => 'UserController@update']);
         Route::post('/edit-partner', ['as' => 'edit.partner', 'uses' => 'PartnerController@save']);
 
+        //REPORTS
+        Route::get('/report-by-company', ['as' => 'report.by.company', 'uses' => 'ReportController@reportByCompany']);
+        Route::get('/api/report-by-company', ['as' => 'ajax.report.by.company', 'uses' => 'Ajax\ReportController@reportByCompany']);
+        Route::post('/api/report-by-company-json', ['as' => 'ajax.report.by.companyJson', 'uses' => 'Ajax\ReportController@reportByCompanyAjax']);
+
         Route::group(['middleware' => ['is_superadmin']], function () {
 
-            //REPORTS
-            Route::get('/report-by-company', ['as' => 'report.by.company', 'uses' => 'ReportController@reportByCompany']);
-            Route::get('/api/report-by-company', ['as' => 'ajax.report.by.company', 'uses' => 'Ajax\ReportController@reportByCompany']);
-            Route::post('/api/report-by-company-json', ['as' => 'ajax.report.by.companyJson', 'uses' => 'Ajax\ReportController@reportByCompanyAjax']);
 
             //SERVICES
             Route::get('/services/moderation', function () {

@@ -72,22 +72,30 @@
                                 <input class="form-control" name="max" id="max" type="date">
                             </div>
                         </div>
-                        <div class="col-sm-6">
-                            <label>Компания:</label>
 
-                            <select class="form-control" id="company">
-                                <option value="">Не выбрано</option>
-                                @foreach($companies as $c)
-                                    <option value="{{$c->id}}">{{$c->name}}</option>
-                                @endforeach
-                                <option value=""></option>
-                            </select>
-                        </div>
                         <div class="col-sm-6">
-                            <label>Получить данные </label>
-                            <br>
-                            <a class="btn btn-danger m-1" onclick="fetchDataForReport()">Отчет<span
-                                        class="fa fa-file-o"></span></a>
+                            @if(Auth::user()->role_id == 1)
+                                <label>Компания:</label>
+
+                                <select class="form-control" id="company">
+                                    <option value="">Не выбрано</option>
+                                    @foreach($companies as $c)
+                                        <option value="{{$c->id}}">{{$c->name}}</option>
+                                    @endforeach
+                                    <option value=""></option>
+                                </select>
+
+                                <div class="col-sm-6">
+                                    @elseif(Auth::user()->role_id == 3)
+                                        <input type="hidden" id="company" class="form-control" name="company"
+                                               value="{{Auth::user()->company_id}}">
+                                    @endif
+                                </div>
+
+                                <label>Получить данные </label>
+                                <br>
+                                <a class="btn btn-danger m-1" onclick="fetchDataForReport()">Отчет<span
+                                            class="fa fa-file-o"></span></a>
                         </div>
                     </div>
                 </form>
@@ -223,11 +231,11 @@
 
 
             $('#min, #max, #company').change(function () {
-                if ($('#min').val() && $('#max').val() && $('#company').val()) {
+                if ($('#min').val() && $('#max').val() && $('#max').val() !== '' && $('#min').val() !== '' && $('#company').val()) {
                     table.draw();
                 }
             });
-        })
+        });
 
 
         var newExportAction = function (e, dt, button, config) {
