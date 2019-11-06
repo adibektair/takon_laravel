@@ -415,6 +415,15 @@
                     </li>
 
                     <li>
+                        <a href="{{ route('report.by.company') }}">
+                            <i class="fa fa-file-text"></i>
+                            <span>
+                                Отчет комапнии
+                            </span>
+                        </a>
+                    </li>
+
+                    <li>
                         <a href="{{ route('transactions.use') }}">
                             <i class="fa fa-hand-grab-o"></i>
                             <span>
