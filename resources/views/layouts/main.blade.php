@@ -250,74 +250,74 @@
 
 
                 @elseif(auth()->user()->role_id == 4)
-                    <li>
-                        <a href="{{ route('partners_list') }}">
-                            <i class="fa fa-handshake-o"></i>
-                            <span>Партнеры</span>
-                        </a>
+{{--                    <li>--}}
+{{--                        <a href="{{ route('partners_list') }}">--}}
+{{--                            <i class="fa fa-handshake-o"></i>--}}
+{{--                            <span>Партнеры</span>--}}
+{{--                        </a>--}}
 
-                    </li>
-                    <li>
-                        <a href="/companies">
-                            <i class="fa fa-suitcase"></i>
-                            <span>
-                                Юр. лица
-                            </span>
-                        </a>
+{{--                    </li>--}}
+{{--                    <li>--}}
+{{--                        <a href="/companies">--}}
+{{--                            <i class="fa fa-suitcase"></i>--}}
+{{--                            <span>--}}
+{{--                                Юр. лица--}}
+{{--                            </span>--}}
+{{--                        </a>--}}
 
-                    </li>
-                    <li>
-                        <a href="/mobile_users">
-                            <i class="fa fa-users"></i>
-                            <span>
-                                Пользователи
-                            </span>
-                        </a>
+{{--                    </li>--}}
+{{--                    <li>--}}
+{{--                        <a href="/mobile_users">--}}
+{{--                            <i class="fa fa-users"></i>--}}
+{{--                            <span>--}}
+{{--                                Пользователи--}}
+{{--                            </span>--}}
+{{--                        </a>--}}
 
-                    </li>
-                    <li>
-                        <a href="{{ route('transactions.admin') }}">
-                            <i class="fa fa-exchange"></i>
-                            <span>
-                                Транзакции
-                            </span>
-                        </a>
+{{--                    </li>--}}
+{{--                    <li>--}}
+{{--                        <a href="{{ route('transactions.admin') }}">--}}
+{{--                            <i class="fa fa-exchange"></i>--}}
+{{--                            <span>--}}
+{{--                                Транзакции--}}
+{{--                            </span>--}}
+{{--                        </a>--}}
 
-                    </li>
-                    <li>
-                        <a href="{{ route('transactions.payments') }}">
-                            <i class="fa fa-external-link"></i>
-                            <span>
-                                Транзакции по онлайн оплате
-                            </span>
-                        </a>
+{{--                    </li>--}}
+{{--                    <li>--}}
+{{--                        <a href="{{ route('transactions.payments') }}">--}}
+{{--                            <i class="fa fa-external-link"></i>--}}
+{{--                            <span>--}}
+{{--                                Транзакции по онлайн оплате--}}
+{{--                            </span>--}}
+{{--                        </a>--}}
 
-                    </li>
+{{--                    </li>--}}
 
-                    <li>
-                        <a href="{{ route('transactions.use') }}">
-                            <i class="fa fa-hand-grab-o"></i>
-                            <span>
-                                Использование таконов
-                            </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('transactions.search') }}">
-                            <i class="fa fa-search"></i>
-                            <span>
-                                Поиск по транзакциям
-                            </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ route('transactions.return') }}">
-                            <i class="fa fa-arrow-circle-left"></i>
-                            <span>
-                                Транзакции по возвратам
-                            </span>
-                        </a>
-                    </li>
+{{--                    <li>--}}
+{{--                        <a href="{{ route('transactions.use') }}">--}}
+{{--                            <i class="fa fa-hand-grab-o"></i>--}}
+{{--                            <span>--}}
+{{--                                Использование таконов--}}
+{{--                            </span>--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
+{{--                    <li>--}}
+{{--                        <a href="{{ route('transactions.search') }}">--}}
+{{--                            <i class="fa fa-search"></i>--}}
+{{--                            <span>--}}
+{{--                                Поиск по транзакциям--}}
+{{--                            </span>--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
+{{--                    <li>--}}
+{{--                        <a href="{{ route('transactions.return') }}">--}}
+{{--                            <i class="fa fa-arrow-circle-left"></i>--}}
+{{--                            <span>--}}
+{{--                                Транзакции по возвратам--}}
+{{--                            </span>--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
 
 
                 @elseif(auth()->user()->role_id == 2)
@@ -452,8 +452,6 @@
                             </span>
                         </a>
                     </li>
-
-
 
                 @endif
 
