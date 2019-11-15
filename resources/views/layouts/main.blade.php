@@ -454,9 +454,7 @@
                     </li>
 
                 @endif
-	            <?php
-	            dd(auth()->user()->role_id);
-	            ?>
+
             </ul>
         </section>
     </aside>
