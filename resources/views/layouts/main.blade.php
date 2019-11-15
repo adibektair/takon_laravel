@@ -249,7 +249,7 @@
                     </li>
 
 
-                @elseif(auth()->user()->role_id == 4)
+{{--                @elseif(auth()->user()->role_id == 4)--}}
 {{--                    <li>--}}
 {{--                        <a href="{{ route('partners_list') }}">--}}
 {{--                            <i class="fa fa-handshake-o"></i>--}}
