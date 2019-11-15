@@ -17,7 +17,7 @@ class CheckRole
     public function handle($request, Closure $next)
     {
         if(auth()->user()){
-            if($request->user()->role_id == 2){
+            if($request->user()->role_id == 2 OR $request->user()->role_id == 4){
                 return $next($request);
             }
 
