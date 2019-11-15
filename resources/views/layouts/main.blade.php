@@ -440,9 +440,7 @@
                             </span>
                         </a>
                     </li>
-                    <?php
-                    dd(auth()->user()->role_id);
-                    ?>
+
 
                 @elseif(auth()->user()->role_id == 4)
 
@@ -456,7 +454,9 @@
                     </li>
 
                 @endif
-
+	            <?php
+	            dd(auth()->user()->role_id);
+	            ?>
             </ul>
         </section>
     </aside>
