@@ -441,6 +441,20 @@
                         </a>
                     </li>
 
+
+                @elseif(auth()->user()->role_id == 4)
+
+                    <li>
+                        <a href="{{ route('transactions.cashier.history') }}">
+                            <i class="fa fa-search"></i>
+                            <span>
+                                Архив
+                            </span>
+                        </a>
+                    </li>
+
+
+
                 @endif
 
             </ul>

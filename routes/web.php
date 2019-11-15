@@ -276,6 +276,8 @@ Route::group(['middleware' => ['authenticated']], function () {
             Route::get('/transactions/partner/all', 'TransactionController@partnerAll')->name('transactions.partner.all');
             Route::get('/transactions/partner/etc', 'TransactionController@partnerEtc')->name('transactions.partner.etc');
             Route::get('/transactions/partner', 'TransactionController@partner')->name('transactions.partner');
+            Route::get('/transactions/cashier', 'TransactionController@cashier')->name('transactions.cashier.history');
+            Route::get('/transactions/cashier/get', 'TransactionController@cashierGet')->name('transactions.cashies.all');
 
 
             //EMPLOYEES

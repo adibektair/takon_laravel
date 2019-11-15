@@ -34,6 +34,11 @@ class TransactionController extends Controller
     }
 
 
+    public function cashier(){
+	    return view('transactions/cashier');
+    }
+
+
     public function use()
     {
         return view('transactions/use');
@@ -47,6 +52,22 @@ class TransactionController extends Controller
     public function searchGo(Request $request)
     {
         return view('transactions/search-go')->with(['phone' => $request->phone]);
+    }
+
+
+    public function cashierGet(){
+	    $model = DB::table('transactions')
+		    ->where('u_r_id', auth()->user()->id)
+		    ->where('type', 3)
+		    ->join('services', 'services.id', '=', 'transactions.service_id')
+		    ->join('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
+		    ->join('users', 'users.id', '=', 'transactions.u_r_id')
+		    ->select('transactions.*', 'services.name as service', 'mobile_users.phone as phone', 'users.email')
+		    ->orderBy('transactions.id', 'desc')
+		    ->get();
+	    $s = DataTables::of($model)
+		    ->make(true);
+	    return $s;
     }
 
     public function searchMake(Request $request)
