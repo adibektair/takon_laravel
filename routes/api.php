@@ -19,6 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::post('/paymenthandle', ['uses' => 'ApiController@paymentHandle']);
 Route::post('/test', ['uses' => 'ApiController@sendTest']);
+Route::get('/get-companies', ['uses' => 'ApiController@getAllPartners']);
 
 Route::post('/m_register', ['uses' => 'ApiController@auth']);
 Route::post('/m_login', ['uses' => 'ApiController@checkCode']);

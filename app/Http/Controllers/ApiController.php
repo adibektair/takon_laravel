@@ -34,6 +34,12 @@ use phpDocumentor\Reflection\Types\Integer;
 
 class ApiController extends Controller
 {
+
+
+	public function getAllPartners(){
+		$p = Partner::all();
+		return $this->makeResponse(200, true, ["companies" => $p]);
+	}
     public function auth(Request $request)
     {
         $phone = $request->phone;
