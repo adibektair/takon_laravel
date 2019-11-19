@@ -1206,12 +1206,14 @@ class ApiController extends Controller
 		public function handleSuccededWalletPayment(Request $request){
 		$order_number = $request->WMI_PAYMENT_NO;
 
+		$wallet_order = WalletPayment::where('id', $order_number)->first();
+		$wallet_order->status = 1;
+		$wallet_order->save();
 
 		DB::beginTransaction();
 
 		try {
 			// Validate, then create if valid
-			$wallet_order = WalletPayment::where('id', $order_number)->first();
 
 			$service = Service::where('id', $wallet_order->service_id)->first();
 			$newService = new UsersService();
