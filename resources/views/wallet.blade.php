@@ -14,7 +14,7 @@ $wallet_payment = \App\WalletPayment::where('id', $id)->first();
   <input name="WMI_CURRENCY_ID"    value="398"/>
   <input name="WMI_DESCRIPTION"    value="Покупка <?= $wallet_payment->amount ?> Таконов"/>
   <input name="WMI_SUCCESS_URL"    value="https://takon.org/api/wallet-success"/>
-	<input name="WMI_FAIL_URL"       value="https://takon.org/api/wallet-fail"/>
+  <input name="WMI_FAIL_URL"       value="https://takon.org/api/wallet-fail"/>
   <input name="WMI_PAYMENT_NO"       value="<?=$wallet_payment->id?>"/>
   <input type="submit"/>
 </form>
