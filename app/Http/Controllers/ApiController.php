@@ -18,6 +18,7 @@ use App\Transaction;
 use App\User;
 use App\UsersService;
 use App\UsersSubscriptions;
+use App\WalletPayment;
 use Carbon\Carbon;
 use Couchbase\UserSettings;
 use Illuminate\Http\Request;
@@ -28,6 +29,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use phpDocumentor\Reflection\Types\Boolean;
 use phpDocumentor\Reflection\Types\Integer;
 
@@ -1177,12 +1179,87 @@ class ApiController extends Controller
         return $this->makeResponse(200, true, ["partners" => $array]);
     }
 
+    // wallet one payment request
+    public function createWalletOrder(Request $request){
+	    $validator = Validator::make($request->all(), [
+		    'amount' => 'required|integer',
+		    'service_id' => 'required|integer',
+		    'name' => 'required|string|max:42',
+	    ]);
+	    if ($validator->fails()) {
+		    return $this->makeResponse(400, false, ['errors' => $validator->errors()->all()]);
+	    }
+	    $service = Service::where('id', $request->service_id)->first();
+	    $user = MobileUser::where('token', $request->token)->first();
+		$wallet_order = new WalletPayment();
+		$wallet_order->amount = $request->amount;
+		$wallet_order->service_id = $request->service_id;
+	    $wallet_order->mobile_user_id = $user->id;
+	    $wallet_order->price  = $request->amount * $service->payment_price;
+		$wallet_order->save();
+		$url = "https://takon.org/wallet?id=" . $wallet_order->id;
+
+		return $this->makeResponse(200, true, ["url" => $url]);
+
+    }
+
+    // handle walletOne response
+	public function handleSuccededWalletPayment(Request $request){
+		$order_number = $request->WMI_PAYMENT_NO;
+
+
+		DB::beginTransaction();
+
+		try {
+			// Validate, then create if valid
+			$wallet_order = WalletPayment::where('id', $order_number)->first();
+
+			$service = Service::where('id', $wallet_order->service_id)->first();
+			$newService = new UsersService();
+			$newService->mobile_user_id = $wallet_order->mobile_user_id;
+			$newService->service_id = $service->id;
+			$newService->amount = $wallet_order->amount;
+			$newService->company_id = null;
+			$newService->cs_id = null;
+			$newService->deadline = strtotime("+" . $service->deadline . " day", strtotime("now"));
+			$newService->save();
+
+			$transaction = new Transaction();
+			$transaction->u_r_id = $wallet_order->mobile_user_id;
+			$transaction->amount = $wallet_order->amount;
+			$transaction->service_id = $wallet_order->service_id;
+			$transaction->price = $wallet_order->price;
+			$transaction->type = 6;
+			$transaction->users_service_id = $newService->id;
+			$transaction->save();
+		}
+		catch(ValidationException $e)
+		{
+
+			DB::rollback();
+
+		}
+		catch(\Exception $e)
+		{
+			DB::rollback();
+			throw $e;
+		}
+
+		DB::commit();
+
+	}
+
+	public function handleFailedWalletPayment(Request $request){
+
+	}
+
     public function getPartnersLocations(Request $request){
         $id = $request->id;
         $pl = PartnersLocation::where('partner_id', $id)->get();
         return $this->makeResponse(200, true, ['locations' => $pl]);
 
     }
+
 
 
     public function getDateFrom($time)
