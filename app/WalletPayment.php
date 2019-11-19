@@ -12,6 +12,7 @@ class WalletPayment extends Model
 		'service_id',
 		'amount',
 		'mobile_user_id',
+		'status',
 		'price'
 	];
 
