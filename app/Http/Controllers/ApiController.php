@@ -1204,7 +1204,7 @@ class ApiController extends Controller
     }
 
     // handle walletOne response
-	public function handleSuccededWalletPayment(Request $request){
+		public function handleSuccededWalletPayment(Request $request){
 		$order_number = $request->WMI_PAYMENT_NO;
 
 

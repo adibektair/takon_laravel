@@ -53,6 +53,9 @@ Route::group(['middleware' => ['token']], function () {
     Route::post('/set-profile', ['uses' => 'ApiController@setProfile']);
     Route::post('/get-partners', ['uses' => 'ApiController@getPartnersList']);
     Route::post('/get-partners-locations', ['uses' => 'ApiController@getPartnersLocations']);
+    Route::post('/create-wallet-order', ['uses' => 'ApiController@createWalletOrder']);
+    Route::post('/wallet-success', ['uses' => 'ApiController@handleSuccededWalletPayment']);
+    Route::post('/wallet-fail', ['uses' => 'ApiController@handleFailedWalletPayment']);
 
 });
 
