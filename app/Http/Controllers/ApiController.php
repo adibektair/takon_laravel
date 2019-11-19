@@ -478,7 +478,6 @@ class ApiController extends Controller
         $password = $request->password;
 
         $user = User::where('email', $email)
-            ->where('password', md5($request->password))
             ->first();
         if ($user) {
             if ($user->token == NULL) {

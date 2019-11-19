@@ -26,6 +26,10 @@ Route::post('/paymentcomplete', function () {
 Route::get('/policy', function () {
     return view('policy');
 });
+
+Route::get('/wallet', function () {
+    return view('wallet');
+});
 Route::get('/forbidden', function () {
     return view('other/forbidden');
 })->name('forbidden');
