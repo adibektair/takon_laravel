@@ -1184,7 +1184,6 @@ class ApiController extends Controller
 	    $validator = Validator::make($request->all(), [
 		    'amount' => 'required|integer',
 		    'service_id' => 'required|integer',
-		    'name' => 'required|string|max:42',
 	    ]);
 	    if ($validator->fails()) {
 		    return $this->makeResponse(400, false, ['errors' => $validator->errors()->all()]);
