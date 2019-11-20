@@ -1204,7 +1204,7 @@ class ApiController extends Controller
 
     // handle walletOne response
 		public function handleSuccededWalletPayment(Request $request){
-		$order_number = 9;
+		$order_number = $request->WMI_PAYMENT_NO;
 
 		$wallet_order = WalletPayment::where('id', $order_number)->first();
 		$wallet_order->status = 1;
