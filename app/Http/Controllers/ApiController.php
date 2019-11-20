@@ -1204,7 +1204,7 @@ class ApiController extends Controller
 
     // handle walletOne response
 		public function handleSuccededWalletPayment(Request $request){
-		$order_number = $request->WMI_PAYMENT_NO;
+		$order_number = 9;
 
 		$wallet_order = WalletPayment::where('id', $order_number)->first();
 		$wallet_order->status = 1;
@@ -1233,6 +1233,9 @@ class ApiController extends Controller
 			$transaction->type = 6;
 			$transaction->users_service_id = $newService->id;
 			$transaction->save();
+
+
+
 		}
 		catch(ValidationException $e)
 		{
@@ -1248,6 +1251,7 @@ class ApiController extends Controller
 
 		DB::commit();
 
+		echo "WMI_RESULT=OK";
 	}
 
 	public function handleFailedWalletPayment(Request $request){
