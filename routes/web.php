@@ -23,6 +23,7 @@ Route::get('/payment', function () {
 Route::post('/paymentcomplete', function () {
     return view('mobile_users/paymentcomplete');
 });
+
 Route::get('/policy', function () {
     return view('policy');
 });

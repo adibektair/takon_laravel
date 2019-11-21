@@ -59,4 +59,7 @@ Route::group(['middleware' => ['token']], function () {
 
 });
 
+Route::get('/wallet-success', function () {
+	return view('success');
+});
 //scanCashierQR
