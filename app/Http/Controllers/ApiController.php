@@ -589,7 +589,12 @@ class ApiController extends Controller
                         ->where('cs_id', $us->cs_id)
                         ->where('type', '<>', 3)
                         ->orderBy('created_at', 'desc')->first();
-                    $stat->parent_id = $parent->parent_id;
+                    if($parent->parent_id){
+	                    $stat->parent_id = $parent->parent_id;
+                    }elseif ($parent->id){
+	                    $stat->parent_id = $parent->id;
+                    }
+
                 }
 
                 $stat->type = 3;
