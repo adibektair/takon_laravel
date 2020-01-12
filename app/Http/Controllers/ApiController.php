@@ -5,10 +5,7 @@ namespace App\Http\Controllers;
 use App\Card;
 use App\CloudMessage;
 use App\Code;
-use App\Company;
 use App\Http\Payment;
-use App\Mail\DemoEmail;
-use App\ManagementNotification;
 use App\MobileUser;
 use App\Partner;
 use App\PartnersLocation;
@@ -20,28 +17,24 @@ use App\UsersService;
 use App\UsersSubscriptions;
 use App\WalletPayment;
 use Carbon\Carbon;
-use Couchbase\UserSettings;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
-use phpDocumentor\Reflection\Types\Boolean;
-use phpDocumentor\Reflection\Types\Integer;
 
 
 class ApiController extends Controller
 {
 
 
-	public function getAllPartners(){
-		$p = Partner::all();
-		return $this->makeResponse(200, true, ["companies" => $p]);
-	}
+    public function getAllPartners()
+    {
+        $p = Partner::all();
+        return $this->makeResponse(200, true, ["companies" => $p]);
+    }
+
     public function auth(Request $request)
     {
         $phone = $request->phone;
@@ -196,7 +189,6 @@ class ApiController extends Controller
             $sub = UsersSubscriptions::where('mobile_user_id', $user->id)->where('partner_id', $request->id)->first();
             $sub->delete();
             return $this->makeResponse(200, true, ['msg' => 'success']);
-
         }
     }
 
@@ -423,45 +415,51 @@ class ApiController extends Controller
                     $subs->partner_id = $service->partner_id;
                     $subs->save();
                 }
+                DB::beginTransaction();
+                try {
+                    $us->amount -= $amount;
 
-                $us->amount -= $amount;
-                if ($us->save()) {
+                    if ($us->save()) {
 //                    $not = new CloudMessage("На Ваш счет поступили таконы " . $service->name, $reciever->id, "Внимание", $service->partner_id, $partner->name);
 //                    $not->sendNotification();
-                    $c = new CloudMessage();
-                    $c->sendSilentThroughNode($reciever->push_id, $reciever->platform, "На Ваш счет поступили таконы " . $service->name, 1, "Внимание");
+                        $c = new CloudMessage();
+                        $c->sendSilentThroughNode($reciever->push_id, $reciever->platform, "На Ваш счет поступили таконы " . $service->name, 1, "Внимание");
 
 
-                    $parent = Transaction::where('service_id', $service->id)
-                        ->where('u_r_id', $user->id)
-                        ->where('type', '<>', 3)
-                        ->where('users_service_id', $us->id)
-                        ->orderBy('created_at', 'desc')->first();
-
-
-                    $model = new Transaction();
-                    if ($parent) {
-                        $model->parent_id = $parent->id;
-                    } else {
                         $parent = Transaction::where('service_id', $service->id)
                             ->where('u_r_id', $user->id)
                             ->where('type', '<>', 3)
+                            ->where('users_service_id', $us->id)
                             ->orderBy('created_at', 'desc')->first();
-                        $model->parent_id = $parent->parent_id;
 
+
+                        $model = new Transaction();
+                        if ($parent) {
+                            $model->parent_id = $parent->id;
+                        } else {
+                            $parent = Transaction::where('service_id', $service->id)
+                                ->where('u_r_id', $user->id)
+                                ->where('type', '<>', 3)
+                                ->orderBy('created_at', 'desc')->first();
+                            $model->parent_id = $parent->parent_id;
+
+                        }
+                        $model->type = 1;
+                        $model->balance = $us->amount;
+                        $model->cs_id = $parent->cs_id;
+                        $model->service_id = $service->id;
+                        $model->u_s_id = $user->id;
+                        $model->u_r_id = $reciever->id;
+                        $model->price = $service->price;
+                        $model->amount = $amount;
+                        $model->save();
                     }
-                    $model->type = 1;
-                    $model->balance = $us->amount;
-                    $model->cs_id = $parent->cs_id;
-                    $model->service_id = $service->id;
-                    $model->u_s_id = $user->id;
-                    $model->u_r_id = $reciever->id;
-                    $model->price = $service->price;
-                    $model->amount = $amount;
-                    $model->save();
+                    DB::commit();
+                    return $this->makeResponse(200, true, ['msg' => 'Таконы успешно переданы']);
+                } catch (\Exception $exception) {
+                    DB::rollBack();
+                    return $this->makeResponse(400, true, ['msg' => 'user not found']);
                 }
-
-                return $this->makeResponse(200, true, ['msg' => 'Таконы успешно переданы']);
 
             } else {
                 return $this->makeResponse(400, true, ['msg' => 'user not found']);
@@ -498,33 +496,36 @@ class ApiController extends Controller
         $token = $request->token;
         $user = User::where('token', $token)->first();
         if ($user) {
-            $model = QrCode::where('hash', $string)->first();
-            if ($model) {
-                $us = UsersService::where('id', $model->users_service_id)->first();
-                $service = Service::where('id', $us->service_id)->first();
-                if ($user->partner_id != $service->partner_id) {
-                    return $this->makeResponse(400, false, ['message' => 'Ошибка']);
-                }
-                if ($us->amount < $model->amount) {
-                    return $this->makeResponse(400, false, ['message' => 'Недостаточно средств']);
-                }
-                $us->amount -= $model->amount;
-                if ($us->save()) {
 
-                    $stat = new Transaction();
-                    $parent = Transaction::where('service_id', $service->id)
-                        ->where('u_r_id', $us->mobile_user_id)
-                        ->where('users_service_id', $us->id)
-                        ->orderBy('created_at', 'desc')->first();
+            DB::beginTransaction();
+            try {
+                $model = QrCode::where('hash', $string)->first();
+                if ($model) {
+                    $us = UsersService::where('id', $model->users_service_id)->first();
+                    $service = Service::where('id', $us->service_id)->first();
+                    if ($user->partner_id != $service->partner_id) {
+                        return $this->makeResponse(400, false, ['message' => 'Ошибка']);
+                    }
+                    if ($us->amount < $model->amount) {
+                        return $this->makeResponse(400, false, ['message' => 'Недостаточно средств']);
+                    }
+                    $us->amount -= $model->amount;
+                    if ($us->save()) {
 
-                    if ($parent) {
-                        $stat->parent_id = $parent->id;
-                    } else {
+                        $stat = new Transaction();
                         $parent = Transaction::where('service_id', $service->id)
                             ->where('u_r_id', $us->mobile_user_id)
+                            ->where('users_service_id', $us->id)
                             ->orderBy('created_at', 'desc')->first();
-                        $stat->parent_id = $parent->parent_id;
-                    }
+
+                        if ($parent) {
+                            $stat->parent_id = $parent->id;
+                        } else {
+                            $parent = Transaction::where('service_id', $service->id)
+                                ->where('u_r_id', $us->mobile_user_id)
+                                ->orderBy('created_at', 'desc')->first();
+                            $stat->parent_id = $parent->parent_id;
+                        }
 
 
 //                    $objDemo = new \stdClass();
@@ -534,20 +535,27 @@ class ApiController extends Controller
 //                    $objDemo->receiver = 'ReceiverUserName';
 //                    Mail::to("adibek.t@maint.kz")->send(new DemoEmail($objDemo));
 
-                    $stat->type = 3;
-                    $stat->balance = $us->amount;
-                    $stat->service_id = $us->service_id;
-                    $stat->u_s_id = $us->mobile_user_id;
-                    $stat->u_r_id = $user->id;
-                    $stat->cs_id = $parent->cs_id;
-                    $stat->price = $service->price;
-                    $stat->amount = $model->amount;
-                    $stat->save();
+                        $stat->type = 3;
+                        $stat->balance = $us->amount;
+                        $stat->service_id = $us->service_id;
+                        $stat->u_s_id = $us->mobile_user_id;
+                        $stat->u_r_id = $user->id;
+                        $stat->cs_id = $parent->cs_id;
+                        $stat->price = $service->price;
+                        $stat->amount = $model->amount;
+                        $stat->save();
+                    }
+
+                    $model->delete();
+                    DB::commit();
+                    return $this->makeResponse(200, true, ['message' => 'Успешно!']);
                 }
-
-                $model->delete();
-
-                return $this->makeResponse(200, true, ['message' => 'Успешно!']);
+            } catch (\Exception $exception) {
+                DB::rollBack();
+                return $this->makeResponse(400, false, [
+                    'message' => 'Ошибка обратитесь к администратору!',
+                    'error' => $exception->getMessage()
+                ]);
             }
             return $this->makeResponse(400, false, ['message' => 'QR не найден']);
         }
@@ -569,43 +577,46 @@ class ApiController extends Controller
             if ($us->amount < $amount) {
                 return $this->makeResponse(400, false, ['msg' => 'Недостаточно таконов']);
             }
-            $us->amount -= $amount;
-            $service = Service::where('id', $us->service_id)->first();
-            if ($us->save()) {
 
-                $stat = new Transaction();
-                $parent = Transaction::where('service_id', $service->id)
-                    ->where('u_r_id', $us->mobile_user_id)
-                    ->where('users_service_id', $us->id)
-                    ->where('cs_id', $us->cs_id)
-                    ->where('type', '<>', 3)
-                    ->orderBy('created_at', 'desc')->first();
+            DB::beginTransaction();
+            try {
+                $us->amount -= $amount;
+                $service = Service::where('id', $us->service_id)->first();
+                if ($us->save()) {
 
-                if ($parent) {
-                    $stat->parent_id = $parent->id;
-                } else {
+                    $stat = new Transaction();
                     $parent = Transaction::where('service_id', $service->id)
                         ->where('u_r_id', $us->mobile_user_id)
+                        ->where('users_service_id', $us->id)
                         ->where('cs_id', $us->cs_id)
                         ->where('type', '<>', 3)
                         ->orderBy('created_at', 'desc')->first();
-                    if($parent->parent_id){
-	                    $stat->parent_id = $parent->parent_id;
-                    }elseif ($parent->id){
-	                    $stat->parent_id = $parent->id;
+
+                    if ($parent) {
+                        $stat->parent_id = $parent->id;
+                    } else {
+                        $parent = Transaction::where('service_id', $service->id)
+                            ->where('u_r_id', $us->mobile_user_id)
+                            ->where('cs_id', $us->cs_id)
+                            ->where('type', '<>', 3)
+                            ->orderBy('created_at', 'desc')->first();
+                        if ($parent->parent_id) {
+                            $stat->parent_id = $parent->parent_id;
+                        } elseif ($parent->id) {
+                            $stat->parent_id = $parent->id;
+                        }
+
                     }
 
-                }
-
-                $stat->type = 3;
-                $stat->balance = $us->amount;
-                $stat->service_id = $us->service_id;
-                $stat->u_s_id = $us->mobile_user_id;
-                $stat->u_r_id = $user_id;
-                $stat->cs_id = $parent->cs_id;
-                $stat->price = $service->price;
-                $stat->amount = $amount;
-                $stat->save();
+                    $stat->type = 3;
+                    $stat->balance = $us->amount;
+                    $stat->service_id = $us->service_id;
+                    $stat->u_s_id = $us->mobile_user_id;
+                    $stat->u_r_id = $user_id;
+                    $stat->cs_id = $parent->cs_id;
+                    $stat->price = $service->price;
+                    $stat->amount = $amount;
+                    $stat->save();
 
 
 //                $Talgat = MobileUser::where('phone', '77089995055')->first();
@@ -615,15 +626,21 @@ class ApiController extends Controller
 //                $management = new ManagementNotification($user->phone, $amount, $Tair->push_id, $service->name, $Tair->platform);
 //                $management->send();
 
-                $cashier = User::where('id', $user_id)->first();
-                if ($cashier) {
+                    $cashier = User::where('id', $user_id)->first();
+                    if ($cashier) {
 //                    $message = new CloudMessage("Вам были переведены " . $amount . " таконов", $user->id, "Произведена оплата", "", "");
-                    if ($cashier->push_id) {
-                        $c = new CloudMessage();
-                        $c->sendSilentThroughNode($cashier->push_id, $cashier->platform, "Вам были переведены " . $amount . " таконов", '', 'Произведена оплата');
+                        if ($cashier->push_id) {
+                            $c = new CloudMessage();
+                            $c->sendSilentThroughNode($cashier->push_id, $cashier->platform, "Вам были переведены " . $amount . " таконов", '', 'Произведена оплата');
+                        }
                     }
-                }
 
+                }
+            } catch (\Exception $exception) {
+                return $this->makeResponse(400, false, [
+                    'message' => 'Ошибка! Обратитесь к администратору!',
+                    'error' => $exception->getMessage()
+                ]);
             }
             return $this->makeResponse(200, true, ['msg' => 'Таконы успешно переданы']);
 
@@ -822,52 +839,61 @@ class ApiController extends Controller
         }
 
         $user = MobileUser::where('token', $request->token)->first();
+        DB::beginTransaction();
+        try {
+            $paymentModel = new Payment($request->name, $request->cryptogram, $request->ip, $request->amount, $user->id);
+            $response = $paymentModel->pay();
+            $response = json_decode($response);
+            $TransactionId = $response->Model->TransactionId;
+            $AcsUrl = $response->Model->AcsUrl;
+            $PaReq = $response->Model->PaReq;
+            $success = $response->Success;
+            $payModel = new \App\Payment();
+            $payModel->service_id = $request->serviceId;
+            $payModel->amount = $request->amount;
+            $payModel->transaction_id = $TransactionId;
+            $payModel->mobile_user_id = $user->id;
 
-        $paymentModel = new Payment($request->name, $request->cryptogram, $request->ip, $request->amount, $user->id);
-        $response = $paymentModel->pay();
-        $response = json_decode($response);
-        $TransactionId = $response->Model->TransactionId;
-        $AcsUrl = $response->Model->AcsUrl;
-        $PaReq = $response->Model->PaReq;
-        $success = $response->Success;
-        $payModel = new \App\Payment();
-        $payModel->service_id = $request->serviceId;
-        $payModel->amount = $request->amount;
-        $payModel->transaction_id = $TransactionId;
-        $payModel->mobile_user_id = $user->id;
-
-        if ($success) {
-            // add money
-            $service = Service::where('id', $request->serviceId)->first();
-            $newService = new UsersService();
-            $newService->mobile_user_id = $user->id;
-            $newService->service_id = $request->serviceId;
-            $newService->amount = $request->amount / $service->payment_price;
-            $newService->company_id = null;
-            $newService->cs_id = null;
-            $newService->deadline = strtotime("+" . $service->deadline . " day", strtotime("now"));
-            $newService->save();
+            if ($success) {
+                // add money
+                $service = Service::where('id', $request->serviceId)->first();
+                $newService = new UsersService();
+                $newService->mobile_user_id = $user->id;
+                $newService->service_id = $request->serviceId;
+                $newService->amount = $request->amount / $service->payment_price;
+                $newService->company_id = null;
+                $newService->cs_id = null;
+                $newService->deadline = strtotime("+" . $service->deadline . " day", strtotime("now"));
+                $newService->save();
 
 
-            $transaction = new Transaction();
-            $transaction->u_r_id = $user->id;
-            $transaction->amount = $request->amount / $service->payment_price;
-            $transaction->service_id = $request->serviceId;
-            $transaction->price = $request->amount;
-            $transaction->type = 5;
-            $transaction->users_service_id = $newService->id;
-            $transaction->save();
+                $transaction = new Transaction();
+                $transaction->u_r_id = $user->id;
+                $transaction->amount = $request->amount / $service->payment_price;
+                $transaction->service_id = $request->serviceId;
+                $transaction->price = $request->amount;
+                $transaction->type = 5;
+                $transaction->users_service_id = $newService->id;
+                $transaction->save();
 
+            }
+            $payModel->save();
+            DB::commit();
+            return $this->makeResponse(200,
+                $success,
+                [
+                    'TransactionId' => $TransactionId,
+                    'AcsUrl' => $AcsUrl,
+                    'PaReq' => $PaReq
+                ]
+            );
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            return $this->makeResponse(400, false, [
+                'message' => 'Ошибка! Обратитесь к администратору',
+                'error' => $exception->getMessage()
+            ]);
         }
-        $payModel->save();
-        return $this->makeResponse(200,
-            $success,
-            [
-                'TransactionId' => $TransactionId,
-                'AcsUrl' => $AcsUrl,
-                'PaReq' => $PaReq
-            ]
-        );
     }
 
     const API_KEY = 'f1bfe6d357926dca0b37913171d258af';
@@ -875,62 +901,69 @@ class ApiController extends Controller
 
     public function paymentHandle(Request $request)
     {
-        $TransactionId = $request->MD;
-        $PaRes = $request->PaRes;
-        $data = array("TransactionId" => $TransactionId, "PaRes" => $PaRes);
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Content-type: application/json',
-            'Authorization: Basic ' . base64_encode(self::ID . ":" . self::API_KEY)
-        ));
-        curl_setopt($ch, CURLOPT_URL, "https://api.cloudpayments.kz/payments/cards/post3ds");
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS,
-            json_encode($data));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $server_output = curl_exec($ch);
-        curl_close($ch);
-        $s = json_decode($server_output);
-        if ($s) {
-            if ($s->Success == true) {
 
-                $payment = \App\Payment::where('transaction_id', $TransactionId)->first();
-                $user = MobileUser::where('id', $payment->mobile_user_id)->first();
-                $service = Service::where('id', $payment->service_id)->first();
-                $newService = new UsersService();
-                $newService->mobile_user_id = $user->id;
-                $newService->service_id = $payment->service_id;
-                $newService->amount = $payment->amount / $service->payment_price;
-                $newService->company_id = null;
-                $newService->cs_id = null;
-                $newService->deadline = strtotime("+" . $service->deadline . " day", strtotime("now"));
-                $newService->save();
+        DB::beginTransaction();
+        try {
+            $TransactionId = $request->MD;
+            $PaRes = $request->PaRes;
+            $data = array("TransactionId" => $TransactionId, "PaRes" => $PaRes);
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'Content-type: application/json',
+                'Authorization: Basic ' . base64_encode(self::ID . ":" . self::API_KEY)
+            ));
+            curl_setopt($ch, CURLOPT_URL, "https://api.cloudpayments.kz/payments/cards/post3ds");
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS,
+                json_encode($data));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $server_output = curl_exec($ch);
+            curl_close($ch);
+            $s = json_decode($server_output);
+            if ($s) {
+                if ($s->Success == true) {
 
-                $transaction = new Transaction();
-                $transaction->u_r_id = $user->id;
-                $transaction->amount = intval($payment->amount / $service->payment_price);
-                $transaction->service_id = $payment->service_id;
-                $transaction->price = $payment->amount;
-                $transaction->type = 6;
-                $transaction->users_service_id = $newService->id;
-                $transaction->save();
+                    $payment = \App\Payment::where('transaction_id', $TransactionId)->first();
+                    $user = MobileUser::where('id', $payment->mobile_user_id)->first();
+                    $service = Service::where('id', $payment->service_id)->first();
+                    $newService = new UsersService();
+                    $newService->mobile_user_id = $user->id;
+                    $newService->service_id = $payment->service_id;
+                    $newService->amount = $payment->amount / $service->payment_price;
+                    $newService->company_id = null;
+                    $newService->cs_id = null;
+                    $newService->deadline = strtotime("+" . $service->deadline . " day", strtotime("now"));
+                    $newService->save();
 
-                $card = new Card();
-                $card->mobile_user_id = $user->id;
-                $card->last_four = $s->Model->CardLastFour;
-                $card->token = $s->Model->Token;
-                $card->save();
+                    $transaction = new Transaction();
+                    $transaction->u_r_id = $user->id;
+                    $transaction->amount = intval($payment->amount / $service->payment_price);
+                    $transaction->service_id = $payment->service_id;
+                    $transaction->price = $payment->amount;
+                    $transaction->type = 6;
+                    $transaction->users_service_id = $newService->id;
+                    $transaction->save();
 
-                echo "Оплата успешно произведена!";
+                    $card = new Card();
+                    $card->mobile_user_id = $user->id;
+                    $card->last_four = $s->Model->CardLastFour;
+                    $card->token = $s->Model->Token;
+                    $card->save();
 
+                    echo "Оплата успешно произведена!";
+
+                } else {
+                    echo "error " . $s->Model->Reason;
+                }
             } else {
-                echo "error " . $s->Model->Reason;
+                echo "SOME ERROR OCURED";
             }
-        } else {
-            echo "SOME ERROR OCURED";
+
+            DB::commit();
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            echo 'Ошибка! Обратитесь к администратору! ';
         }
-
-
     }
 
     public function payByToken(Request $request)
@@ -967,30 +1000,41 @@ class ApiController extends Controller
         $server_output = curl_exec($ch);
         curl_close($ch);
         $s = json_decode($server_output);
-
         if ($s) {
             if ($s->Success == true) {
-                $service = Service::where('id', $request->service_id)->first();
-                $newService = new UsersService();
-                $newService->mobile_user_id = $user->id;
-                $newService->service_id = $request->service_id;
-                $newService->amount = $request->amount;
-                $newService->company_id = null;
-                $newService->cs_id = null;
-                $newService->deadline = strtotime("+" . $service->deadline . " day", strtotime("now"));
-                $newService->save();
 
-                $transaction = new Transaction();
-                $transaction->u_r_id = $user->id;
-                $transaction->amount = $request->amount;
-                $transaction->service_id = $request->service_id;
-                $transaction->price = $request->amount;
-                $transaction->type = 6;
-                $transaction->users_service_id = $newService->id;
-                $transaction->save();
+                DB::beginTransaction();
+                try {
+                    $service = Service::where('id', $request->service_id)->first();
 
-                return $this->makeResponse(200, true, []);
+                    $newService = new UsersService();
+                    $newService->mobile_user_id = $user->id;
+                    $newService->service_id = $request->service_id;
+                    $newService->amount = $request->amount;
+                    $newService->company_id = null;
+                    $newService->cs_id = null;
+                    $newService->deadline = strtotime("+" . $service->deadline . " day", strtotime("now"));
+                    $newService->save();
 
+                    $transaction = new Transaction();
+                    $transaction->u_r_id = $user->id;
+                    $transaction->amount = $request->amount;
+                    $transaction->service_id = $request->service_id;
+                    $transaction->price = $request->amount;
+                    $transaction->type = 6;
+                    $transaction->users_service_id = $newService->id;
+                    $transaction->save();
+
+                    DB::commit();
+
+                    return $this->makeResponse(200, true, []);
+                } catch (\Exception $exception) {
+                    DB::rollBack();
+                    return $this->makeResponse(200, false, [
+                        'message' => 'Ошибка! Обратитесь к администртору!',
+                        'error' => $exception->getMessage()
+                    ]);
+                }
             } else {
                 return $this->makeResponse(200, false, ['data' => $s]);
             }
@@ -1086,9 +1130,9 @@ class ApiController extends Controller
                             if ($value->ttype == 3) {
                                 $suser = User::where('id', $value->r_user_id)->first();
                                 $partner = Partner::where('id', $suser->partner_id)->first();
-                                if($partner){
+                                if ($partner) {
                                     $el['contragent'] = $partner->name . " (" . $suser->name . ")";
-                                }else{
+                                } else {
                                     $el['contragent'] = $suser->name;
                                 }
 
@@ -1166,17 +1210,18 @@ class ApiController extends Controller
         }
     }
 
-    public function getPartnersList(Request $request){
+    public function getPartnersList(Request $request)
+    {
         $user = MobileUser::where('token', $request->token)->first();
         $subs = UsersSubscriptions::where('mobile_user_id', $user->id)->get();
         $partners = Partner::all();
         $array = [];
-        foreach ($partners as $partner){
+        foreach ($partners as $partner) {
             $sub = $subs->where('partner_id', $partner->id)->first();
             $obj = $partner;
-            if($sub){
+            if ($sub) {
                 $obj['has'] = 1;
-            }else{
+            } else {
                 $obj['has'] = 0;
             }
             array_push($array, $obj);
@@ -1185,91 +1230,89 @@ class ApiController extends Controller
     }
 
     // wallet one payment request
-    public function createWalletOrder(Request $request){
-	    $validator = Validator::make($request->all(), [
-		    'amount' => 'required|integer',
-		    'service_id' => 'required|integer',
-	    ]);
-	    if ($validator->fails()) {
-		    return $this->makeResponse(400, false, ['errors' => $validator->errors()->all()]);
-	    }
-	    $service = Service::where('id', $request->service_id)->first();
-	    $user = MobileUser::where('token', $request->token)->first();
-		$wallet_order = new WalletPayment();
-		$wallet_order->amount = $request->amount;
-		$wallet_order->service_id = $request->service_id;
-	    $wallet_order->mobile_user_id = $user->id;
-	    $wallet_order->price  = $request->amount * $service->payment_price;
-		$wallet_order->save();
-		$url = "https://takon.org/wallet?id=" . $wallet_order->id;
+    public function createWalletOrder(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'amount' => 'required|integer',
+            'service_id' => 'required|integer',
+        ]);
+        if ($validator->fails()) {
+            return $this->makeResponse(400, false, ['errors' => $validator->errors()->all()]);
+        }
+        $service = Service::where('id', $request->service_id)->first();
+        $user = MobileUser::where('token', $request->token)->first();
+        $wallet_order = new WalletPayment();
+        $wallet_order->amount = $request->amount;
+        $wallet_order->service_id = $request->service_id;
+        $wallet_order->mobile_user_id = $user->id;
+        $wallet_order->price = $request->amount * $service->payment_price;
+        $wallet_order->save();
+        $url = "https://takon.org/wallet?id=" . $wallet_order->id;
 
-		return $this->makeResponse(200, true, ["url" => $url]);
+        return $this->makeResponse(200, true, ["url" => $url]);
 
     }
 
     // handle walletOne response
-		public function handleSuccededWalletPayment(Request $request){
-		$order_number = $request->WMI_PAYMENT_NO;
+    public function handleSuccededWalletPayment(Request $request)
+    {
+        $order_number = $request->WMI_PAYMENT_NO;
 
-		$wallet_order = WalletPayment::where('id', $order_number)->first();
-		$wallet_order->status = 1;
-		$wallet_order->save();
+        $wallet_order = WalletPayment::where('id', $order_number)->first();
+        $wallet_order->status = 1;
+        $wallet_order->save();
 
-		DB::beginTransaction();
+        DB::beginTransaction();
 
-		try {
-			// Validate, then create if valid
+        try {
+            // Validate, then create if valid
 
-			$service = Service::where('id', $wallet_order->service_id)->first();
-			$newService = new UsersService();
-			$newService->mobile_user_id = $wallet_order->mobile_user_id;
-			$newService->service_id = $service->id;
-			$newService->amount = $wallet_order->amount;
-			$newService->company_id = null;
-			$newService->cs_id = null;
-			$newService->deadline = strtotime("+" . $service->deadline . " day", strtotime("now"));
-			$newService->save();
+            $service = Service::where('id', $wallet_order->service_id)->first();
+            $newService = new UsersService();
+            $newService->mobile_user_id = $wallet_order->mobile_user_id;
+            $newService->service_id = $service->id;
+            $newService->amount = $wallet_order->amount;
+            $newService->company_id = null;
+            $newService->cs_id = null;
+            $newService->deadline = strtotime("+" . $service->deadline . " day", strtotime("now"));
+            $newService->save();
 
-			$transaction = new Transaction();
-			$transaction->u_r_id = $wallet_order->mobile_user_id;
-			$transaction->amount = $wallet_order->amount;
-			$transaction->service_id = $wallet_order->service_id;
-			$transaction->price = $wallet_order->price;
-			$transaction->type = 6;
-			$transaction->users_service_id = $newService->id;
-			$transaction->save();
+            $transaction = new Transaction();
+            $transaction->u_r_id = $wallet_order->mobile_user_id;
+            $transaction->amount = $wallet_order->amount;
+            $transaction->service_id = $wallet_order->service_id;
+            $transaction->price = $wallet_order->price;
+            $transaction->type = 6;
+            $transaction->users_service_id = $newService->id;
+            $transaction->save();
 
 
+        } catch (ValidationException $e) {
 
-		}
-		catch(ValidationException $e)
-		{
+            DB::rollback();
 
-			DB::rollback();
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw $e;
+        }
 
-		}
-		catch(\Exception $e)
-		{
-			DB::rollback();
-			throw $e;
-		}
+        DB::commit();
 
-		DB::commit();
+        echo "WMI_RESULT=OK";
+    }
 
-		echo "WMI_RESULT=OK";
-	}
+    public function handleFailedWalletPayment(Request $request)
+    {
 
-	public function handleFailedWalletPayment(Request $request){
+    }
 
-	}
-
-    public function getPartnersLocations(Request $request){
+    public function getPartnersLocations(Request $request)
+    {
         $id = $request->id;
         $pl = PartnersLocation::where('partner_id', $id)->get();
         return $this->makeResponse(200, true, ['locations' => $pl]);
 
     }
-
 
 
     public function getDateFrom($time)
