@@ -636,7 +636,9 @@ class ApiController extends Controller
                     }
 
                 }
+                DB::commit();
             } catch (\Exception $exception) {
+                DB::rollBack();
                 return $this->makeResponse(400, false, [
                     'message' => 'Ошибка! Обратитесь к администратору!',
                     'error' => $exception->getMessage()
