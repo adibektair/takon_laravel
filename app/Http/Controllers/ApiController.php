@@ -547,9 +547,9 @@ class ApiController extends Controller
                     }
 
                     $model->delete();
-                    DB::commit();
                     return $this->makeResponse(200, true, ['message' => 'Успешно!']);
                 }
+                DB::commit();
             } catch (\Exception $exception) {
                 DB::rollBack();
                 return $this->makeResponse(400, false, [
