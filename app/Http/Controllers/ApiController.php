@@ -544,8 +544,8 @@ class ApiController extends Controller
                         $stat->amount = $model->amount;
                         $stat->save();
                     }
-                    DB::commit();
                     $model->delete();
+                    DB::commit();
                     return $this->makeResponse(200, true, ['message' => 'Успешно!']);
                 }
             } catch (\Exception $exception) {
