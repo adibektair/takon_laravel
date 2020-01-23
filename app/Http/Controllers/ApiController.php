@@ -496,7 +496,6 @@ class ApiController extends Controller
         $token = $request->token;
         $user = User::where('token', $token)->first();
         if ($user) {
-
             DB::beginTransaction();
             try {
                 $model = QrCode::where('hash', $string)->first();
@@ -545,11 +544,10 @@ class ApiController extends Controller
                         $stat->amount = $model->amount;
                         $stat->save();
                     }
-
+                    DB::commit();
                     $model->delete();
                     return $this->makeResponse(200, true, ['message' => 'Успешно!']);
                 }
-                DB::commit();
             } catch (\Exception $exception) {
                 DB::rollBack();
                 return $this->makeResponse(400, false, [
