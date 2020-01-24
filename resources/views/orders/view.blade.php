@@ -22,29 +22,29 @@
 
     <br><br>
     <div class="col-md-12">
-            <div class="col-md-12">
-                <h5>Заявка от юр. лица: <?=$company->name?></h5>
-                <br>
-                <label class="text-semibold">Телефон: <?=$company->phone?></label>
-            </div>
+        <div class="col-md-12">
+            <h5>Заявка от юр. лица: <?=$company->name?></h5>
+            <br>
+            <label class="text-semibold">Телефон: <?=$company->phone?></label>
+        </div>
         <br><br>
-            <div class="col-md-12">
-                <h5>Заявка партнеру: <?=$partner->name?></h5>
-                <br>
-                <label class="text-semibold">Телефон: <?=$partner->phone?></label>
-            </div>
+        <div class="col-md-12">
+            <h5>Заявка партнеру: <?=$partner->name?></h5>
+            <br>
+            <label class="text-semibold">Телефон: <?=$partner->phone?></label>
+        </div>
         <br>
-            <div class="col-md-12">
-                <h5>Товар или услуга</h5>
-                <label class="text-semibold">Наименование: <?=$service->name?></label>
-                <br>
-                <label class="text-semibold">В количестве: <?=$order->amount?></label>
-                <br>
-                <label class="text-semibold">На сумму: <?=$order->cost?></label>
-            </div>
+        <div class="col-md-12">
+            <h5>Товар или услуга</h5>
+            <label class="text-semibold">Наименование: <?=$service->name?></label>
+            <br>
+            <label class="text-semibold">В количестве: <?=$order->amount?></label>
+            <br>
+            <label class="text-semibold">На сумму: <?=$order->cost?></label>
+        </div>
         <hr>
         <br>
-        <form action="{{ route('save.order') }}" method="post" >
+        <form action="{{ route('save.order') }}" method="post">
             @csrf
             <input type="text" hidden value="<?=$order->id?>" name="id">
             <input type="text" hidden name="confirm" value="3" id="confirm">
@@ -66,7 +66,7 @@
 
                 </div>
                 <div class="form-group">
-                    <button id="accept_btn" onclick="disableBtn()" type="submit" class="btn btn-success btn-lg">Применить</button>
+                    <button id="accept_btn" type="submit" class="btn btn-success btn-lg">Применить</button>
                 </div>
 
             </div>
@@ -76,9 +76,9 @@
     <br>
 
     <script>
-        function disableBtn(){
-            document.getElementById('accept_btn').disabled = 'disabled';
-        }
+        // function disableBtn(){
+        //     document.getElementById('accept_btn').disabled = 'disabled';
+        // }
 
         function appendInput() {
             var div = document.getElementById('reason');
