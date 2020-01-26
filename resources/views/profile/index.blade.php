@@ -21,9 +21,9 @@
             <br>
             <div class="col-md-6">
                 @if($partner->image_path)
-                    <img src="/avatars/<?=$partner->image_path?>" style="width: 350px; height: 350px;" class="rounded">
+                    <img src="/public/avatars/<?=$partner->image_path?>" style="width: 350px; height: 350px;" class="rounded">
                 @else
-                    <img src="/avatars/Logo-placeholder.png"  class="rounded-circle" >
+                    <img src="/public/avatars/Logo-placeholder.png"  class="rounded-circle" >
                 @endif
                 <br><br>
                 <label class="text-info">Загрузить лого</label>

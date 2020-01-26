@@ -44,7 +44,7 @@ class PartnerController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -53,7 +53,7 @@ class PartnerController extends Controller
         $model->name = $request->name;
         $model->phone = $request->phone;
         $model->address = $request->address;
-        if($model->save()){
+        if ($model->save()) {
             $user = new User;
             $user->role_id = 2;
             $user->partner_id = $model->id;
@@ -70,11 +70,10 @@ class PartnerController extends Controller
     }
 
 
-
     /**
      * Display the specified resource.
      *
-     * @param  \App\Partner  $partner
+     * @param  \App\Partner $partner
      * @return \Illuminate\Http\Response
      */
     public function show(Partner $partner)
@@ -85,7 +84,7 @@ class PartnerController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Partner  $partner
+     * @param  \App\Partner $partner
      * @return \Illuminate\Http\Response
      */
     public function save(Request $request)
@@ -99,9 +98,9 @@ class PartnerController extends Controller
         $model->phone = $request->phone;
         $model->description = $request->desc;
         $model->address = $request->address;
-        if(request()->avatar){
-            $imageName = strtotime('now') . $model->name . '.'  . request()->avatar->getClientOriginalExtension();
-            request()->avatar->move(public_path('avatars'), $imageName);
+        if (request()->avatar) {
+            $imageName = strtotime('now') . $model->name . '.' . request()->avatar->getClientOriginalExtension();
+            request()->avatar->move(public_path('public/avatars'), $imageName);
             $model->image_path = $imageName;
         }
         $model->save();
@@ -113,8 +112,8 @@ class PartnerController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Partner  $partner
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Partner $partner
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Partner $partner)
@@ -125,7 +124,7 @@ class PartnerController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Partner  $partner
+     * @param  \App\Partner $partner
      * @return \Illuminate\Http\Response
      */
     public function destroy(Partner $partner)
@@ -133,19 +132,22 @@ class PartnerController extends Controller
         //
     }
 
-    public function getServicesPage(Request $request){
+    public function getServicesPage(Request $request)
+    {
 
         $partner = Partner::where('id', '=', $request->id)->first();
 
         return view('partners/services')->with(['id' => $request->id, 'name' => $partner->name]); //
     }
 
-    public function buyCurrentService(Request $request) {
+    public function buyCurrentService(Request $request)
+    {
         $service = Service::where('id', '=', $request->id)->first();
         return view('companies/form')->with(['service' => $service]);
     }
 
-    public function buyService(Request $request) {
+    public function buyService(Request $request)
+    {
         $service = Service::where('id', '=', $request->id)->first();
         $amount = $request->amount;
         $cost = $amount * $service->price;
@@ -158,20 +160,22 @@ class PartnerController extends Controller
         $message = new Notification();
         $message->status = 'info';
         $message->title = 'У Вас появилась новая заяка!';
-        $message->message = 'Ваш товар/услугу ' . $service->name .' желает приобрести юр. лицо в количестве - ' . $amount;
+        $message->message = 'Ваш товар/услугу ' . $service->name . ' желает приобрести юр. лицо в количестве - ' . $amount;
         $message->reciever_partner_id = $service->partner_id;
         $message->save();
         toastr()->info('Ваша заявка была отправлена на модерацию');
         return redirect()->route('company.services');
     }
 
-    public function shareServices(Request $request){
+    public function shareServices(Request $request)
+    {
         $id = $request->id;
         $service = Service::where('id', '=', $id)->first();
         return view('partners/share')->with(['service' => $service]);
     }
 
-    public function share(Request $request){
+    public function share(Request $request)
+    {
         $partner = Partner::where('id', '=', auth()->user()->partner_id)->first();
         $service = Service::where('id', '=', $request->id)->first();
         $reciever = Company::where('id', '=', $request->company_id)->first();
@@ -179,21 +183,21 @@ class PartnerController extends Controller
         // TODO: add moderation
         // TODO: deadline check
 
-        $deadline = strtotime("+" . $service->deadline ." day", strtotime("now"));
+        $deadline = strtotime("+" . $service->deadline . " day", strtotime("now"));
         $rec_ser = CompaniesService::where('service_id', '=', $request->id)
             ->where('company_id', '=', $request->company_id)
             ->where('deadline', '=', $deadline)
             ->first();
-        if($rec_ser){
+        if ($rec_ser) {
             $rec_ser->amount += $request->amount;
-        }else{
+        } else {
             $rec_ser = new CompaniesService();
             $rec_ser->service_id = $request->id;
             $rec_ser->amount = $request->amount;
             $rec_ser->deadline = $deadline;
             $rec_ser->company_id = $request->company_id;
         }
-        if($rec_ser->save()){
+        if ($rec_ser->save()) {
             $model = new Transaction();
             $model->type = 4;
             $model->cs_id = $rec_ser->id;
@@ -212,19 +216,20 @@ class PartnerController extends Controller
             null, $request->company_id, false);
 
         $not1 = new Notification();
-        $not1->make('info', 'Внимание!',  $request->amount . ' таконов товара/услуги ' . $service->name . ' от партнера' . $partner->name . ' были отправлены ' . $reciever->name,
+        $not1->make('info', 'Внимание!', $request->amount . ' таконов товара/услуги ' . $service->name . ' от партнера' . $partner->name . ' были отправлены ' . $reciever->name,
             null, $request->company_id, true);
         return view('services/index');
 
     }
 
 
-    public function getPartnersServices(Request $request){
+    public function getPartnersServices(Request $request)
+    {
 
         $services = Service::where('partner_id', '=', $request->id)->where('status', '=', 3)->get();
         return Datatables::of($services)
-            ->addColumn('service', function($service){
-                return '<a href="/buy-current-service?id='.  $service->id . '"><button class="btn btn-success">Приобрести</button></a>';
+            ->addColumn('service', function ($service) {
+                return '<a href="/buy-current-service?id=' . $service->id . '"><button class="btn btn-success">Приобрести</button></a>';
             })
             ->rawColumns(['service'])
             ->make(true);
@@ -232,23 +237,22 @@ class PartnerController extends Controller
 //        return datatables()->toJson();
     }
 
-    public function getPartners(){
+    public function getPartners()
+    {
         $partners = Partner::all();
         return Datatables::of($partners)
-            ->addColumn('buy', function($partner){
-                return '<a href="/partners-services?id=' . $partner->id .'"><button class="btn btn-success">Посмотреть товары и услуги</button></a>';
+            ->addColumn('buy', function ($partner) {
+                return '<a href="/partners-services?id=' . $partner->id . '"><button class="btn btn-success">Посмотреть товары и услуги</button></a>';
             })
-            ->addColumn('locations', function($partner){
-                return '<a class="btn btn-success" href="'.route('partners.location', ['id' => $partner->id]).'">Локации партнеров</a>';
+            ->addColumn('locations', function ($partner) {
+                return '<a class="btn btn-success" href="' . route('partners.location', ['id' => $partner->id]) . '">Локации партнеров</a>';
             })
-            ->addColumn('email', function ($partner){
+            ->addColumn('email', function ($partner) {
                 $user = User::where('role_id', 2)->where('partner_id', $partner->id)->first();
                 return $user->email;
             })
             ->rawColumns(['buy', 'email', 'locations'])
             ->make(true);
-
-
 
 
 //        return datatables()->toJson();
