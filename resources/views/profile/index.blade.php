@@ -17,6 +17,7 @@
     <div class="col-md-12">
         <form action="{{ route('edit.partner') }}" enctype="multipart/form-data" method="post">
             @csrf
+            
             <hr>
             <br>
             <div class="col-md-6">
