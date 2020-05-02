@@ -41,10 +41,8 @@ class TransactionController extends Controller
         return view('transactions/cashier');
     }
 
-
     public function use()
     {
-        $services = [];
         if (Auth::user()->role_id == Role::PARTNER_ID) {
             $services = Service::where('partner_id', auth()->user()->partner_id)->get();
         } else {
@@ -144,68 +142,11 @@ class TransactionController extends Controller
 
     }
 
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function return()
     {
         return view('transactions/return');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Transaction $transaction
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Transaction $transaction)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Transaction $transaction
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Transaction $transaction)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \App\Transaction $transaction
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Transaction $transaction)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Transaction $transaction
-     * @return \Illuminate\Http\Response
-     */
     public function partner()
     {
         return view('transactions/partners');
@@ -901,8 +842,6 @@ class TransactionController extends Controller
             $maxDate = $maxDate . ' 23:59:59';
         }
         $serviceId = $request->serviceId;
-//        $service = $request->service;
-//        $type = $request->type;
 
         $report = DB::select('select
               t.id,
