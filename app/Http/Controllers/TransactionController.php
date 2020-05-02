@@ -669,14 +669,14 @@ class TransactionController extends Controller
         $query = DB::table('transactions')
             ->where('transactions.type', 3)
             ->join('services', 'services.id', '=', 'transactions.service_id')
-            ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id');
+            ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
+            ->leftJoin('users', 'users.id', '=', 'transactions.u_r_id');
+
         if ($request->id) {
             $query = $query->where('transactions.service_id', $request->id);
         }
         if (auth()->user()->role_id == 1 OR auth()->user()->role_id == 4) {
-            $query = $query
-                ->leftJoin('users', 'users.id', '=', 'transactions.u_r_id')
-                ->leftJoin('companies_services', 'companies_services.id', '=', 'transactions.cs_id')
+            $query = $query->leftJoin('companies_services', 'companies_services.id', '=', 'transactions.cs_id')
                 ->leftJoin('companies', 'companies.id', '=', 'companies_services.company_id')
                 ->select(
                     'transactions.*',
@@ -686,9 +686,7 @@ class TransactionController extends Controller
                     'users.name as reciever',
                     'companies.name as company');
         } else {
-            $query = $query
-                ->leftJoin('users', 'users.id', '=', 'transactions.u_r_id')
-                ->leftJoin('groups_users', 'groups_users.mobile_user_id', '=', 'mobile_users.id')
+            $query = $query->leftJoin('groups_users', 'groups_users.mobile_user_id', '=', 'mobile_users.id')
                 ->leftJoin('groups', 'groups.id', '=', 'groups_users.group_id')
                 ->join('companies_services', 'companies_services.id', '=', 'transactions.cs_id')
                 ->join('companies', 'companies.id', '=', 'companies_services.company_id')
