@@ -680,40 +680,42 @@ class TransactionController extends Controller
     public function useAll(Request $request)
     {
         $query = DB::table('transactions')
-            ->where('transactions.type', 3);
+            ->where('transactions.type', 3)
+            ->join('services', 'services.id', '=', 'transactions.service_id')
+            ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id');
 
         if ($request->id) {
             $query = $query->where('transactions.service_id', $request->id);
         }
         if (auth()->user()->role_id == 1 OR auth()->user()->role_id == 4) {
-            $result = $query
-                ->join('services', 'services.id', '=', 'transactions.service_id')
-                ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
+            $query = $query
                 ->leftJoin('users', 'users.id', '=', 'transactions.u_r_id')
                 ->leftJoin('companies_services', 'companies_services.id', '=', 'transactions.cs_id')
                 ->leftJoin('companies', 'companies.id', '=', 'companies_services.company_id')
-                ->select('transactions.*', 'services.name as service', 'mobile_users.phone as sender', 'mobile_users.name as username', 'users.name as reciever', 'companies.name as company')
-                ->orderBy('created_at', 'asc');
+                ->select(
+                    'transactions.*',
+                    'services.name as service',
+                    'mobile_users.phone as sender',
+                    'mobile_users.name as username',
+                    'users.name as reciever',
+                    'companies.name as company');
         } else {
-            $result = $query
-                ->join('services', 'services.id', '=', 'transactions.service_id')
-                ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
+            $query = $query
                 ->leftJoin('users', 'users.id', '=', 'transactions.u_r_id')
                 ->leftJoin('groups_users', 'groups_users.mobile_user_id', '=', 'mobile_users.id')
-                ->leftJoin(
-                    'groups',
-                    'groups.id',
-                    '=',
-                    'groups_users.group_id'
-                )
-                ->select('transactions.*', 'services.name as service', 'groups_users.username as username', 'mobile_users.phone as sender', 'users.name as reciever')
+                ->leftJoin('groups', 'groups.id', '=', 'groups_users.group_id')
                 ->join('companies_services', 'companies_services.id', '=', 'transactions.cs_id')
                 ->join('companies', 'companies.id', '=', 'companies_services.company_id')
                 ->where('companies.id', '=', auth()->user()->company_id)
-                ->orderBy('created_at', 'asc')
-                ->groupBy('transactions.id');
+                ->groupBy('transactions.id')
+                ->select(
+                    'transactions.*',
+                    'services.name as service',
+                    'groups_users.username as username',
+                    'mobile_users.phone as sender',
+                    'users.name as reciever');
         }
-
+        $result = $query->orderBy('created_at', 'asc');
 
         $s = DataTables::of($result)
             ->make(true);
