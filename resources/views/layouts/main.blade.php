@@ -352,6 +352,14 @@
 
                     </li>
 
+                    <li>
+                        <a href="{{ route('transactions.use') }}">
+                            <i class="fa fa-hand-grab-o"></i>
+                            <span>
+                                Использование таконов
+                            </span>
+                        </a>
+                    </li>
                 @elseif(auth()->user()->role_id == 3)
                     <li>
                         <a href="{{ route('company.services') }}">
