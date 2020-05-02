@@ -65,8 +65,7 @@ class TransactionController extends Controller
             ->join('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
             ->join('users', 'users.id', '=', 'transactions.u_r_id')
             ->select('transactions.*', 'services.name as service', 'mobile_users.phone as phone', 'users.email')
-            ->orderBy('transactions.id', 'desc')
-            ->get();
+            ->orderBy('transactions.id', 'desc');
         $s = DataTables::of($model)
             ->make(true);
         return $s;
@@ -84,8 +83,7 @@ class TransactionController extends Controller
                 ->join('services', 'services.id', '=', 'transactions.service_id')
                 ->join('companies_services', 'companies_services.id', '=', 'transactions.cs_id')
                 ->where('companies_services.company_id', '=', auth()->user()->company_id)
-                ->select('transactions.*', 'musers.phone as muserphone', 'users.phone as sender', 'services.name as service')
-                ->get();
+                ->select('transactions.*', 'musers.phone as muserphone', 'users.phone as sender', 'services.name as service');
             $s = DataTables::of($result)
                 ->addColumn('reciever', function ($service) {
                     if ($service->type == 3) {
@@ -114,8 +112,7 @@ class TransactionController extends Controller
                 ->leftJoin('mobile_users as users', 'users.id', '=', 'transactions.u_s_id')
                 ->leftJoin('mobile_users as musers', 'musers.id', '=', 'transactions.u_r_id')
                 ->join('services', 'services.id', '=', 'transactions.service_id')
-                ->select('transactions.*', 'musers.phone as muserphone', 'users.phone as sender', 'services.name as service')
-                ->get();
+                ->select('transactions.*', 'musers.phone as muserphone', 'users.phone as sender', 'services.name as service');
             $s = DataTables::of($result)
                 ->addColumn('reciever', function ($service) {
                     if ($service->type == 3) {
@@ -252,8 +249,7 @@ class TransactionController extends Controller
             ->join('companies', 'companies.id', '=', 'transactions.c_s_id')
             ->leftJoin('companies as c', 'c.id', '=', 'transactions.c_r_id')
             ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_r_id')
-            ->select('transactions.*', 'services.name as service', 'companies.name as sender', 'c.name as company', 'mobile_users.phone as user')
-            ->get();
+            ->select('transactions.*', 'services.name as service', 'companies.name as sender', 'c.name as company', 'mobile_users.phone as user');
 
         $s = DataTables::of($result)
             ->addColumn('1', function ($service) {
@@ -289,8 +285,7 @@ class TransactionController extends Controller
             ->leftJoin('companies as c', 'c.id', '=', 'transactions.c_r_id')
             ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
             ->leftJoin('users', 'users.id', '=', 'transactions.u_r_id')
-            ->select('transactions.*', 'services.name as service', 'mobile_users.phone as sender', 'users.name as user')
-            ->get();
+            ->select('transactions.*', 'services.name as service', 'mobile_users.phone as sender', 'users.name as user');
 
         $s = DataTables::of($result)
             ->addColumn('1', function ($service) {
@@ -344,8 +339,7 @@ class TransactionController extends Controller
 //                'groups_users.group_id'
 //            )
 //            ->where('groups.company_id', auth()->user()->company_id)
-            ->select('transactions.*', 'services.name as service', 'companies.name as sender', 'c.name as company', 'mobile_users.phone as user', 'mobile_users.name as user_name')
-            ->get();
+            ->select('transactions.*', 'services.name as service', 'companies.name as sender', 'c.name as company', 'mobile_users.phone as user', 'mobile_users.name as user_name');
 
 //        }
 
@@ -383,8 +377,7 @@ class TransactionController extends Controller
             ->leftJoin('companies as c', 'c.id', '=', 'transactions.c_r_id')
             ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_r_id')
             ->leftJoin('mobile_users as m', 'm.id', '=', 'transactions.u_s_id')
-            ->select('transactions.*', 'services.name as service', 'services.partner_id as partner_id', 'companies.name as c1', 'c.name as c2', 'mobile_users.phone as u1', 'm.phone as u2')
-            ->get();
+            ->select('transactions.*', 'services.name as service', 'services.partner_id as partner_id', 'companies.name as c1', 'c.name as c2', 'mobile_users.phone as u1', 'm.phone as u2');
 
         $s = DataTables::of($result)
             ->addColumn('1', function ($service) {
@@ -424,8 +417,7 @@ class TransactionController extends Controller
             ->leftJoin('companies as c', 'c.id', '=', 'transactions.c_r_id')
             ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_r_id')
             ->leftJoin('mobile_users as m', 'm.id', '=', 'transactions.u_s_id')
-            ->select('transactions.*', 'services.name as service', 'services.partner_id as partner_id', 'companies.name as c1', 'c.name as c2', 'mobile_users.phone as u1', 'm.phone as u2')
-            ->get();
+            ->select('transactions.*', 'services.name as service', 'services.partner_id as partner_id', 'companies.name as c1', 'c.name as c2', 'mobile_users.phone as u1', 'm.phone as u2');
 
         $s = DataTables::of($result)
             ->addColumn('1', function ($service) {
@@ -466,8 +458,7 @@ class TransactionController extends Controller
             ->leftJoin('companies as c', 'c.id', '=', 'transactions.c_r_id')
             ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_r_id')
             ->leftJoin('mobile_users as m', 'm.id', '=', 'transactions.u_s_id')
-            ->select('transactions.*', 'services.name as service', 'services.partner_id as partner_id', 'companies.name as c1', 'c.name as c2', 'mobile_users.phone as u1', 'm.phone as u2')
-            ->get();
+            ->select('transactions.*', 'services.name as service', 'services.partner_id as partner_id', 'companies.name as c1', 'c.name as c2', 'mobile_users.phone as u1', 'm.phone as u2');
 
         $s = DataTables::of($result)
             ->addColumn('1', function ($service) {
@@ -505,8 +496,8 @@ class TransactionController extends Controller
             ->join('services', 'services.id', '=', 'transactions.service_id')
             ->join('companies', 'companies.id', '=', 'transactions.c_r_id')
             ->join('partners', 'partners.id', '=', 'transactions.p_s_id')
-            ->select('transactions.*', 'services.name as service', 'companies.name as company', 'partners.name as partner')
-            ->get();
+            ->select('transactions.*', 'services.name as service', 'companies.name as company', 'partners.name as partner');
+
         $s = DataTables::of($result)
             ->addColumn('1', function ($service) {
                 return '<a href="/transactions/admin/more?id=' . $service->id . '"><button class="btn btn-success">Подробнее</button></a>';
@@ -540,8 +531,7 @@ class TransactionController extends Controller
             ->leftJoin('services', 'services.id', '=', 'transactions.service_id')
             ->leftJoin('companies', 'companies.id', '=', 'transactions.c_r_id')
             ->leftJoin('partners', 'partners.id', '=', 'transactions.p_s_id')
-            ->select('transactions.*', 'services.name as service', 'companies.name as company', 'partners.name as partner')
-            ->get();
+            ->select('transactions.*', 'services.name as service', 'companies.name as company', 'partners.name as partner');
 
 
         $s = DataTables::of($result)
@@ -588,8 +578,7 @@ class TransactionController extends Controller
             ->where('c_r_id', auth()->user()->company_id)
             ->join('services', 'services.id', '=', 'transactions.service_id')
             ->leftJoin('partners', 'partners.id', '=', 'services.partner_id')
-            ->select('transactions.*', 'services.name as service', 'partners.name as partner')
-            ->get();
+            ->select('transactions.*', 'services.name as service', 'partners.name as partner');
 
         $s = DataTables::of($result)
             ->addColumn('1', function ($service) {
@@ -669,8 +658,7 @@ class TransactionController extends Controller
             ->where('type', 6)
             ->join('services', 'services.id', '=', 'transactions.service_id')
             ->join('mobile_users', 'mobile_users.id', '=', 'transactions.u_r_id')
-            ->select('transactions.*', 'services.name as service', 'mobile_users.phone as sender')
-            ->get();
+            ->select('transactions.*', 'services.name as service', 'mobile_users.phone as sender');
 
         $s = DataTables::of($result)->make(true);
 
@@ -752,7 +740,7 @@ class TransactionController extends Controller
         if ($type) {
             $res = $res->where('transactions.type', '=', $type);
         }
-        $res = $res->get();
+
 
         $s = DataTables::of($res)
             ->addColumn('sender', function ($service) {
