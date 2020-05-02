@@ -843,9 +843,19 @@ class TransactionController extends Controller
         }
         $serviceId = $request->serviceId;
 
-        $report = DB::select('select
-              t.id,
-               case
+        $reportQuery = DB::table('transactions as t')
+            ->join('companies_services as cs', 't.cs_id', '=', 'cs.id')
+            ->join('services as s', 'cs.service_id', '=', 's.id')
+            ->join('companies as c', 'cs.company_id', '=', 'c.id')
+            ->leftJoin('partners as p', 't.p_s_id', '=', 'p.id')
+            ->leftJoin('mobile_users as mobile_user_receiver', 'mobile_user_receiver.id', '=', 't.u_r_id')
+            ->leftJoin('users as cashier_user_receiver', 'cashier_user_receiver.id', '=', 't.u_r_id')
+            ->leftJoin('companies as company_receiver', 'company_receiver.id', '=', 't.c_r_id')
+            ->leftJoin('mobile_users as mobile_user_sender', 'mobile_user_sender.id', '=', 't.u_s_id')
+            ->leftJoin('companies as company_sender', 'company_sender.id', '=', 't.c_s_id')
+            ->select([
+                't.id',
+                DB::raw('case
                  when t.type = 1
                          then case
                                 when company_sender.id is not null then company_sender.phone
@@ -859,8 +869,8 @@ class TransactionController extends Controller
                          then p.phone
                  when t.type = 5
                          then mobile_user_sender.phone
-                   end sender,
-               case
+                   end sender'),
+                DB::raw('case
                  when t.type = 1
                          then case
                                 when company_sender.id is not null then company_sender.name
@@ -874,9 +884,9 @@ class TransactionController extends Controller
                          then p.name
                  when t.type = 5
                          then mobile_user_sender.phone
-                   end sender_name,
-               s.name  service_name,
-               case
+                   end sender_name'),
+                's.name as service_name',
+                DB::raw('case
                  when t.type in (1,3)
                          then t.amount
                    end sent,
@@ -885,26 +895,27 @@ class TransactionController extends Controller
                      then t.amount
                  when t.type in(4, 5)
                          then t.amount
-                   end received,
-               t.created_at
-        from transactions t
-               inner join companies_services cs on t.cs_id = cs.id
-               inner join services s on cs.service_id = s.id
-               inner join companies c on cs.company_id = c.id
-               left join partners p on t.p_s_id = p.id
-               left join mobile_users mobile_user_receiver on mobile_user_receiver.id = t.u_r_id
-               left join users cashier_user_receiver on cashier_user_receiver.id = t.u_r_id
-               left join companies company_receiver on company_receiver.id = t.c_r_id
-               left join mobile_users mobile_user_sender on mobile_user_sender.id = t.u_s_id
-               left join companies company_sender on company_sender.id = t.c_s_id
-        
-        WHERE c.id = ?
-        ' . ($minDate ? ' and t.created_at >=  \'' . $minDate . '\'' : '') . '
-        ' . ($maxDate ? ' and t.created_at <=  \'' . $maxDate . '\'' : '') . '
-        ' . ($mobileUserId ? ' and mobile_user_sender.id =  ' . $mobileUserId : '') . '
-        ' . ($serviceId ? ' and s.id =  ' . $serviceId : '') . '
-        order by t.created_at asc', [Auth::user()->company_id]);
-        return DataTables::of($report)->make(true);
+                   end received'),
+                't.created_at'
+            ])
+            ->where('c.id', '=', Auth::user()->company_id);
+
+        if ($minDate) {
+            $reportQuery = $reportQuery->where('t.created_at', '>=', $minDate);
+        }
+        if ($maxDate) {
+            $reportQuery = $reportQuery->where('t.created_at', '<=', $maxDate);
+        }
+        if ($mobileUserId) {
+            $reportQuery = $reportQuery->where('mobile_user_sender.id', '=', $mobileUserId);
+        }
+        if ($serviceId) {
+            $reportQuery = $reportQuery->where('s.id', '=', $serviceId);
+        }
+
+        $reportQuery = $reportQuery->orderBy('t.created_at', 'asc');
+
+        return DataTables::of($reportQuery)->make(true);
 
     }
 
