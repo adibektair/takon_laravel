@@ -42,7 +42,7 @@ class ReportController extends Controller
 //        if ($type) {
 //            $res = $res->where('transactions.type', '=', $type);
 //        }
-        $res = $res->get();
+//        $res = $res->get();
 
         $s = DataTables::of($res)
             ->addColumn('sender', function ($service) {
