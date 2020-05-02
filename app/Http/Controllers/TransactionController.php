@@ -34,8 +34,9 @@ class TransactionController extends Controller
     }
 
 
-    public function cashier(){
-	    return view('transactions/cashier');
+    public function cashier()
+    {
+        return view('transactions/cashier');
     }
 
 
@@ -55,19 +56,20 @@ class TransactionController extends Controller
     }
 
 
-    public function cashierGet(){
-	    $model = DB::table('transactions')
-		    ->where('u_r_id', auth()->user()->id)
-		    ->where('type', 3)
-		    ->join('services', 'services.id', '=', 'transactions.service_id')
-		    ->join('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
-		    ->join('users', 'users.id', '=', 'transactions.u_r_id')
-		    ->select('transactions.*', 'services.name as service', 'mobile_users.phone as phone', 'users.email')
-		    ->orderBy('transactions.id', 'desc')
-		    ->get();
-	    $s = DataTables::of($model)
-		    ->make(true);
-	    return $s;
+    public function cashierGet()
+    {
+        $model = DB::table('transactions')
+            ->where('u_r_id', auth()->user()->id)
+            ->where('type', 3)
+            ->join('services', 'services.id', '=', 'transactions.service_id')
+            ->join('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
+            ->join('users', 'users.id', '=', 'transactions.u_r_id')
+            ->select('transactions.*', 'services.name as service', 'mobile_users.phone as phone', 'users.email')
+            ->orderBy('transactions.id', 'desc')
+            ->get();
+        $s = DataTables::of($model)
+            ->make(true);
+        return $s;
     }
 
     public function searchMake(Request $request)
@@ -677,76 +679,39 @@ class TransactionController extends Controller
 
     public function useAll(Request $request)
     {
+        $query = DB::table('transactions')
+            ->where('transactions.type', 3);
 
+        if ($request->id) {
+            $query = $query->where('transactions.service_id', $request->id);
+        }
         if (auth()->user()->role_id == 1 OR auth()->user()->role_id == 4) {
-
-            if ($request->id) {
-                $result = DB::table('transactions')
-                    ->where('transactions.type', 3)
-                    ->where('transactions.service_id', $request->id)
-                    ->join('services', 'services.id', '=', 'transactions.service_id')
-                    ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
-                    ->leftJoin('users', 'users.id', '=', 'transactions.u_r_id')
-                    ->leftJoin('companies_services', 'companies_services.id', '=', 'transactions.cs_id')
-                    ->leftJoin('companies', 'companies.id', '=', 'companies_services.company_id')
-                    ->select('transactions.*', 'services.name as service', 'mobile_users.phone as sender', 'mobile_users.name as username', 'users.name as reciever', 'companies.name as company')
-                    ->orderBy('created_at', 'asc');
-
-            } else {
-                $result = DB::table('transactions')
-                    ->where('transactions.type', 3)
-                    ->join('services', 'services.id', '=', 'transactions.service_id')
-                    ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
-                    ->leftJoin('companies_services', 'companies_services.id', '=', 'transactions.cs_id')
-                    ->leftJoin('companies', 'companies.id', '=', 'companies_services.company_id')
-                    ->leftJoin('users', 'users.id', '=', 'transactions.u_r_id')
-                    ->select('transactions.*', 'services.name as service', 'mobile_users.phone as sender', 'mobile_users.name as username', 'users.name as reciever', 'companies.name as company')
-                    ->orderBy('created_at', 'asc');
-            }
+            $result = $query
+                ->join('services', 'services.id', '=', 'transactions.service_id')
+                ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
+                ->leftJoin('users', 'users.id', '=', 'transactions.u_r_id')
+                ->leftJoin('companies_services', 'companies_services.id', '=', 'transactions.cs_id')
+                ->leftJoin('companies', 'companies.id', '=', 'companies_services.company_id')
+                ->select('transactions.*', 'services.name as service', 'mobile_users.phone as sender', 'mobile_users.name as username', 'users.name as reciever', 'companies.name as company')
+                ->orderBy('created_at', 'asc');
         } else {
-
-            if ($request->id) {
-                $result = DB::table('transactions')
-                    ->where('transactions.type', 3)
-                    ->where('transactions.service_id', $request->id)
-                    ->join('services', 'services.id', '=', 'transactions.service_id')
-                    ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
-                    ->leftJoin('users', 'users.id', '=', 'transactions.u_r_id')
-                    ->join('companies_services', 'companies_services.id', '=', 'transactions.cs_id')
-                    ->join('companies', 'companies.id', '=', 'companies_services.company_id')
-                    ->where('companies.id', '=', auth()->user()->company_id)
-                    ->leftJoin('groups_users', 'groups_users.mobile_user_id', '=', 'mobile_users.id')
-                    ->leftJoin(
-                        'groups',
-                        'groups.id',
-                        '=',
-                        'groups_users.group_id'
-                    )
-                    ->where('groups.company_id', auth()->user()->company_id)
-                    ->select('transactions.*', 'services.name as service', 'mobile_users.phone as sender', 'groups_users.username as username', 'users.name as reciever')
-                    ->groupBy('transactions.id')
-                    ->orderBy('created_at', 'asc');
-
-            } else {
-                $result = DB::table('transactions')
-                    ->where('transactions.type', 3)
-                    ->join('services', 'services.id', '=', 'transactions.service_id')
-                    ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
-                    ->leftJoin('users', 'users.id', '=', 'transactions.u_r_id')
-                    ->leftJoin('groups_users', 'groups_users.mobile_user_id', '=', 'mobile_users.id')
-                    ->leftJoin(
-                        'groups',
-                        'groups.id',
-                        '=',
-                        'groups_users.group_id'
-                    )
-                    ->select('transactions.*', 'services.name as service', 'groups_users.username as username', 'mobile_users.phone as sender', 'users.name as reciever')
-                    ->join('companies_services', 'companies_services.id', '=', 'transactions.cs_id')
-                    ->join('companies', 'companies.id', '=', 'companies_services.company_id')
-                    ->where('companies.id', '=', auth()->user()->company_id)
-                    ->orderBy('created_at', 'asc')
-                    ->groupBy('transactions.id');
-            }
+            $result = $query
+                ->join('services', 'services.id', '=', 'transactions.service_id')
+                ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
+                ->leftJoin('users', 'users.id', '=', 'transactions.u_r_id')
+                ->leftJoin('groups_users', 'groups_users.mobile_user_id', '=', 'mobile_users.id')
+                ->leftJoin(
+                    'groups',
+                    'groups.id',
+                    '=',
+                    'groups_users.group_id'
+                )
+                ->select('transactions.*', 'services.name as service', 'groups_users.username as username', 'mobile_users.phone as sender', 'users.name as reciever')
+                ->join('companies_services', 'companies_services.id', '=', 'transactions.cs_id')
+                ->join('companies', 'companies.id', '=', 'companies_services.company_id')
+                ->where('companies.id', '=', auth()->user()->company_id)
+                ->orderBy('created_at', 'asc')
+                ->groupBy('transactions.id');
         }
 
 
@@ -793,38 +758,38 @@ class TransactionController extends Controller
                 if ($service->type == 1) {
                     if ($service->c_s_id) {
                         $c = Company::where('id', $service->c_s_id)->first();
-                        if($c){
+                        if ($c) {
                             return $c->name;
-                        }else{
+                        } else {
                             return '';
                         }
                     } else {
                         $m = MobileUser::where('id', $service->u_s_id)->first();
-                        if($m){
+                        if ($m) {
                             return $m->phone;
-                        }else{
+                        } else {
                             return '';
                         }
                     }
                 } else if ($service->type == 2) {
                     $p = Partner::where('id', $service->p_s_id)->first();
-                    if($p){
+                    if ($p) {
                         return $p->name;
-                    }else{
+                    } else {
                         return '';
                     }
                 } else if ($service->type == 3) {
                     $m = MobileUser::where('id', $service->u_s_id)->first();
-                    if($m){
+                    if ($m) {
                         return $m->phone;
-                    }else{
+                    } else {
                         return '';
                     }
                 } else if ($service->type == 5) {
                     $m = MobileUser::where('id', $service->u_s_id)->first();
-                    if($m){
+                    if ($m) {
                         return $m->phone;
-                    }else{
+                    } else {
                         return '';
                     }
                 }
