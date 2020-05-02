@@ -244,15 +244,13 @@ class CompanyController extends Controller
 
     public function getServices()
     {
-
-        $services = DB::table('companies_services')->where('company_id', '=', auth()->user()->company_id)
+        $servicesQuery = DB::table('companies_services')->where('company_id', '=', auth()->user()->company_id)
             ->join('services', 'services.id', '=', 'companies_services.service_id')
             ->join('partners', 'partners.id', '=', 'services.partner_id')
             ->select('companies_services.*', 'partners.name as partner', 'services.name as service', 'services.price')
-            ->where('companies_services.amount','<>',0)
-            ->get();
+            ->where('companies_services.amount', '<>', 0);
 
-        $s = DataTables::of($services)->addColumn('checkbox', function ($service) {
+        $s = DataTables::of($servicesQuery)->addColumn('checkbox', function ($service) {
             return '<a class="btn btn-success" href="/groups?id=' . $service->id . '">Раздать</a>';
         })
             // передать юр лицу
@@ -263,8 +261,6 @@ class CompanyController extends Controller
             })
             ->rawColumns(['return', 'checkbox'])
             ->make(true);
-
-
         return $s;
     }
 
@@ -342,14 +338,14 @@ class CompanyController extends Controller
 
     public function getReturn()
     {
-        $users = DB::table('users_services')
+        $usersQuery = DB::table('users_services')
             ->where('company_id', auth()->user()->company_id)
             ->where('users_services.amount', '<>', 0)
             ->join('services', 'services.id', '=', 'users_services.service_id')
             ->join('mobile_users', 'mobile_users.id', '=', 'users_services.mobile_user_id')
-            ->select('users_services.*', 'mobile_users.phone','mobile_users.name as m_name', 'services.name as service')->get();
+            ->select('users_services.*', 'mobile_users.phone', 'mobile_users.name as m_name', 'services.name as service');
 
-        return Datatables::of($users)
+        return Datatables::of($usersQuery)
             ->addColumn('return', function ($user) {
                 return '<a href="/return-takon?id=' . $user->id . '"><button class="btn btn-success">Возврат</button></a>';
             })
@@ -414,8 +410,8 @@ class CompanyController extends Controller
     public function all()
     {
 
-        $companies = Company::all();
-        return Datatables::of($companies)
+        $companiesQuery = Company::all();
+        return Datatables::of($companiesQuery)
             ->addColumn('email', function ($company) {
                 $user = User::where('role_id', 3)->where('company_id', $company->id)->first();
                 return $user->email;

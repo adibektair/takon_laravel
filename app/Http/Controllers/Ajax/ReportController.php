@@ -64,8 +64,6 @@ class ReportController extends Controller
                     $m = MobileUser::where('id', $service->u_s_id)->first();
                     return $m->phone;
                 }
-
-
             })
             ->addColumn('reciever', function ($service) use ($company) {
                 if ($service->type == 1) {
