@@ -691,7 +691,6 @@ class TransactionController extends Controller
                 ->join('companies_services', 'companies_services.id', '=', 'transactions.cs_id')
                 ->join('companies', 'companies.id', '=', 'companies_services.company_id')
                 ->where('companies.id', '=', auth()->user()->company_id)
-//                ->groupBy('transactions.id')
                 ->select(
                     'transactions.*',
                     'services.name as service',
