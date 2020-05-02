@@ -678,7 +678,7 @@ class TransactionController extends Controller
         }
 
         $roleId = auth()->user()->role_id;
-        if (in_array($roleId, [Role::ADMIN_ID, Role::CASHIER_ID])) {
+        if (in_array($roleId, [Role::ADMIN_ID, Role::CASHIER_ID, Role::PARTNER_ID])) {
             $query = $query->leftJoin('companies_services', 'companies_services.id', '=', 'transactions.cs_id')
                 ->leftJoin('companies', 'companies.id', '=', 'companies_services.company_id')
                 ->select(
@@ -688,6 +688,9 @@ class TransactionController extends Controller
                     'mobile_users.name as username',
                     'users.name as reciever',
                     'companies.name as company');
+            if($roleId == Role::PARTNER_ID){
+                $query = $query->where('services.partner_id', '=', auth()->user()->partner_id);
+            }
         } else if ($roleId == Role::COMPANY_ID) {
             $query = $query->leftJoin('groups_users', 'groups_users.mobile_user_id', '=', 'mobile_users.id')
                 ->leftJoin('groups', 'groups.id', '=', 'groups_users.group_id')
@@ -700,17 +703,6 @@ class TransactionController extends Controller
                     'groups_users.username as username',
                     'mobile_users.phone as sender',
                     'users.name as reciever');
-        } else if ($roleId == Role::PARTNER_ID) {
-            $query = $query->leftJoin('companies_services', 'companies_services.id', '=', 'transactions.cs_id')
-                ->leftJoin('companies', 'companies.id', '=', 'companies_services.company_id')
-                ->where('services.partner_id', '=', auth()->user()->partner_id)
-                ->select(
-                    'transactions.*',
-                    'services.name as service',
-                    'mobile_users.phone as sender',
-                    'mobile_users.name as username',
-                    'users.name as reciever',
-                    'companies.name as company');
         }
         $result = $query->orderBy('created_at', 'asc');
 
@@ -735,7 +727,6 @@ class TransactionController extends Controller
             ->join('companies', 'companies.id', '=', 'companies_services.company_id')
             ->join('services', 'services.id', '=', 'transactions.service_id')
             ->where('companies.id', auth()->user()->company_id);
-
 
         if ($minDate) {
             $res = $res->where('transactions.created_at', '>=', $minDate);

@@ -6,8 +6,9 @@ use App\Notification;
 use App\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-//use Yajra\DataTables\Facades\DataTables;
 use Yajra\DataTables\DataTables;
+
+//use Yajra\DataTables\Facades\DataTables;
 
 class ServiceController extends Controller
 {
@@ -34,7 +35,7 @@ class ServiceController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -45,7 +46,7 @@ class ServiceController extends Controller
         $model->price = $request->price;
         $model->description = $request->desc;
         $model->partner_id = auth()->user()->partner_id;
-        if($request->payment){
+        if ($request->payment) {
             $model->payment_enabled = true;
             $model->payment_deadline = $request->payment_deadline;
             $model->payment_price = $request->payment_price;
@@ -63,12 +64,12 @@ class ServiceController extends Controller
         $model->deadline = $request->deadline;
         $model->price = $request->price;
         $model->description = $request->desc;
-        if($request->active){
+        if ($request->active) {
             $model->status = 3;
-        }else{
+        } else {
             $model->status = 4;
         }
-        if($request->payment){
+        if ($request->payment) {
             $model->payment_deadline = $request->payment_deadline;
             $model->payment_enabled = true;
             $model->payment_price = $request->payment_price;
@@ -81,7 +82,7 @@ class ServiceController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Service  $service
+     * @param  \App\Service $service
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request)
@@ -93,19 +94,19 @@ class ServiceController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Service  $service
+     * @param  \App\Service $service
      * @return \Illuminate\Http\Response
-     // sharuam jok
-    public function edit(Service $service)
-    {
-        //
-    }
-
-    /**
+     * // sharuam jok
+     * public function edit(Service $service)
+     * {
+     * //
+     * }
+     *
+     * /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Service  $service
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Service $service
      * @return \Illuminate\Http\Response
      */
     public function edit(Request $request)
@@ -117,7 +118,7 @@ class ServiceController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Service  $service
+     * @param  \App\Service $service
      * @return \Illuminate\Http\Response
      */
     public function destroy(Service $service)
@@ -125,22 +126,21 @@ class ServiceController extends Controller
         //
     }
 
-    public function getMyServices(){
+    public function getMyServices()
+    {
 
-        $servives = DB::table('services')
+        $servicesQuery = DB::table('services')
             ->where('partner_id', '=', auth()->user()->partner_id)
-            ->whereIn('status',  [3, 4])
-            ->get();
+            ->whereIn('status', [3, 4]);
 
-        $s = DataTables::of($servives)->addColumn('checkbox', function ($service) {
-            if($service->status == 3){
+        $s = DataTables::of($servicesQuery)->addColumn('checkbox', function ($service) {
+            if ($service->status == 3) {
                 return '<a href="/partner-share-services?id=' . $service->id . '"><button class="btn btn-success">Поделиться</button></a>';
-            }else{
+            } else {
                 return 'Неактивен';
             }
-
         })
-            ->addColumn('edit', function ($service){
+            ->addColumn('edit', function ($service) {
                 return '<a href="/edit-service?id=' . $service->id . '"><button class="btn btn-outline-info">Редактировать</button></a>';
             })
             ->rawColumns(['checkbox', 'edit'])
@@ -150,36 +150,37 @@ class ServiceController extends Controller
         return $s;
     }
 
-    public function moderationList(){
-        $list = DB::table('services')->where('status', '=', 1)
+    public function moderationList()
+    {
+        $listQuery = DB::table('services')->where('status', '=', 1)
             ->join('partners', 'partners.id', '=', 'services.partner_id')
-            ->select('services.*', 'partners.name as partner', 'partners.phone')
-            ->get();
+            ->select('services.*', 'partners.name as partner', 'partners.phone');
 
-        return Datatables::of($list)
-            ->addColumn('moderate', function($partner){
-                return '<a href="/services/view?id=' . + $partner->id . '"><button class="btn btn-success">Управлять</button></a>';
+        return Datatables::of($listQuery)
+            ->addColumn('moderate', function ($partner) {
+                return '<a href="/services/view?id=' . +$partner->id . '"><button class="btn btn-success">Управлять</button></a>';
             })
             ->rawColumns(['moderate'])
             ->make(true);
 
-        return datatables($list)->toJson();
+        return datatables($listQuery)->toJson();
     }
 
-    public function moderate(Request $request){
+    public function moderate(Request $request)
+    {
         $service = Service::where('id', '=', $request->id)->first();
         $service->status = $request->confirm;
-        if($service->save()){
+        if ($service->save()) {
             toastr()->success('Успешно!');
 
             $message = new Notification();
 
-            if($request->confirm == 3){
+            if ($request->confirm == 3) {
                 $message->status = 'success';
                 $message->title = 'Товар или услуга успешно были добавлены в систему';
                 $message->message = $service->name . ' был(а) успешно добавлен(а) в систему!';
                 $message->reciever_partner_id = $service->partner_id;
-            }else{
+            } else {
                 $message->status = 'error';
                 $message->title = 'Товар или услуга не прошли модерацию';
                 $message->message = $service->name . ' не был(а) добавлен(а) в систему по причине - ' . $request->reason;
@@ -188,7 +189,7 @@ class ServiceController extends Controller
             $message->save();
             return view('services/moderation');
 
-        }else{
+        } else {
             abort(501);
         }
 

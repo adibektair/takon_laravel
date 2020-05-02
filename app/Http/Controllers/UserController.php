@@ -99,7 +99,7 @@ class UserController extends Controller
 
         ]);
         if ($validator->fails()) {
-          
+
             toastr()->error($validator->errors());
             return redirect()->back();
         }
@@ -131,9 +131,9 @@ class UserController extends Controller
 
     public function all(){
 
-        $users = User::where('partner_id', '=', auth()->user()->partner_id)->where('role_id', '=', 4)->get();
+        $usersQuery = User::where('partner_id', '=', auth()->user()->partner_id)->where('role_id', '=', 4);
 
-        return Datatables::of($users)
+        return Datatables::of($usersQuery)
             ->addColumn('edit', function($user){
                 return '<a href="/edit-user?id=' . $user->id .'"><button class="btn btn-outline-info">Редактировать</button></a>';
             })
