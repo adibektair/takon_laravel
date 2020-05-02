@@ -73,8 +73,8 @@ class TransactionController extends Controller
 
     public function searchMake(Request $request)
     {
+        $phone = $request->phone;
         if (auth()->user()->role_id == 3) {
-            $phone = $request->phone;
             $result = DB::table('transactions')
                 ->where('users.phone', $phone)
                 ->orWhere('musers.phone', $phone)
@@ -105,7 +105,6 @@ class TransactionController extends Controller
                 ->make(true);
             return $s;
         } else {
-            $phone = $request->phone;
             $result = DB::table('transactions')
                 ->where('users.phone', $phone)
                 ->orWhere('musers.phone', $phone)
