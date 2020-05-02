@@ -8,6 +8,7 @@ use App\Group;
 use App\GroupsUser;
 use App\MobileUser;
 use App\Partner;
+use App\Role;
 use App\Transaction;
 use App\User;
 use App\UsersService;
@@ -675,7 +676,7 @@ class TransactionController extends Controller
         if ($request->id) {
             $query = $query->where('transactions.service_id', $request->id);
         }
-        if (auth()->user()->role_id == 1 OR auth()->user()->role_id == 4) {
+        if (in_array(auth()->user()->role_id, [Role::ADMIN_ID, Role::CASHIER_ID, Role::PARTNER_ID])) {
             $query = $query->leftJoin('companies_services', 'companies_services.id', '=', 'transactions.cs_id')
                 ->leftJoin('companies', 'companies.id', '=', 'companies_services.company_id')
                 ->select(
