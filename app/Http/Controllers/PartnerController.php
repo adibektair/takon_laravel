@@ -226,8 +226,8 @@ class PartnerController extends Controller
     public function getPartnersServices(Request $request)
     {
 
-        $services = Service::where('partner_id', '=', $request->id)->where('status', '=', 3)->get();
-        return Datatables::of($services)
+        $servicesQuery = Service::where('partner_id', '=', $request->id)->where('status', '=', 3);
+        return Datatables::of($servicesQuery)
             ->addColumn('service', function ($service) {
                 return '<a href="/buy-current-service?id=' . $service->id . '"><button class="btn btn-success">Приобрести</button></a>';
             })

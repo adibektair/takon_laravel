@@ -25,7 +25,8 @@ class MobileUserController extends Controller
     }
 
 
-    public function addUserGroup(Request $request){
+    public function addUserGroup(Request $request)
+    {
         if (!$request->id) {
             toastError("Добавьте пользователей в группу, для этого воспользуйтесь поиском!");
             return redirect()->back();
@@ -33,12 +34,12 @@ class MobileUserController extends Controller
         $group = Group::where('id', $request->group_id)->first();
 
         foreach ($request->id as $user_id => $phone) {
-                $group_user = new GroupsUser();
-                $group_user->username = $request->name[$user_id];
-                $group_user->mobile_user_id = $user_id;
-                $group_user->group_id = $group->id;
-                $group_user->save();
-            }
+            $group_user = new GroupsUser();
+            $group_user->username = $request->name[$user_id];
+            $group_user->mobile_user_id = $user_id;
+            $group_user->group_id = $group->id;
+            $group_user->save();
+        }
 
         toastSuccess('Пользователи были добавлены в группу');
         return redirect()->route('groups');
@@ -176,12 +177,11 @@ class MobileUserController extends Controller
      */
     public function getGroups(Request $request)
     {
-        $groups = DB::table('groups')
+        $groupsQuery = DB::table('groups')
             ->where('company_id', auth()->user()->company_id)
-            ->select('groups.*')
-            ->get();
+            ->select('groups.*');
 
-        $s = DataTables::of($groups)->addColumn('checkbox', function ($group) use ($request) {
+        $s = DataTables::of($groupsQuery)->addColumn('checkbox', function ($group) use ($request) {
             return '<a href="/choose-group?id=' . $group->id . '&cs_id=' . $request->id . '"><button class="btn btn-success" >Выбрать</button></a>';
         })
             ->addColumn('remove', function ($group) {
@@ -202,9 +202,9 @@ class MobileUserController extends Controller
 
     public function removeUser(Request $request)
     {
-        $id = $request->id;
-        $gr = GroupsUser::where('mobile_user_id', $id)->where('group_id', $request->group_id)->first();
-        $gr->delete();
+        GroupsUser::where('mobile_user_id', $request->id)
+            ->where('group_id', $request->group_id)
+            ->delete();
         return ['success' => true];
     }
 
@@ -217,8 +217,8 @@ class MobileUserController extends Controller
      */
     public function chooseGroup(Request $request)
     {
-        $group = Group::where('id', $request->id)->first();
         $group_id = $request->id;
+        $group = Group::where('id', $group_id)->first();
         $users = GroupsUser::where('group_id', $group_id)->get();
         $string = '';
         foreach ($users as $user) {
@@ -247,12 +247,10 @@ class MobileUserController extends Controller
                 $gu->mobile_user_id = $el;
                 $gu->save();
             }
+            $response = ['success' => true];
         } else {
             $response = ['success' => false];
         }
-
-        $response = ['success' => true];
-
         return $response;
 
     }
@@ -268,9 +266,8 @@ class MobileUserController extends Controller
     {
         $ids = $request->ids;
         $array = explode(',', $ids);
-        $users = DB::table('mobile_users')->whereIn('id', $array)->get();
-
-        $s = DataTables::of($users)->make();
+        $usersQuery = DB::table('mobile_users')->whereIn('id', $array);
+        $s = DataTables::of($usersQuery)->make();
         return $s;
     }
 
@@ -292,10 +289,10 @@ class MobileUserController extends Controller
     public function searchUser(Request $request)
     {
 
-        if($request->group_id){
+        if ($request->group_id) {
             $GU = GroupsUser::where('group_id', $request->group_id)->get();
             $arr = [];
-            foreach ($GU as $g){
+            foreach ($GU as $g) {
                 array_push($arr, $g->mobile_user_id);
             }
             $u = MobileUser::where('phone', $request->value)->whereNotIn('id', $arr)->first();
@@ -339,10 +336,8 @@ class MobileUserController extends Controller
 
     public function all()
     {
-//        $users = MobileUser::all();
-        $users = DB::table('mobile_users')->get();
-//        dd($users);
-        $s = DataTables::of($users)->addColumn('checkbox', function ($user) {
+        $usersQuery = DB::table('mobile_users');
+        $s = DataTables::of($usersQuery)->addColumn('checkbox', function ($user) {
             return '<button class="btn btn-info" data-name="' . $user->phone . '" id="' . $user->id . '">Выбрать</button>';
         })
             ->addColumn('name', function ($user) {
