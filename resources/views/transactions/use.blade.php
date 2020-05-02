@@ -14,15 +14,9 @@
         <label>Товар/услуга</label>
         <select id="statusFilter">
             <option>Не выбрано</option>
-            <?php
-
-            $services = \App\Service::all();
-            foreach ($services as $company){
-            ?>
-            <option value="<?=$company->id?>"><?=$company->name?></option>
-            <?php
-            }
-            ?>
+            @foreach ($services as $service){
+            <option value="{{$service->id}}">{{$service->name}}</option>
+            @endforeach
         </select>
         <div class="panel panel-default">
             <div class="panel-body">
@@ -96,8 +90,8 @@
                 dom: 'Bfrltip',
                 buttons: {
                     buttons: [
-                        { extend: 'copy', className: 'btn btn-warning' },
-                        { extend: 'excel', className: 'btn btn-success',action: newExportAction }
+                        {extend: 'copy', className: 'btn btn-warning'},
+                        {extend: 'excel', className: 'btn btn-success', action: newExportAction}
                     ]
                 },
             });

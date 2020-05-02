@@ -9,6 +9,7 @@ use App\GroupsUser;
 use App\MobileUser;
 use App\Partner;
 use App\Role;
+use App\Service;
 use App\Transaction;
 use App\User;
 use App\UsersService;
@@ -43,7 +44,13 @@ class TransactionController extends Controller
 
     public function use()
     {
-        return view('transactions/use');
+        $services = [];
+        if (Auth::user()->role_id == Role::PARTNER_ID) {
+            $services = Service::where('partner_id', auth()->user()->partner_id)->get();
+        } else {
+            $services = Service::all();
+        }
+        return view('transactions/use', compact('services'));
     }
 
     public function search()
@@ -688,7 +695,7 @@ class TransactionController extends Controller
                     'mobile_users.name as username',
                     'users.name as reciever',
                     'companies.name as company');
-            if($roleId == Role::PARTNER_ID){
+            if ($roleId == Role::PARTNER_ID) {
                 $query = $query->where('services.partner_id', '=', auth()->user()->partner_id);
             }
         } else if ($roleId == Role::COMPANY_ID) {
