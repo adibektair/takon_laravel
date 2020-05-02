@@ -683,7 +683,6 @@ class TransactionController extends Controller
             ->where('transactions.type', 3)
             ->join('services', 'services.id', '=', 'transactions.service_id')
             ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id');
-
         if ($request->id) {
             $query = $query->where('transactions.service_id', $request->id);
         }
@@ -795,8 +794,6 @@ class TransactionController extends Controller
                         return '';
                     }
                 }
-
-
             })
             ->addColumn('reciever', function ($service) {
                 if ($service->type == 1) {
@@ -852,8 +849,6 @@ class TransactionController extends Controller
                             }
                         }
                     }
-
-
                 } else if ($service->type == 3) {
                     $m = MobileUser::where('id', $service->u_s_id)->first();
                     $gr = Group::where('company_id', auth()->user()->company_id)->get();
@@ -877,8 +872,6 @@ class TransactionController extends Controller
                         }
                     }
                 }
-
-
             })
             ->addColumn('reciever_name', function ($service) {
                 if ($service->type == 1) {
