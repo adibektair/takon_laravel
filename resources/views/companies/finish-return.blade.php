@@ -15,7 +15,7 @@
             <input type="text" hidden name="id" value="{{ $us->id }}">
             <div class="form-group">
                 <label for="" class="text-secondary">Введите количество для возврата на счет компании (в наличии у пользователя : {{ $us->amount }})</label>
-                <input type="number" name="amount" required class="form-control">
+                <input type="number" step="any" name="amount" required class="form-control">
             </div>
             <button class="btn btn-success submitBtn" type="submit">Отправить</button>
         </form>
