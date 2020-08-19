@@ -12,13 +12,13 @@
     <br><br>
     <div class="col-md-12 mt-2">
 
-          <label>Товар/услуга</label>
+         <!-- <label>Товар/услуга</label>
           <select id="statusFilter">
             <option>Не выбрано</option>
             @foreach ($services as $service)
             <option value="{{$service->id}}">{{$service->name}}</option>
            @endforeach
-       </select>
+       </select> -->
 
         <div class="panel panel-default">
             <div class="panel-body">
@@ -94,7 +94,7 @@
 
     <script>
         $(document).ready(function () {
-            var dtListUsers = $('#table').DataTable({
+            var table = $('#table').DataTable({
                 processing: true,
                 responsive: true,
                 serverSide: true,
@@ -162,11 +162,11 @@
             $('#min, #max, #service').change(function () {
                 table.draw();
             });
-             $('#statusFilter').on('change', function () {
+            /* $('#statusFilter').on('change', function () {
                 var filter_value = $(this).val();
                 var new_url = '/transactions/use/all?id=' + filter_value;
                 dtListUsers.ajax.url(new_url).load();
-            });
+            }); */
         });
 
 
