@@ -12,60 +12,17 @@
     <br><br>
     <div class="col-md-12 mt-2">
 
-         <!-- <label>Товар/услуга</label>
+          <label>Товар/услуга</label>
           <select id="statusFilter">
             <option>Не выбрано</option>
             @foreach ($services as $service)
             <option value="{{$service->id}}">{{$service->name}}</option>
            @endforeach
-       </select> -->
+       </select>
 
         <div class="panel panel-default">
             <div class="panel-body">
-
-                <table border="0" cellspacing="5" cellpadding="5">
-                    <tbody>
-                    <tr>
-                        <td>C какого числа:</td>
-                        <td><input class="form-control" name="min" id="min" type="date"></td>
-                    </tr>
-                    <tr>
-                        <td>По какое число:</td>
-                        <td><input class="form-control" name="max" id="max" type="date"></td>
-                    </tr>
-                    <tr>
-                        <?php
-                        $services = \App\Service::all();
-                        ?>
-                        <td>Услуга:</td>
-                        <td>
-                            <select class="form-control" name="service" id="service">
-                                <option value="">Не выбрано</option>
-
-                                <?php
-                                foreach ($services as $s){
-                                ?>
-                                <option value="<?=$s->id?>"><?=$s->name?></option>
-                                <?php
-                                }
-                                ?>
-                                <option value=""></option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-
-                        <td>Тип транзакции:</td>
-                        <td>
-                            <select class="form-control" name="type" id="type">
-                                <option value="">Не выбрано</option>
-                                <option value="3">Использование таконов</option>
-                            </select>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-
+                
                 <table class="table table-bordered" id="table">
                     <thead>
                     <tr>
@@ -75,7 +32,7 @@
                         <?php
                         if(auth()->user()->role_id == 1){
                         ?>
-                        <th>Комания</th>
+                        <th>Компания</th>
                         <?php
                         }
                         ?>
@@ -104,22 +61,14 @@
 
     <script>
         $(document).ready(function () {
-            var table = $('#table').DataTable({
+            var dtListUsers = $('#table').DataTable({
                 processing: true,
                 responsive: true,
                 serverSide: true,
                 language: {
                     url: '{{asset('admin/bower_components/datatable/js/ru.locale.json')}}',
                 },
-                ajax: {
-                    url: "{{ route('transactions.use.all') }}",
-                    "data": function (d) {
-                        d.minDate = $('#min').val();
-                        d.maxDate = $('#max').val();
-                        d.service = $('#service').val();
-                        d.type = $('#type').val();
-                    },
-                },
+                ajax: "{{ route('transactions.use.all') }}",
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'sender', name: 'sender'},
@@ -148,36 +97,14 @@
                         {extend: 'excel', className: 'btn btn-success', action: newExportAction}
                     ]
                 },
-                initComplete: function () {
-                    this.api().columns().every( function () {
-                        var column = this;
-                        var select = $('<select class="form-control"><option value=""></option></select>')
-                            .appendTo( $(column.footer()).empty() )
-                            .on( 'change', function () {
-                                var val = $.fn.dataTable.util.escapeRegex(
-                                    $(this).val()
-                                );
-
-                                column
-                                    .search( val ? '^'+val+'$' : '', true, false )
-                                    .draw();
-                            } );
-
-                        column.data().unique().sort().each( function ( d, j ) {
-                            select.append( '<option value="'+d+'">'+d+'</option>' )
-                        } );
-                    } );
-                }
             });
 
-            $('#min, #max, #service, #type').change(function () {
-                table.draw();
-            });
-            /* $('#statusFilter').on('change', function () {
+
+             $('#statusFilter').on('change', function () {
                 var filter_value = $(this).val();
                 var new_url = '/transactions/use/all?id=' + filter_value;
                 dtListUsers.ajax.url(new_url).load();
-            }); */
+            });
         });
 
 
