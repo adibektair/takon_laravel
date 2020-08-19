@@ -101,14 +101,7 @@
                 language: {
                     url: '{{asset('admin/bower_components/datatable/js/ru.locale.json')}}',
                 },
-                ajax: {
-                    url: "{{ route('transactions.use.all') }}",
-                    "data": function (d) {
-                        d.minDate = $('#min').val();
-                        d.maxDate = $('#max').val();
-                        d.service = $('#service').val();
-                    },
-                },
+                ajax: "{{ route('transactions.use.all') }}",
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'sender', name: 'sender'},
@@ -137,30 +130,25 @@
                         {extend: 'excel', className: 'btn btn-success', action: newExportAction}
                     ]
                 },
-                initComplete: function () {
-                    this.api().columns().every( function () {
-                        var column = this;
-                        var select = $('<select class="form-control"><option value=""></option></select>')
-                            .appendTo( $(column.footer()).empty() )
-                            .on( 'change', function () {
-                                var val = $.fn.dataTable.util.escapeRegex(
-                                    $(this).val()
-                                );
 
-                                column
-                                    .search( val ? '^'+val+'$' : '', true, false )
-                                    .draw();
-                            } );
-
-                        column.data().unique().sort().each( function ( d, j ) {
-                            select.append( '<option value="'+d+'">'+d+'</option>' )
-                        } );
-                    } );
-                }
             });
 
-            $('#min, #max, #service').change(function () {
-                table.draw();
+            $('#min').on('change', function () {
+                var filter_value = $(this).val();
+                var new_url = '/transactions/use/all?id=' + filter_value;
+                table.ajax.url(new_url).load();
+            });
+
+            $('#max').on('change', function () {
+                var filter_value = $(this).val();
+                var new_url = '/transactions/use/all?id=' + filter_value;
+                table.ajax.url(new_url).load();
+            });
+
+            $('#service').on('change', function () {
+                var filter_value = $(this).val();
+                var new_url = '/transactions/use/all?id=' + filter_value;
+                table.ajax.url(new_url).load();
             });
             /* $('#statusFilter').on('change', function () {
                 var filter_value = $(this).val();

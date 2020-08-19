@@ -615,11 +615,26 @@ class TransactionController extends Controller
 
     public function useAll(Request $request)
     {
+        $minDate = $request->minDate;
+        $maxDate = $request->maxDate;
+        $service = $request->service;
+
         $query = DB::table('transactions')
             ->where('transactions.type', 3)
             ->join('services', 'services.id', '=', 'transactions.service_id')
             ->leftJoin('mobile_users', 'mobile_users.id', '=', 'transactions.u_s_id')
             ->leftJoin('users', 'users.id', '=', 'transactions.u_r_id');
+
+        if ($minDate) {
+            $query = $query->where('transactions.created_at', '>=', $minDate);
+        }
+
+        if ($maxDate) {
+            $query = $query->where('transactions.created_at', '<=', $maxDate);
+        }
+        if ($service) {
+            $query = $query->where('transactions.service_id', '=', $service);
+        }
 
         if ($request->id) {
             $query = $query->where('transactions.service_id', $request->id);
