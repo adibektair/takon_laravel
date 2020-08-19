@@ -617,7 +617,7 @@ class TransactionController extends Controller
     {
         $minDate = $request->minDate;
         $maxDate = $request->maxDate;
-        $service = $request->service;
+        $service = $request->id;
 
         $query = DB::table('transactions')
             ->where('transactions.type', 3)
@@ -633,7 +633,7 @@ class TransactionController extends Controller
             $query = $query->where('transactions.created_at', '<=', $maxDate);
         }
         if ($service) {
-            $query = $query->where('transactions.service_id', '=', $service);
+            $query = $query->where('transactions.service_id', '=', $request->id);
         }
 
         if ($request->id) {
