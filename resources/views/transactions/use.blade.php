@@ -12,13 +12,13 @@
     <br><br>
     <div class="col-md-12 mt-2">
 
-        <!-- <label>Товар/услуга</label>
+         <!-- <label>Товар/услуга</label>
           <select id="statusFilter">
             <option>Не выбрано</option>
             @foreach ($services as $service)
             <option value="{{$service->id}}">{{$service->name}}</option>
            @endforeach
-       </select>  -->
+       </select> -->
 
         <div class="panel panel-default">
             <div class="panel-body">
@@ -111,7 +111,15 @@
                 language: {
                     url: '{{asset('admin/bower_components/datatable/js/ru.locale.json')}}',
                 },
-                ajax: "{{ route('transactions.use.all') }}",
+                ajax: {
+                    url: "{{ route('transactions.use.all') }}",
+                    "data": function (d) {
+                        d.minDate = $('#min').val();
+                        d.maxDate = $('#max').val();
+                        d.service = $('#service').val();
+                        d.type = $('#type').val();
+                    },
+                },
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'sender', name: 'sender'},
