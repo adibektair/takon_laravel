@@ -11,15 +11,61 @@
 
     <br><br>
     <div class="col-md-12 mt-2">
-        <label>Товар/услуга</label>
-        <select id="statusFilter">
+
+        <!-- <label>Товар/услуга</label>
+          <select id="statusFilter">
             <option>Не выбрано</option>
-            @foreach ($services as $service){
+            @foreach ($services as $service)
             <option value="{{$service->id}}">{{$service->name}}</option>
-            @endforeach
-        </select>
+           @endforeach
+       </select>  -->
+
         <div class="panel panel-default">
             <div class="panel-body">
+
+                <table border="0" cellspacing="5" cellpadding="5">
+                    <tbody>
+                    <tr>
+                        <td>C какого числа:</td>
+                        <td><input class="form-control" name="min" id="min" type="date"></td>
+                    </tr>
+                    <tr>
+                        <td>По какое число:</td>
+                        <td><input class="form-control" name="max" id="max" type="date"></td>
+                    </tr>
+                    <tr>
+                        <?php
+                        $services = \App\Service::all();
+                        ?>
+                        <td>Услуга:</td>
+                        <td>
+                            <select class="form-control" name="service" id="service">
+                                <option value="">Не выбрано</option>
+
+                                <?php
+                                foreach ($services as $s){
+                                ?>
+                                <option value="<?=$s->id?>"><?=$s->name?></option>
+                                <?php
+                                }
+                                ?>
+                                <option value=""></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td>Тип транзакции:</td>
+                        <td>
+                            <select class="form-control" name="type" id="type">
+                                <option value="">Не выбрано</option>
+                                <option value="3">Использование таконов</option>
+                            </select>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
                 <table class="table table-bordered" id="table">
                     <thead>
                     <tr>

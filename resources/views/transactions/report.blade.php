@@ -47,7 +47,7 @@
                     </tr>
                     <tr>
 
-                        <td>Тип транзакция:</td>
+                        <td>Тип транзакции:</td>
                         <td>
                             <select class="form-control" name="type" id="type">
                                 <option value="">Не выбрано</option>
