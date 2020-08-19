@@ -3,8 +3,6 @@
 @section('content')
 
 
-
-
     <div class="col-md-12 mt-2 mb-3 bg-transparent">
         <div class="float-left">
             <h5>Отчет</h5>

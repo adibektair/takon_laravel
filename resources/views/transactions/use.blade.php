@@ -12,13 +12,7 @@
     <br><br>
     <div class="col-md-12 mt-2">
 
-         <!-- <label>Товар/услуга</label>
-          <select id="statusFilter">
-            <option>Не выбрано</option>
-            @foreach ($services as $service)
-            <option value="{{$service->id}}">{{$service->name}}</option>
-           @endforeach
-       </select> -->
+
 
         <div class="panel panel-default">
             <div class="panel-body">
@@ -173,11 +167,7 @@
             $('#min, #max, #service, #type').change(function () {
                 table.draw();
             });
-            /* $('#statusFilter').on('change', function () {
-                var filter_value = $(this).val();
-                var new_url = '/transactions/use/all?id=' + filter_value;
-                dtListUsers.ajax.url(new_url).load();
-            }); */
+
         });
 
 
