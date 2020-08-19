@@ -148,12 +148,36 @@
                         {extend: 'excel', className: 'btn btn-success', action: newExportAction}
                     ]
                 },
+                initComplete: function () {
+                    this.api().columns().every( function () {
+                        var column = this;
+                        var select = $('<select class="form-control"><option value=""></option></select>')
+                            .appendTo( $(column.footer()).empty() )
+                            .on( 'change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex(
+                                    $(this).val()
+                                );
+
+                                column
+                                    .search( val ? '^'+val+'$' : '', true, false )
+                                    .draw();
+                            } );
+
+                        column.data().unique().sort().each( function ( d, j ) {
+                            select.append( '<option value="'+d+'">'+d+'</option>' )
+                        } );
+                    } );
+                }
             });
-            $('#statusFilter').on('change', function () {
+            
+            $('#min, #max, #service, #type').change(function () {
+                table.draw();
+            });
+            /* $('#statusFilter').on('change', function () {
                 var filter_value = $(this).val();
                 var new_url = '/transactions/use/all?id=' + filter_value;
                 dtListUsers.ajax.url(new_url).load();
-            });
+            }); */
         });
 
 
