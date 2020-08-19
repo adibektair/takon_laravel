@@ -104,7 +104,7 @@
 
     <script>
         $(document).ready(function () {
-            var dtListUsers = $('#table').DataTable({
+            var table = $('#table').DataTable({
                 processing: true,
                 responsive: true,
                 serverSide: true,
@@ -169,7 +169,7 @@
                     } );
                 }
             });
-            
+
             $('#min, #max, #service, #type').change(function () {
                 table.draw();
             });
