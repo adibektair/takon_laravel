@@ -617,7 +617,7 @@ class TransactionController extends Controller
     {
         $minDate = $request->minDate;
         $maxDate = $request->maxDate;
-        $service = $request->id;
+        $service_id = $request->service_id;
 
         $query = DB::table('transactions')
             ->where('transactions.type', 3)
@@ -632,13 +632,10 @@ class TransactionController extends Controller
         if ($maxDate) {
             $query = $query->where('transactions.created_at', '<=', $maxDate);
         }
-        if ($service) {
-            $query = $query->where('transactions.service_id', '=', $request->id);
+        if ($service_id) {
+            $query = $query->where('transactions.service_id', '=', $service_id);
         }
 
-        if ($request->id) {
-            $query = $query->where('transactions.service_id', $request->id);
-        }
 
         $roleId = auth()->user()->role_id;
         if (in_array($roleId, [Role::ADMIN_ID, Role::CASHIER_ID, Role::PARTNER_ID])) {

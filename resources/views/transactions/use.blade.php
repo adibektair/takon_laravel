@@ -39,7 +39,7 @@
                         ?>
                         <td>Услуга:</td>
                         <td>
-                            <select class="form-control" name="service" id="service">
+                            <select class="form-control" name="service_id" id="service_id">
                                 <option value="">Не выбрано</option>
 
                                 <?php
@@ -130,26 +130,29 @@
                         {extend: 'excel', className: 'btn btn-success', action: newExportAction}
                     ]
                 },
-
             });
+
+            var new_url = '/transactions/use/all?';
+
 
             $('#min').on('change', function () {
                 var filter_value = $(this).val();
-                var new_url = '/transactions/use/all?id=' + filter_value;
+                new_url = new_url + 'minDate=' + filter_value + '&';
                 table.ajax.url(new_url).load();
             });
 
             $('#max').on('change', function () {
                 var filter_value = $(this).val();
-                var new_url = '/transactions/use/all?id=' + filter_value;
+                new_url = new_url + 'maxDate=' + filter_value + '&';
                 table.ajax.url(new_url).load();
             });
 
-            $('#service').on('change', function () {
+            $('#service_id').on('change', function () {
                 var filter_value = $(this).val();
-                var new_url = '/transactions/use/all?id=' + filter_value;
+                new_url = new_url + 'service_id=' + filter_value + '&';
                 table.ajax.url(new_url).load();
             });
+
             /* $('#statusFilter').on('change', function () {
                 var filter_value = $(this).val();
                 var new_url = '/transactions/use/all?id=' + filter_value;
