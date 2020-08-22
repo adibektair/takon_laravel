@@ -133,22 +133,37 @@
             });
 
             var new_url = '/transactions/use/all?';
-
+            var min_value, max_value, service_value;
 
             $('#min').on('change', function () {
+                if(new_url.includes('minDate'))
+                {
+                    new_url = new_url.replace('minDate=' + min_value + '&', '');
+                }
                 var filter_value = $(this).val();
+                min_value = filter_value;
                 new_url = new_url + 'minDate=' + filter_value + '&';
                 table.ajax.url(new_url).load();
             });
 
             $('#max').on('change', function () {
+                if(new_url.includes('maxDate'))
+                {
+                    new_url = new_url.replace('maxDate=' + max_value + '&', '');
+                }
                 var filter_value = $(this).val();
+                max_value = filter_value;
                 new_url = new_url + 'maxDate=' + filter_value + '&';
                 table.ajax.url(new_url).load();
             });
 
             $('#service_id').on('change', function () {
+                if(new_url.includes('service_id'))
+                {
+                    new_url = new_url.replace('service_id=' + service_value + '&', '');
+                }
                 var filter_value = $(this).val();
+                service_value = filter_value;
                 new_url = new_url + 'service_id=' + filter_value + '&';
                 table.ajax.url(new_url).load();
             });
