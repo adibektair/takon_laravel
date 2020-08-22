@@ -22,7 +22,7 @@ Route::get('/secure/config/key-generate', ['uses' => 'ConfigController@keyGenera
 
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('intro');
 });
 Route::get('/payment', function () {
     return view('mobile_users/payment');
