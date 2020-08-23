@@ -223,7 +223,7 @@
             </div><!-- /.footer__inner -->
 
             <div class="copyright">
-                © 2018 Takon | Все права защищены
+                © 2018 - <?php echo date("Y"); ?> Takon | Все права защищены
             </div>
 
         </div><!-- /.container -->
