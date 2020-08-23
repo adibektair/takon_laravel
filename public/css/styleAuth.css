@@ -1,0 +1,54 @@
+.formatted__text{
+    font-weight: bold;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    font-family: 'Montserrat', sans-serif;
+}
+
+html {
+    height: 100%;
+}
+body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    background: url("../assets/images/loginBg.jpg") center;
+    -webkit-background-size: cover;
+    background-size: cover;
+}
+
+.btn{
+    display: block;
+    width:100%;
+}
+
+.link {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.btn-primary {
+    font-weight: bold;
+    background: #343a40;
+    border: #343a40;
+}
+
+.btn-primary:hover {
+    color: #333;
+    background: #6c91ff;
+}
+
+.card-header {
+    display: flex;
+    justify-content: center;
+
+    color: #343a40;
+    font-weight: bold;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    font-family: 'Montserrat', sans-serif;
+}
