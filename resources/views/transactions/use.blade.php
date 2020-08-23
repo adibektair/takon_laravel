@@ -18,7 +18,7 @@
             @foreach ($services as $service)
             <option value="{{$service->id}}">{{$service->name}}</option>
            @endforeach
-       </select> -->
+          </select> -->
 
         <div class="panel panel-default">
             <div class="panel-body">
@@ -34,21 +34,13 @@
                         <td><input class="form-control" name="max" id="max" type="date"></td>
                     </tr>
                     <tr>
-                        <?php
-                        $services = \App\Service::all();
-                        ?>
                         <td>Услуга:</td>
                         <td>
                             <select class="form-control" name="service_id" id="service_id">
                                 <option value="">Не выбрано</option>
-
-                                <?php
-                                foreach ($services as $s){
-                                ?>
-                                <option value="<?=$s->id?>"><?=$s->name?></option>
-                                <?php
-                                }
-                                ?>
+                                @foreach ($services as $service)
+                                    <option value="{{$service->id}}">{{$service->name}}</option>
+                                @endforeach
                                 <option value=""></option>
                             </select>
                         </td>
@@ -168,7 +160,7 @@
                 table.ajax.url(new_url).load();
             });
 
-            /* $('#statusFilter').on('change', function () {
+             /* $('#statusFilter').on('change', function () {
                 var filter_value = $(this).val();
                 var new_url = '/transactions/use/all?id=' + filter_value;
                 dtListUsers.ajax.url(new_url).load();
