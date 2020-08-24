@@ -55,6 +55,10 @@
             padding: 10px;
         }
     </style>
+
+    <!-- Custom style -->
+    <link rel="stylesheet" href="{{asset('css/styleMain.css')}}">
+
     @yield('styles')
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -80,20 +84,22 @@
 
                         </a>
                         <ul class="dropdown-menu">
-                            <li class="user-header">
-                                <i class="fa fa-home fa-3x" style="color:white"></i>
+                            <!--<li class="user-header">
+                                <a href="{{route('home')}}">
+                                    <span>Главная</span>
+                                </a>
                                 <p>
                                     <a class="dropdown-item" href="/logout"> Выйти </a>
 
                                 </p>
-                            </li>
+                            </li> -->
 
 
-                            <li class="user-footer">
+                            <li class="user-header">
                                 {{--<div class="pull-left">--}}
                                     {{--<a href="{{route('account.index')}}"  class="btn btn-default btn-flat">Аккаунт</a>--}}
                                 {{--</div>--}}
-                                <div class="pull-right">
+                                <!--<div class="pull-right">
                                     <a class="btn btn-default btn-flat" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -104,7 +110,10 @@
                                           style="display: none;">
                                         @csrf
                                     </form>
-                                </div>
+                                </div>-->
+
+                                <a href="/logout">Выйти</a>
+
                             </li>
                         </ul>
                     </li>
