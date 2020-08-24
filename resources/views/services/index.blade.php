@@ -17,10 +17,11 @@
                 <button class="btn btn-success">Добавить товар/услугу</button>
             </a>
         </div>
+        <br>
     </div>
 
 
-    <br><br>
+
     <div class="col-md-12 mt-2">
         <div class="panel panel-default">
             <div class="panel-body">
