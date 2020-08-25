@@ -65,7 +65,7 @@
 <div class="wrapper">
 
     <header class="main-header">
-        <a class="logo">
+        <a class="logo" href="{{ url('/') }}">
             <span class="logo-mini"><b>T</b>ORG</span>
             <span class="logo-lg"><b>TAKON.</b>ORG</span>
         </a>

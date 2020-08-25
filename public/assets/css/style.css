@@ -130,6 +130,7 @@ hr {
     font-size: 30px;
     font-weight: 700;
     color: #fff;
+    text-decoration: none;
 }
 
 
@@ -795,7 +796,7 @@ hr {
         top: 100%;
         left: 0;
 
-        background-color: rgba(37, 38, 39, 0.97);
+        background-color: #252627;
         padding: 10px;
         transform: translateY(-10px);
         transition: all .2s ease;

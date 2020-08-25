@@ -14,7 +14,7 @@
 <header class="header" id="header">
     <div class="container">
         <div class="header__inner">
-            <div class="header__logo" data-scroll="#intro">Takon</div>
+            <a class="header__logo" data-scroll="#intro" href="{{ url('/') }}">Takon</a>
 
             <nav class="nav" id="nav">
                 <a class="nav__link" href="#" data-scroll="#goal">Цель</a>
