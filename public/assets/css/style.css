@@ -107,7 +107,7 @@ hr {
 }
 
 .header.fixed {
-    background-color: #252627;
+    background-color: rgba(37, 38, 39, 0.97);
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
 
     position: fixed;
@@ -116,7 +116,7 @@ hr {
     right: 0;
 
     transform: translate3d(0, 0, 0);
-    transition: background-color 1s ease, color 1s ease;
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 
@@ -787,19 +787,24 @@ hr {
 
     /* Nav */
     .nav {
-        display: none;
+        display: block;
+        opacity: 0;
+        pointer-events: none;
         width: 100%;
-
         position: absolute;
         top: 100%;
         left: 0;
 
-        background-color: #252627;
+        background-color: rgba(37, 38, 39, 0.97);
         padding: 10px;
+        transform: translateY(-10px);
+        transition: all .2s ease;
     }
 
     .nav.active {
-        display: block;
+        opacity: 1;
+        transform:translateY(0px);
+        pointer-events: all;
     }
 
     .nav__link:after {
