@@ -29,21 +29,22 @@
         </div>
 
     </div>
-    <div class="float-right mb-4">
-            <div id="addings" >
+    <div class="col-md-12 mt-2 mb-3 bg-transparent">
+        <div class="float-right mb-4">
+                <div id="addings" >
 
-            </div>
+                </div>
 
-            <form action="{{ route('send') }}" method="post">
-                @csrf
-                <input type="text" hidden name="ids" id="ids">
-                <input type="text" hidden name="cs_id" value="{{ $id }}">
+                <form action="{{ route('send') }}" method="post">
+                    @csrf
+                    <input type="text" hidden name="ids" id="ids">
+                    <input type="text" hidden name="cs_id" value="{{ $id }}">
 
-                <button hidden id="bt" class="btn btn-success ">Выбрать</button>
-            </form>
+                    <button hidden id="bt" class="btn btn-success ">Выбрать</button>
+                </form>
+        </div>
+        <br>
     </div>
-
-
 
 
     <br><br>

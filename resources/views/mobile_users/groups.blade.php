@@ -50,18 +50,18 @@
 
                 <button id="bbb" type="submit" class="btn btn-success">Отправить</button>
             </form>
-
+            <br>
             <div class="float-right">
                 <a href="{{ route('create.group') }}">
                     <button class="btn btn-info">Добавить группу</button>
                 </a>
             </div>
+            <br>
         </div>
     </div>
 
 
 
-    <br><br>
     <div class="col-md-12 mt-2">
         <div class="panel panel-default">
             <div class="panel-body">
