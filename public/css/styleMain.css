@@ -15,6 +15,13 @@
     background-color: #343B3F;
 }
 
+/* Footer */
+
+.main-footer {
+    display: flex;
+    justify-content: center;
+}
+
 /* User section */
 .navbar-nav>.user-menu>.dropdown-menu {
     min-width: 100px;
@@ -44,9 +51,17 @@
     display: block;
     opacity: 0;
     margin-right: 5px;
+    margin-top: 5px;
     pointer-events: none;
     transform: translateY(-10px);
     transition: all 0.2s ease;
+}
+
+.navbar-nav>.user-menu>.dropdown-menu {
+    padding: 0px;
+    margin-top: 5px;
+    border: 1px solid #40474b;
+    border-radius: 4px;
 }
 
 .show {
