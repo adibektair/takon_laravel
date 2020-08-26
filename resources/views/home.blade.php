@@ -2,20 +2,10 @@
 
 @section('content')
 
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Админ-панель приложения TAKON</div>
-
-                <div class="card-body">
-
-                        <div class="alert alert-success" role="alert">
-                            Добро пожаловать!
-                        </div>
-                </div>
-            </div>
-        </div>
+<div class="container mt-4 container-main">
+    <div class="col-sm-6">
+        <img src="/Takon.png" alt="" class="main__img">
+        <div class="main__text">Добро пожаловать в Takon!</div>
     </div>
 </div>
 

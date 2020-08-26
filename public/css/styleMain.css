@@ -1,3 +1,31 @@
+/* Page */
+.container-main {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    max-width: 500px;
+    min-height: 250px;
+
+    background: #343B3F;
+    color: #fff;
+    border: 1px solid #fff;
+    border-radius: 4px;
+}
+
+.main__text {
+
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.main__img {
+    width: 100px;
+    height: 100px;
+
+}
+
+
 /* Header */
 .skin-blue .main-header .logo {
     background-color: #212529;
