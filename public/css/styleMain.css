@@ -43,6 +43,11 @@
     background-color: #343B3F;
 }
 
+.user-panel>.info {
+    padding: 8px 0px;
+    font-weight: 700;
+}
+
 /* Footer */
 
 .main-footer {

@@ -138,7 +138,15 @@
                     <i class="fa fa-user-circle fa-2x " style="color:white"></i>
                 </div>
                 <div class="pull-left info">
-                    <p>{{Auth::user()->first_name. ' '. Auth::user()->last_name}}</p>
+                    <?php
+                            if(strpos((auth()->user()->name), 'Админ') !== false) {
+                             $userName = str_replace('Админ ', '', auth()->user()->name);
+                            }
+                            else{
+                                $userName = auth()->user()->name;
+                            }
+                        ?>
+                    {{ $userName }}
                 </div>
             </div>
             <ul class="sidebar-menu" data-widget="tree">
