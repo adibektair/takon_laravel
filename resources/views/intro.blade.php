@@ -60,7 +60,7 @@
     <div class="intro" id="intro">
         <div class="container">
             <div class="intro__inner">
-                <h2 class="intro__suptitle">Электронно-цифровые талоны</h2>
+                <h2 class="intro__suptitle">Электронно-цифровые токены</h2>
                 <h1 class="intro__title">Welcome to Takon</h1>
 
                 <a class="btn" href="#" data-scroll="#goal">Подробнее</a>
@@ -125,7 +125,7 @@
                 </div>
                 <div class="stat__item">
                     <div class="stat__title">02</div>
-                    <div class="stat__text">Никакой привязки к бумажным талонам и рискам потери</div>
+                    <div class="stat__text">Никакой привязки к бумажным документам и рискам потери</div>
                 </div>
                 <div class="stat__item">
                     <div class="stat__title">03</div>
