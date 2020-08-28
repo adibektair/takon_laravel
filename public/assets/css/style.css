@@ -325,7 +325,7 @@ hr {
 }
 
 .section--phone {
-    background: url(../images/phoneBg.png) no-repeat;
+    background: url(../images/phoneBg.png) center no-repeat;
     -webkit-background-size: cover;
     background-size: cover;
     position:relative;
@@ -565,11 +565,39 @@ hr {
 }
 
 
+/* Trust */
+.section--companies{
+    background: url("../images/companies/background.jpg") center no-repeat;
+    -webkit-background-size: cover;
+    background-size: cover;
+}
+.trust {
+    display: flex;
+    margin: 10px;
+    padding: 15px 50px;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+
+    background: rgba(51, 51, 51, 0.30);
+    border: 1px #ecf0f5 solid;
+    border-radius: 5px;
+}
+
+.trust__item {
+    margin: 10px 0;
+    width: 20%;
+    text-align: center;
+}
+
+.trust__item img{
+    max-width: 100%;
+    height: auto;
+}
 
 /* Footer */
 .footer {
     padding-top: 65px;
-
     background-color: #f8f8f8;
 }
 
@@ -870,6 +898,20 @@ hr {
         left: 0;
     }
 
+    /* Trust */
+    .trust {
+        margin-top: 50px;
+    }
+
+    .trust__item {
+        width: 40%;
+        max-width: 410px;
+        margin: 15px;
+    }
+
+    /*.trust__item:last-child {*/
+    /*    margin-bottom: 0;*/
+    /*}*/
 
     /* Footer */
     .footer__col--second,

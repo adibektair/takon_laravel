@@ -181,6 +181,29 @@
         </div><!-- /.container -->
     </section>
 
+    <section class="section section--companies">
+        <div class="container">
+            <div class="section__header">
+                <div class="section__title">Нам доверяют</div>
+            </div>
+
+            <div class="trust">
+                <div class="trust__item">
+                    <img src="assets/images/companies/petrolasia.png" alt="">
+                </div>
+                <div class="trust__item">
+                    <img src="assets/images/companies/azimutGaz.png" alt="">
+                </div>
+                <div class="trust__item">
+                    <img src="assets/images/companies/rosinka.png" alt="">
+                </div>
+                <div class="trust__item">
+                    <img src="assets/images/companies/yandexTaxi.png" alt="">
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section class="section section--phone">
         <div class="container">
             <div class="section__header">

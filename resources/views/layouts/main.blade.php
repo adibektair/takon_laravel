@@ -101,17 +101,6 @@
 
                         </a>
                         <ul class="dropdown-menu">
-                            <!--<li class="user-header">
-                                <a href="{{route('home')}}">
-                                    <span>Главная</span>
-                                </a>
-                                <p>
-                                    <a class="dropdown-item" href="/logout"> Выйти </a>
-
-                                </p>
-                            </li> -->
-
-
                             <li class="user-header">
                                 {{--<div class="pull-left">--}}
                                     {{--<a href="{{route('account.index')}}"  class="btn btn-default btn-flat">Аккаунт</a>--}}
