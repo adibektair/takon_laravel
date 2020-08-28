@@ -969,7 +969,12 @@ hr {
         font-size: 52px;
     }
 
-    /* Blogs */
+    /* Trust */
+    .trust__item {
+        margin: 5px;
+    }
+
+    /* Contacts */
 
     .contacts__title {
         font-size: 10px;
