@@ -53,7 +53,7 @@
                     <tr>
                         <th>#</th>
                         <th>Телефон</th>
-                        <th>Имя</th>
+                        {{--<th>Имя</th>--}}
                         <?php
                         if(auth()->user()->role_id == 1){
                         ?>
@@ -97,7 +97,7 @@
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'sender', name: 'sender'},
-                    {data: 'username', name: 'username'},
+                    // {data: 'username', name: 'username'},
                         <?php
                         if(auth()->user()->role_id == 1){
                         ?>
