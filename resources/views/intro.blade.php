@@ -31,8 +31,10 @@
 <header class="header" id="header">
     <div class="container">
         <div class="header__inner">
-            <a class="header__logo" data-scroll="#intro" href="{{ url('/') }}">Takon</a>
-
+            <a href="{{ url('/') }}" class="header__item" data-scroll="#intro">
+                <img src="img/Takon.png" alt="" class="companyLogo">
+                <div class="header__logo">Takon</div>
+            </a>
             <nav class="nav" id="nav">
                 <a class="nav__link" href="#" data-scroll="#goal">Цель</a>
                 <a class="nav__link" href="#" data-scroll="#role">Роль</a>
