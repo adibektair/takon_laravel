@@ -11,6 +11,7 @@
         <div class="float-left">
             <h5>Ваши таконы сейчас в наличии у следующих пользователей </h5>
         </div>
+        <hr>
     </div>
 
 
@@ -19,15 +20,15 @@
 
         <div class="panel panel-default">
             <div class="panel-body">
-        <table class="table table-bordered" id="table">
+        <table class="table table-bordered statTable" id="table">
             <thead>
             <tr>
-                <th >#</th>
-                <th >Имя</th>
-                <th >Телефон</th>
-                <th >Услуга</th>
-                <th >Количество</th>
-                <th >Вернуть</th>
+                <th class="table__title">#</th>
+                <th class="table__title">Имя</th>
+                <th class="table__title">Телефон</th>
+                <th class="table__title">Услуга</th>
+                <th class="table__title">Количество</th>
+                <th class="table__title">Вернуть</th>
             </tr>
             </thead>
             <tbody>

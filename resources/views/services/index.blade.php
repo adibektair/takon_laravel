@@ -9,6 +9,7 @@
         <div class="float-left">
             <h5>Товары и услуги</h5>
         </div>
+        <hr>
     </div>
 
     <div class="col-md-12 mt-2 mb-3">
@@ -25,15 +26,15 @@
     <div class="col-md-12 mt-2">
         <div class="panel panel-default">
             <div class="panel-body">
-                <table class="table table-bordered" id="table">
+                <table class="table table-bordered statTable" id="table">
                     <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Название</th>
-                        <th>Цена за единицу</th>
-                        <th>Срок действия в днях</th>
-                        <th>Редактировать</th>
-                        <th>Поделиться</th>
+                        <th class="table__title">#</th>
+                        <th class="table__title">Название</th>
+                        <th class="table__title">Цена за единицу</th>
+                        <th class="table__title">Срок действия в днях</th>
+                        <th class="table__title">Редактировать</th>
+                        <th class="table__title">Поделиться</th>
                     </tr>
                     </thead>
                     <tbody>

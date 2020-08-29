@@ -8,13 +8,13 @@
 
     <div class="col-md-12 mt-2 mb-3 bg-transparent">
         <div class="float-left">
-            <h4>Пользователи</h4>
-
+            <h5>Пользователи</h5>
+            <hr>
             <?php
             if(auth()->user()->role_id == 3){
                 ?>
 
-            <h6>Выберите пользователей, которым хотите  отправить таконы</h6>
+            <h6>Выберите пользователей, которым хотите отправить таконы</h6>
 
             <a href="{{ route('groups') }}">
                 <button class="btn btn-outline-info">Избранное</button>
@@ -51,13 +51,13 @@
     <div class="col-md-12 mt-2">
         <div class="panel panel-default">
             <div class="panel-body">
-        <table class="table table-bordered" id="table">
+        <table class="table table-bordered statTable" id="table">
             <thead>
             <tr>
-                <th></th>
-                <th >Имя</th>
-                <th >Телефон</th>
-                <th >Создан</th>
+                <th class="table__title"></th>
+                <th class="table__title">Имя</th>
+                <th class="table__title">Телефон</th>
+                <th class="table__title">Создан</th>
             </tr>
             </thead>
             <tbody>

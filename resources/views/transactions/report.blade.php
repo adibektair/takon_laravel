@@ -7,27 +7,27 @@
         <div class="float-left">
             <h5>Отчет</h5>
         </div>
+        <hr>
     </div>
 
-    <br><br>
     <div class="col-md-12 mt-2">
         <div class="panel panel-default">
             <div class="panel-body">
-                <table border="0" cellspacing="5" cellpadding="5">
+                <table class="filterTable" border="0" cellspacing="5" cellpadding="5">
                     <tbody>
                     <tr>
-                        <td>C какого числа:</td>
+                        <td class="filterTitle">C какого числа:</td>
                         <td><input class="form-control" name="min" id="min" type="date"></td>
                     </tr>
                     <tr>
-                        <td>По какое число:</td>
+                        <td class="filterTitle">По какое число:</td>
                         <td><input class="form-control" name="max" id="max" type="date"></td>
                     </tr>
                     <tr>
                         <?php
                         $services = \App\Service::all();
                         ?>
-                        <td>Услуга:</td>
+                        <td class="filterTitle">Услуга:</td>
                         <td>
                             <select class="form-control" name="service" id="service">
                                 <option value="">Не выбрано</option>
@@ -45,7 +45,7 @@
                     </tr>
                     <tr>
 
-                        <td>Тип транзакции:</td>
+                        <td class="filterTitle">Тип транзакции:</td>
                         <td>
                             <select class="form-control" name="type" id="type">
                                 <option value="">Не выбрано</option>
@@ -56,17 +56,17 @@
                     </tbody>
                 </table>
 
-                <table class="table table-bordered" id="table">
+                <table class="table table-bordered statTable" id="table">
                     <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Отправитель</th>
-                        <th>Имя отправителя</th>
-                        <th>Услуга/Товар</th>
-                        <th>Количество</th>
-                        <th>Получатель</th>
-                        <th>Имя получателя</th>
-                        <th>Дата</th>
+                        <th class="table__title">#</th>
+                        <th class="table__title">Отправитель</th>
+                        <th class="table__title">Имя отправителя</th>
+                        <th class="table__title">Услуга/Товар</th>
+                        <th class="table__title">Количество</th>
+                        <th class="table__title">Получатель</th>
+                        <th class="table__title">Имя получателя</th>
+                        <th class="table__title">Дата</th>
                     </tr>
                     </thead>
                     <tbody>

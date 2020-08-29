@@ -1,3 +1,72 @@
+h5 {
+    font-size: 30px;
+    font-weight: 700;
+}
+
+hr {
+    border-top: 2px solid #343B3F;
+}
+
+/* Filter */
+.filterTable {
+    background: transparent;
+    border: 1px solid #343B3F;
+    border-radius: 5px;
+    border-collapse: separate;
+    margin-bottom: 30px !important;
+}
+
+.filterTable .form-control {
+    font-weight: 500;
+    border: 1px solid rgba(51, 51, 51, 0.31);
+    border-radius: 5px;
+    background: transparent;
+    margin-bottom: 10px;
+}
+
+.filterTitle {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.filterTable td,th {
+    padding: 5px 10px;
+}
+
+/*Table*/
+.statTable {
+    border: 1px solid #333;
+    border-radius: 5px;
+    position: relative;
+}
+
+.form-control {
+    border-radius: 5px;
+}
+
+.dt-buttons{
+    margin-bottom: 20px;
+}
+
+/*div.dataTables_wrapper div.dataTables_filter {*/
+/*    position: absolute;*/
+/*    right: 50px;*/
+/*}*/
+
+.table__title {
+    background: rgba(51, 51, 51, 0.11);
+    border-right: 1px solid #333 !important;
+    border-bottom: 1px solid #333 !important;
+}
+
+.table__title:last-child {
+    border-right: none !important;
+}
+
+.table-bordered>thead>tr>th, .table-bordered>tbody>tr>th, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>tbody>tr>td, .table-bordered>tfoot>tr>td {
+    border: 1px solid rgba(51, 51, 51, 0.45);
+}
+
 /* Page */
 .container-main {
     display: flex;
@@ -14,7 +83,6 @@
 }
 
 .main__text {
-
     font-size: 20px;
     font-weight: 700;
 }
@@ -108,11 +176,6 @@
     opacity: 1;
     transform: translateY(0px);
     pointer-events: all;
-}
-
-h5 {
-    font-size: 20px;
-    font-weight: 700;
 }
 
 @media (max-width: 991px) {

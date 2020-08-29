@@ -11,6 +11,7 @@
         <div class="float-left">
             <h5>Партнеры</h5>
         </div>
+        <hr>
     </div>
 
     <div class="col-md-12 mt-2 mb-3">
@@ -27,16 +28,16 @@
     <div class="col-md-12 mt-2">
         <div class="panel panel-default">
             <div class="panel-body">
-                <table class="table table-bordered" id="table">
+                <table class="table table-bordered statTable" id="table">
                     <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Имя</th>
-                        <th>Телефон</th>
-                        <th>email</th>
-                        <th>Адрес</th>
-                        <th>Создан</th>
-                        <th>Локации</th>
+                        <th class="table__title">#</th>
+                        <th class="table__title">Имя</th>
+                        <th class="table__title">Телефон</th>
+                        <th class="table__title">email</th>
+                        <th class="table__title">Адрес</th>
+                        <th class="table__title">Создан</th>
+                        <th class="table__title">Локации</th>
                     </tr>
                     </thead>
                     <tbody>

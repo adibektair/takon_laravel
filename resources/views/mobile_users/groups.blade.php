@@ -14,8 +14,9 @@
 
     <div class="col-md-12 mt-2 mb-3 bg-transparent">
         <div class="float-left">
-            <h3>Сохраненные группы пользователей</h3>
+            <h5>Сохраненные группы пользователей</h5>
         </div>
+        <hr>
         <div class="col-md-12 mt-2 mb-3">
             <form id="form" action="{{ route('send.to.user') }}" method="post">
                 <div class="form-group">
@@ -60,19 +61,17 @@
         </div>
     </div>
 
-
-
     <div class="col-md-12 mt-2">
         <div class="panel panel-default">
             <div class="panel-body">
-                <table class="table table-bordered" id="table">
+                <table class="table table-bordered statTable" id="table">
                     <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Группа</th>
-                        <th>Создан</th>
-                        <th></th>
-                        <th></th>
+                        <th class="table__title">#</th>
+                        <th class="table__title">Группа</th>
+                        <th class="table__title">Создан</th>
+                        <th class="table__title"></th>
+                        <th class="table__title"></th>
 
                     </tr>
                     </thead>

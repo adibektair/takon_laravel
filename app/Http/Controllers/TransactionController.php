@@ -675,8 +675,6 @@ class TransactionController extends Controller
 
     public function report(Request $request)
     {
-
-
         $minDate = $request->minDate;
         $maxDate = $request->maxDate;
         $service = $request->service;

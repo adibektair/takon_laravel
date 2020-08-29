@@ -7,9 +7,9 @@
         <div class="float-left">
             <h5>Использованные таконы</h5>
         </div>
+        <hr>
     </div>
 
-    <br><br>
     <div class="col-md-12 mt-2">
 
          <!-- <label>Товар/услуга</label>
@@ -23,18 +23,18 @@
         <div class="panel panel-default">
             <div class="panel-body">
 
-                <table border="0" cellspacing="5" cellpadding="5">
+                <table class="filterTable" border="0" cellspacing="5" cellpadding="5">
                     <tbody>
                     <tr>
-                        <td>C какого числа:</td>
+                        <td class="filterTitle">C какого числа:</td>
                         <td><input class="form-control" name="min" id="min" type="date"></td>
                     </tr>
                     <tr>
-                        <td>По какое число:</td>
+                        <td class="filterTitle">По какое число:</td>
                         <td><input class="form-control" name="max" id="max" type="date"></td>
                     </tr>
                     <tr>
-                        <td>Услуга:</td>
+                        <td class="filterTitle">Услуга:</td>
                         <td>
                             <select class="form-control" name="service_id" id="service_id">
                                 <option value="">Не выбрано</option>
@@ -48,24 +48,23 @@
                     </tbody>
                 </table>
 
-                <table class="table table-bordered" id="table">
+                <table class="table table-bordered statTable" id="table">
                     <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Телефон</th>
+                        <th class="table__title">#</th>
+                        <th class="table__title">Телефон</th>
                         {{--<th>Имя</th>--}}
                         <?php
                         if(auth()->user()->role_id == 1){
                         ?>
-                        <th>Компания</th>
+                        <th class="table__title">Компания</th>
                         <?php
                         }
                         ?>
-                        <th>Услуга/Товар</th>
-                        <th>Использовано</th>
-                        <th>Принял</th>
-                        <th>Дата</th>
-
+                        <th class="table__title">Услуга/Товар</th>
+                        <th class="table__title">Использовано</th>
+                        <th class="table__title">Принял</th>
+                        <th class="table__title">Дата</th>
                     </tr>
                     </thead>
                     <tbody>

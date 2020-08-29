@@ -7,21 +7,21 @@
         <div class="float-left">
             <h5>Транзакции онлайн оплаты</h5>
         </div>
+        <hr>
     </div>
 
-    <br><br>
     <div class="col-md-12 mt-2">
         <div class="panel panel-default">
             <div class="panel-body">
-                <table class="table table-bordered" id="table">
+                <table class="table table-bordered statTable" id="table">
                     <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Пользователь</th>
-                        <th>Услуга/Товар</th>
-                        <th>Количество</th>
-                        <th>Сумма</th>
-                        <th>Дата</th>
+                        <th class="table__title">#</th>
+                        <th class="table__title">Пользователь</th>
+                        <th class="table__title">Услуга/Товар</th>
+                        <th class="table__title">Количество</th>
+                        <th class="table__title">Сумма</th>
+                        <th class="table__title">Дата</th>
 
                     </tr>
                     </thead>

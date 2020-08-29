@@ -5,22 +5,22 @@
         <div class="float-left">
             <h5>Заявки на создание товаров/услуг</h5>
         </div>
+        <hr>
     </div>
 
-    <br><br>
     <div class="col-md-12 mt-2">
         <div class="panel panel-default">
             <div class="panel-body">
-                <table class="table table-bordered" id="table">
+                <table class="table table-bordered statTable" id="table">
                     <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Партнер</th>
-                        <th>Товар/Услуга</th>
-                        <th>Количество</th>
-                        <th>Цена</th>
-                        <th>Срок в днях</th>
-                        <th>Управлять</th>
+                        <th class="table__title">#</th>
+                        <th class="table__title">Партнер</th>
+                        <th class="table__title">Товар/Услуга</th>
+                        <th class="table__title">Количество</th>
+                        <th class="table__title">Цена</th>
+                        <th class="table__title">Срок в днях</th>
+                        <th class="table__title">Управлять</th>
 
                     </tr>
                     </thead>

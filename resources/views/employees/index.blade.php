@@ -11,6 +11,7 @@
         <div class="float-left">
             <h5>Cотрудники </h5>
         </div>
+        <hr>
     </div>
 
     <div class="col-md-12 mt-2 mb-3">
@@ -26,15 +27,15 @@
 
         <div class="panel panel-default">
             <div class="panel-body">
-                <table class="table table-bordered" id="table">
+                <table class="table table-bordered statTable" id="table">
                     <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Имя</th>
-                        <th>email</th>
-                        <th>Создан</th>
-                        <th></th>
-                        <th></th>
+                        <th class="table__title">#</th>
+                        <th class="table__title">Имя</th>
+                        <th class="table__title">email</th>
+                        <th class="table__title">Создан</th>
+                        <th class="table__title"></th>
+                        <th class="table__title"></th>
 
                     </tr>
                     </thead>

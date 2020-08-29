@@ -6,19 +6,18 @@
     <div class="col-md-12 mt-2 mb-3 bg-transparent">
         <div class="float-left">
             <h5>Поиск (номер телефона: {{ $phone }})</h5>
-
         </div>
+        <hr>
     </div>
 
-    <br><br>
     <div class="col-md-12 mt-2">
         <div class="panel panel-default">
             <div class="panel-body">
-                <table class="table table-bordered" id="table">
+                <table class="table table-bordered statTable" id="table">
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th>Отравительно</th>
+                        <th>Отправитель</th>
                         <th>Получатель</th>
                         <th>Услуга/Товар</th>
                         <th>Количество</th>

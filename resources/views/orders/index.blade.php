@@ -5,22 +5,22 @@
         <div class="float-left">
             <h5>Заявки</h5>
         </div>
+        <hr>
     </div>
 
-    <br><br>
     <div class="col-md-12 mt-2">
         <div class="panel panel-default">
             <div class="panel-body">
-                <table class="table table-bordered" id="table">
+                <table class="table table-bordered statTable" id="table">
                     <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Покупатель</th>
-                        <th>Партнер(продавец)</th>
-                        <th>Товар/Услуга</th>
-                        <th>Количество и сумма</th>
-                        <th>Дата создания</th>
-                        <th>Cтатус</th>
+                        <th class="table__title">#</th>
+                        <th class="table__title">Покупатель</th>
+                        <th class="table__title">Партнер(продавец)</th>
+                        <th class="table__title">Товар/Услуга</th>
+                        <th class="table__title">Количество и сумма</th>
+                        <th class="table__title">Дата создания</th>
+                        <th class="table__title">Cтатус</th>
                     </tr>
                     </thead>
                     <tbody>

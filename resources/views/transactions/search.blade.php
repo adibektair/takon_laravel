@@ -7,9 +7,9 @@
         <div class="float-left">
             <h5>Поиск по транзакциям</h5>
         </div>
+        <hr>
     </div>
 
-    <br><br>
     <div class="col-md-12 mt-2">
         <form method="post" action="{{ route('transactions.search.go') }}">
             <label>Введите номер телефона в формате 77015554797</label>

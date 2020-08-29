@@ -7,26 +7,27 @@
         <div class="float-left">
             <h5>Транзакции</h5>
         </div>
+        <hr>
     </div>
 
     <br><br>
     <div class="col-md-12 mt-2">
         <div class="panel panel-default">
             <div class="panel-body">
-                <table class="table table-bordered" id="table">
+                <table class="table table-bordered statTable" id="table">
                     <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Продавец</th>
-                        <th>Услуга/Товар</th>
-                        <th>Количество</th>
-                        <th>Сумма</th>
-                        <th>Использовано</th>
-                        <th>Остаток</th>
-                        <th>Дата</th>
-                        <th>Срок действия</th>
+                        <th class="table__title">#</th>
+                        <th class="table__title">Продавец</th>
+                        <th class="table__title">Услуга/Товар</th>
+                        <th class="table__title">Количество</th>
+                        <th class="table__title">Сумма</th>
+                        <th class="table__title">Использовано</th>
+                        <th class="table__title">Остаток</th>
+                        <th class="table__title">Дата</th>
+                        <th class="table__title">Срок действия</th>
 
-                        <th>Подробнее</th>
+                        <th class="table__title">Подробнее</th>
 
                     </tr>
                     </thead>

@@ -3,8 +3,9 @@
 
     <div class="col-md-12 mt-2 mb-3 ">
         <div class="float-left">
-            <h5>Редактировать профиль</h5>
+            <h5>Профиль</h5>
         </div>
+        <hr>
     </div>
 
     <br>
@@ -18,8 +19,6 @@
         <form action="{{ route('edit.partner') }}" enctype="multipart/form-data" method="post">
             @csrf
 
-            <hr>
-            <br>
             <div class="col-md-6">
                 @if($partner->image_path)
                     <img src="/public/avatars/<?=$partner->image_path?>" style="width: 350px; height: 350px;" class="rounded">
