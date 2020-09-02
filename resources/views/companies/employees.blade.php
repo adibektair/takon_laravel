@@ -32,7 +32,6 @@
                             <th class="table__title">Пароль</th>
                             <th class="table__title">Создан</th>
                             <th class="table__title"></th>
-                            <th class="table__title"></th>
 
                         </tr>
                         </thead>
