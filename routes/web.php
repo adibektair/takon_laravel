@@ -72,6 +72,14 @@ Route::group(['middleware' => ['authenticated']], function () {
 
     Route::group(['middleware' => ['any_role']], function () {
 
+        //COMPANY-EMPLOYEES
+        Route::get('/company-employees', function (){
+            return view('companies/employees');
+        })->name('company.employees');
+
+        Route::get('company-create-employee', function (){
+            return view('companies/employees-create');
+        })->name('company.employees.create');
 
         Route::get('/company-services', function () {
             return view('companies/services');

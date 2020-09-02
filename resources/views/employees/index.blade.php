@@ -17,7 +17,7 @@
     <div class="col-md-12 mt-2 mb-3">
         <div class="float-right">
             <a href="{{ route('create.employee') }}">
-                <button class="btn btn-success">Добавить сотрудника</button>
+                <button class="btn employee__button">Добавить сотрудника</button>
             </a>
         </div>
         <br>

@@ -387,7 +387,14 @@
                     <li>
                         <a href="{{ route('profile.company') }}">
                             <i class="fa fa-user"></i>
-                            <span>Профиль</span>
+                            <span>Профиль <b>BETA</b></span>
+                        </a>
+
+                    </li>
+                    <li>
+                        <a href="{{ route('company.employees') }}">
+                            <i class="fa fa-users"></i>
+                            <span>Сотрудники <b>BETA</b></span>
                         </a>
 
                     </li>

@@ -20,16 +20,16 @@
 
             @csrf
             <input type="hidden" name="id" >
-            <label class="text-semibold">Имя </label>
+            <label class="text-semibold">Имя</label>
             <input type="text" required name="name" placeholder="Имя"  class="form-control">
             <br>
-            <label class="text-semibold">email </label>
-            <input type="email" required name="email" placeholder="Телефон" class="form-control">
+            <label class="text-semibold">Email</label>
+            <input type="email" required name="email" placeholder="Email" class="form-control">
             <br>
             <label class="text-semibold">Пароль</label>
-            <input required type="text" name="password" placeholder="пароль" class="form-control">
+            <input required type="text" name="password" placeholder="Пароль" class="form-control">
             <br>
-            <label class="text-semibold">Адрес </label>
+            <label class="text-semibold">Адрес</label>
             <input type="text" required name="address" placeholder="Адрес" class="form-control">
             <br>
             <hr>
