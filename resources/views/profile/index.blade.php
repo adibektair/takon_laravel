@@ -49,9 +49,8 @@
                 <input type="text" name="address" placeholder="Адрес" required value="<?=$partner->address?>" class="form-control">
 
 
-
-                <hr>
-                <button type="submit" class="btn btn-success">Сохранить</button>
+                <br>
+                <button type="submit" class="btn btn-success profile__button">Сохранить</button>
             </div>
         </form>
     </div>

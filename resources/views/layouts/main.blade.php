@@ -385,6 +385,13 @@
                     </li>
                 @elseif(auth()->user()->role_id == 3)
                     <li>
+                        <a href="{{ route('profile.company') }}">
+                            <i class="fa fa-user"></i>
+                            <span>Профиль</span>
+                        </a>
+
+                    </li>
+                    <li>
                         <a href="{{ route('company.services') }}">
                             <i class="fa fa-book"></i>
                             <span>Товары и услуги</span>
