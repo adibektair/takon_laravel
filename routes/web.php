@@ -89,6 +89,11 @@ Route::group(['middleware' => ['authenticated']], function () {
             return view('profile/company');
         })->name('profile.company');
 
+        Route::post('/user/credentials', [
+            'uses' => 'UserController@postCredentials',
+            'as' => 'user.credentials'
+        ]);
+
         Route::get('/send-user', function () {
             return view('mobile_users/send-user');
         })->name('send.user');
