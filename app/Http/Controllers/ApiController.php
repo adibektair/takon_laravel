@@ -207,7 +207,7 @@ class ApiController extends Controller
                 ->where('services.status', 3)
 //                ->where('users_services.mobile_user_id', $user->id)
                 ->select('services.id', 'services.price', 'services.name', 'services.created_at', 'services.description', 'services.payment_enabled', 'services.payment_price')
-                ->selectRaw('ROUND(SUM(users_services.amount), 2) AS usersAmount')
+                ->selectRaw('ROUND(SUM(users_services.amount)) AS usersAmount')
                 ->groupBy('services.id', 'services.price', 'services.name', 'services.created_at', 'services.description', 'services.payment_enabled', 'services.payment_price')
                 ->get();
 
@@ -296,7 +296,6 @@ class ApiController extends Controller
                     $usr = new UsersService();
                     $usr->mobile_user_id = $user->id;
                     $usr->cs_id = $us->cs_id;
-
                     $usr->service_id = $us->service_id;
                     $usr->amount = $qr->amount;
                     $usr->company_id = $us->company_id;
@@ -344,10 +343,19 @@ class ApiController extends Controller
                     $model->cs_id = $parent->cs_id;
                     $model->price = $service->price;
                     $model->amount = $qr->amount;
-                    $model->balance = number_format($us->amount - $qr->amount, 2);
+                    if (($us->amount - $qr->amount) < 1){
+                        $model->balance = 0;
+                    }else{
+                        $model->balance = number_format($us->amount - $qr->amount, 2);
+                    }
+
                     $model->save();
                 }
-                $us->amount -= $qr->amount;
+
+                $us->amount = number_format($us->amount - $qr->amount, 2);
+                if ($us->amount < 1){
+                    $us->amount = 0;
+                }
                 $us->save();
                 return $this->makeResponse(200, true, ['msg' => $string]);
             } else {
@@ -418,7 +426,9 @@ class ApiController extends Controller
                 DB::beginTransaction();
                 try {
                     $us->amount = number_format($us->amount - $amount, 2);
-
+                    if($us->amount < 1){
+                        $us->amount = 0;
+                    }
                     if ($us->save()) {
 //                    $not = new CloudMessage("На Ваш счет поступили таконы " . $service->name, $reciever->id, "Внимание", $service->partner_id, $partner->name);
 //                    $not->sendNotification();
@@ -508,6 +518,9 @@ class ApiController extends Controller
                         return $this->makeResponse(400, false, ['message' => 'Недостаточно средств']);
                     }
                     $us->amount = number_format($us->amount - $model->amount, 2);
+                    if($us->amount < 1){
+                        $us->amount = 0;
+                    }
                     if ($us->save()) {
 
                         $stat = new Transaction();
@@ -577,6 +590,9 @@ class ApiController extends Controller
             DB::beginTransaction();
             try {
                 $us->amount = number_format($us->amount - $amount, 2);
+                if($us->amount < 1){
+                    $us->amount = 0;
+                }
                 $service = Service::where('id', $us->service_id)->first();
                 if ($us->save()) {
 
