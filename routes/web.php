@@ -72,6 +72,14 @@ Route::group(['middleware' => ['authenticated']], function () {
 
     Route::group(['middleware' => ['any_role']], function () {
 
+        //COMPANY-EMPLOYEES
+        Route::get('/company-employees', function (){
+            return view('companies/employees');
+        })->name('company.employees');
+
+        Route::get('company-create-employee', function (){
+            return view('companies/employees-create');
+        })->name('company.employees.create');
 
         Route::get('/company-services', function () {
             return view('companies/services');
@@ -80,6 +88,11 @@ Route::group(['middleware' => ['authenticated']], function () {
         Route::get('/company-edit', function () {
             return view('profile/company');
         })->name('profile.company');
+
+        Route::post('/user/credentials', [
+            'uses' => 'UserController@postCredentials',
+            'as' => 'user.credentials'
+        ]);
 
         Route::get('/send-user', function () {
             return view('mobile_users/send-user');

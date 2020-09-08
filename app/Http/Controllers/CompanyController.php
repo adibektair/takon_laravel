@@ -116,7 +116,7 @@ class CompanyController extends Controller
         $c->phone = $request->phone;
         $c->address = $request->address;
         $c->save();
-        toastr()->success('Юр. лицо успешно добавлено!');
+        toastr()->success('Изменения успешно сохранены!');
 
         return redirect()->back();
     }

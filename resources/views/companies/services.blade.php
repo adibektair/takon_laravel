@@ -51,6 +51,9 @@
                 processing: true,
                 responsive: true,
                 serverSide: true,
+                language: {
+                    url: '{{asset('admin/bower_components/datatable/js/ru.locale.json')}}',
+                },
                 ajax: "{{ route('company.get.services') }}",
                 columns: [
                     { data: 'id', name: 'id' },

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use Illuminate\Support\Facades\Auth;
 use Grimthorr\LaravelToast\Toast;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -145,4 +146,57 @@ class UserController extends Controller
             ->make(true);
 
     }
+
+    public function admin_credential_rules(array $data)
+    {
+        $messages = [
+            'current-password.required' => 'Пожалуйста введите текущий пароль',
+            'password.required' => 'Пожалуйста введите пароль',
+            'password_confirmation.required' => 'Пожалуйста введите повторный пароль'
+        ];
+
+        $validator = Validator::make($data, [
+            'current-password' => 'required',
+            'password' => 'required|same:password',
+            'password_confirmation' => 'required|same:password',
+        ], $messages);
+
+        return $validator;
+    }
+
+    public function postCredentials(Request $request)
+    {
+        if(Auth::Check())
+        {
+            $request_data = $request->All();
+            $validator = $this->admin_credential_rules($request_data);
+            if($validator->fails())
+            {
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
+            else
+            {
+                $current_password = Auth::User()->password;
+                if(Hash::check($request_data['current-password'], $current_password))
+                {
+                    $user_id = Auth::User()->id;
+                    $obj_user = User::find($user_id);
+                    $obj_user->password = Hash::make($request_data['password']);
+                    $obj_user->save();
+                    toastr()->success('Пароль успешно обновлён!');
+                    return redirect()->route('profile.company');
+                }
+                else
+                {
+                    $error = array('current-password' => 'Пожалуйста введите правильный текущий пароль');
+                    return redirect()->back()->withErrors($error)->withInput();
+                }
+            }
+        }
+        else
+        {
+            return redirect()->to('/');
+        }
+    }
 }
+
