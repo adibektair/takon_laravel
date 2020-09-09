@@ -41,36 +41,36 @@
             </div>
         </div>
 
-{{--        <div class="col-md-6">--}}
-{{--            <div class="company-profile">--}}
-{{--                @if(count($errors) > 0)--}}
-{{--                    <ul class="list-group">--}}
-{{--                        @foreach($errors->all() as $error)--}}
-{{--                            <li class="list-group-item text-danger danger">--}}
-{{--                                {{ $error }}--}}
-{{--                            </li>--}}
-{{--                        @endforeach--}}
-{{--                    </ul>--}}
-{{--                    <br>--}}
-{{--                @endif--}}
-{{--                <form id="form-change-password" role="form" method="POST" action="{{ url('/user/credentials') }}" novalidate class="form-horizontal">--}}
-{{--                    <label for="current-password" class="text-semibold">Текущий пароль</label>--}}
-{{--                    <input type="hidden" name="_token" value="{{ csrf_token() }}">--}}
-{{--                    <input type="password" class="form-control" id="current-password" name="current-password" placeholder="Пароль">--}}
+        <div class="col-md-6">
+            <div class="company-profile">
+                @if(count($errors) > 0)
+                    <ul class="list-group">
+                        @foreach($errors->all() as $error)
+                            <li class="list-group-item text-danger danger">
+                                {{ $error }}
+                            </li>
+                        @endforeach
+                    </ul>
+                    <br>
+                @endif
+                <form id="form-change-password" role="form" method="POST" action="{{ url('/user/credentials') }}" novalidate class="form-horizontal">
+                    <label for="current-password" class="text-semibold">Текущий пароль</label>
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <input type="password" class="form-control" id="current-password" name="current-password" placeholder="Пароль">
 
-{{--                    <br>--}}
-{{--                    <label for="password" class="text-semibold">Новый пароль</label>--}}
-{{--                    <input type="password" class="form-control" id="password" name="password" placeholder="Пароль">--}}
+                    <br>
+                    <label for="password" class="text-semibold">Новый пароль</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Пароль">
 
-{{--                    <br>--}}
-{{--                    <label for="password_confirmation" class="text-semibold">Повторите пароль</label>--}}
-{{--                    <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Повторите пароль">--}}
+                    <br>
+                    <label for="password_confirmation" class="text-semibold">Повторите пароль</label>
+                    <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Повторите пароль">
 
-{{--                    <br>--}}
-{{--                    <button type="submit" class="btn btn-primary profile__button">Изменить пароль</button>--}}
-{{--                </form>--}}
-{{--            </div>--}}
-{{--        </div>--}}
+                    <br>
+                    <button type="submit" class="btn btn-primary profile__button">Изменить пароль</button>
+                </form>
+            </div>
+        </div>
     </div>
 
 @endsection
