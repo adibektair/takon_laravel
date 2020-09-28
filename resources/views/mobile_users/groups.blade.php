@@ -46,7 +46,7 @@
 
                 <div class="form-group">
                     <label>Введите количество таконов</label>
-                    <input type="number" required class="form-control" name="amount">
+                    <input type="number" step="any" required class="form-control" name="amount">
                 </div>
 
                 <button id="bbb" type="submit" class="btn btn-success">Отправить</button>
