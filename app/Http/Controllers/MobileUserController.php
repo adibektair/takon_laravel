@@ -345,7 +345,12 @@ class MobileUserController extends Controller
                 return '<input type="text" id="' . $user->id . '" class="name"  value="' . $user->name . '" placeholder="Введите имя">';
             })
             ->addColumn('card', function ($user) {
-                return '<a href="/card/'. $user->id .'"><button class="btn btn-default">Карта оплаты</button></a>';
+                if(auth()->user()->role_id == 1){
+                    return '<a href="/card/'. $user->id .'"><button class="btn btn-default">Карта оплаты</button></a>';
+                }else{
+                    return  'В разработке';
+                }
+
             })
             ->rawColumns(['name', 'checkbox', 'card'])->make();
         return $s;
