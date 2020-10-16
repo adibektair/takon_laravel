@@ -274,13 +274,11 @@ class ApiController extends Controller
 
         $user = MobileUser::where('token', $token)->first();
         if ($user) {
-
             if (strlen($string) == 65) {
                 $qr = QrCode::where('hash', $string)->first();
                 if (!$qr) {
                     return $this->makeResponse(400, false, ['msg' => 'Недостаточно таконов']);
                 }
-
                 $us = UsersService::where('id', $qr->users_service_id)->first();
                 if ($qr->amount > $us->amount) {
                     return $this->makeResponse(400, false, ['msg' => 'Недостаточно таконов']);
@@ -401,10 +399,11 @@ class ApiController extends Controller
                     ->where('deadline', $us->deadline)
                     ->where('cs_id', $us->cs_id)
                     ->first();
+
                 if ($model) {
                     $model->amount = number_format($amount + $model->amount, 2);
-
-                } else {
+                }
+                else {
                     $model = new UsersService();
                     $model->mobile_user_id = $reciever->id;
                     $model->cs_id = $us->cs_id;
@@ -417,6 +416,7 @@ class ApiController extends Controller
                 $subs = UsersSubscriptions::where('mobile_user_id', $reciever->id)
                     ->where('partner_id', $service->partner_id)
                     ->first();
+
                 if (!$subs) {
                     $subs = new UsersSubscriptions();
                     $subs->mobile_user_id = $reciever->id;
@@ -505,38 +505,40 @@ class ApiController extends Controller
         $string = $request->qrstring;
         $token = $request->token;
         $user = User::where('token', $token)->first();
-        if ($user) {
-            try {
-                $model = QrCode::where('hash', $string)->first();
-                if ($model) {
-                    $us = UsersService::where('id', $model->users_service_id)->first();
-                    $service = Service::where('id', $us->service_id)->first();
-                    if ($user->partner_id != $service->partner_id) {
-                        return $this->makeResponse(400, false, ['message' => 'Ошибка']);
-                    }
-                    if ($us->amount < $model->amount) {
-                        return $this->makeResponse(400, false, ['message' => 'Недостаточно средств']);
-                    }
-                    $us->amount = number_format($us->amount - $model->amount, 2);
-                    if($us->amount < 1){
-                        $us->amount = 0;
-                    }
-                    if ($us->save()) {
+        // 65 это qr сгенерированный пользователем
+        if(strlen($string) == 65){
+            if ($user) {
+                try {
+                    $model = QrCode::where('hash', $string)->first();
+                    if ($model) {
+                        $us = UsersService::where('id', $model->users_service_id)->first();
+                        $service = Service::where('id', $us->service_id)->first();
+                        if ($user->partner_id != $service->partner_id) {
+                            return $this->makeResponse(400, false, ['message' => 'Ошибка']);
+                        }
+                        if ($us->amount < $model->amount) {
+                            return $this->makeResponse(400, false, ['message' => 'Недостаточно средств']);
+                        }
+                        $us->amount = number_format($us->amount - $model->amount, 2);
+                        if($us->amount < 1){
+                            $us->amount = 0;
+                        }
+                        if ($us->save()) {
 
-                        $stat = new Transaction();
-                        $parent = Transaction::where('service_id', $service->id)
-                            ->where('u_r_id', $us->mobile_user_id)
-                            ->where('users_service_id', $us->id)
-                            ->orderBy('created_at', 'desc')->first();
-
-                        if ($parent) {
-                            $stat->parent_id = $parent->id;
-                        } else {
+                            $stat = new Transaction();
                             $parent = Transaction::where('service_id', $service->id)
                                 ->where('u_r_id', $us->mobile_user_id)
+                                ->where('users_service_id', $us->id)
                                 ->orderBy('created_at', 'desc')->first();
-                            $stat->parent_id = $parent->parent_id;
-                        }
+
+                            if ($parent) {
+                                $stat->parent_id = $parent->id;
+                            } else {
+                                $parent = Transaction::where('service_id', $service->id)
+                                    ->where('u_r_id', $us->mobile_user_id)
+                                    ->orderBy('created_at', 'desc')->first();
+                                $stat->parent_id = $parent->parent_id;
+                            }
 
 
 //                    $objDemo = new \stdClass();
@@ -546,30 +548,148 @@ class ApiController extends Controller
 //                    $objDemo->receiver = 'ReceiverUserName';
 //                    Mail::to("adibek.t@maint.kz")->send(new DemoEmail($objDemo));
 
-                        $stat->type = 3;
-                        $stat->balance = $us->amount;
-                        $stat->service_id = $us->service_id;
-                        $stat->u_s_id = $us->mobile_user_id;
-                        $stat->u_r_id = $user->id;
-                        $stat->cs_id = $parent->cs_id;
-                        $stat->price = $service->price;
-                        $stat->amount = $model->amount;
-                        $stat->save();
+                            $stat->type = 3;
+                            $stat->balance = $us->amount;
+                            $stat->service_id = $us->service_id;
+                            $stat->u_s_id = $us->mobile_user_id;
+                            $stat->u_r_id = $user->id;
+                            $stat->cs_id = $parent->cs_id;
+                            $stat->price = $service->price;
+                            $stat->amount = $model->amount;
+                            $stat->save();
+                        }
+                        $model->delete();
+                        return $this->makeResponse(200, true, ['message' => 'Успешно!']);
                     }
-                    $model->delete();
-                    return $this->makeResponse(200, true, ['message' => 'Успешно!']);
+                } catch (\Exception $exception) {
+                    return $this->makeResponse(400, false, [
+                        'message' => 'Ошибка обратитесь к администратору!',
+                        'error' => $exception->getMessage()
+                    ]);
                 }
-            } catch (\Exception $exception) {
-                return $this->makeResponse(400, false, [
-                    'message' => 'Ошибка обратитесь к администратору!',
-                    'error' => $exception->getMessage()
-                ]);
+                return $this->makeResponse(400, false, ['message' => 'QR не найден']);
             }
-            return $this->makeResponse(400, false, ['message' => 'QR не найден']);
         }
+        // 45 это карта оплаты
+        else{
+            $mobileUser = MobileUser::where('card_hash', $string)->first();
+            if (!$mobileUser->is_enabled){
+                return $this->makeResponse(200, false, ['message' => 'Карта заблокирована', 'error' => 'card blocked']);
+            }
+            $orgId = $user->partner_id;
+
+            $partner = DB::table('services')
+                ->where('partner_id', $orgId)
+                ->leftJoin('users_services', function ($leftJoin) use ($mobileUser) {
+                    $leftJoin->on('users_services.service_id', '=', 'services.id')
+                        ->where('users_services.mobile_user_id', $mobileUser->id);
+                })
+                ->where('services.status', 3)
+                ->select('services.id', 'services.price', 'services.name', 'services.created_at', 'services.description', 'services.payment_enabled', 'services.payment_price')
+                ->selectRaw('ROUND(SUM(users_services.amount)) AS usersAmount')
+                ->groupBy('services.id', 'services.price', 'services.name', 'services.created_at', 'services.description', 'services.payment_enabled', 'services.payment_price')
+                ->get();
+
+            return $this->makeResponse(200, true, ['services' => $partner, 'user' => $mobileUser]);
+        }
+
         return $this->makeResponse(401, false, ['message' => 'Данные для авторизации неверны', 'error' => 'incorrect auth data']);
     }
 
+    public function getUsersServicesForCashier(Request $request){
+        $token = $request->id;
+        $service_id = $request->service_id;
+        $user = MobileUser::where('id', $token)->first();
+        if ($user) {
+            $services = DB::table('users_services')
+                ->leftJoin('companies', 'companies.id', '=', 'users_services.company_id')
+                ->join('services', 'services.id', '=', 'users_services.service_id')
+                ->leftJoin('companies_services', 'companies_services.company_id', '=', 'companies.id')
+                ->where('users_services.mobile_user_id', $user->id)
+                ->where('users_services.service_id', $service_id)
+                ->where('users_services.amount', '<>', 0)
+                ->select('services.*', 'users_services.id', 'users_services.amount as usersAmount')
+                ->selectRaw('IFNULL(companies_services.deadline, 1577880000) AS deadline, IFNULL(companies.name, "TAKON.ORG") as company')
+                ->distinct('users_services.id')
+                ->groupBy('users_services.id')
+                ->get();
+            return $this->makeResponse(200, true, ['services' => $services]);
+        }
+        return $this->makeResponse(401, false, ['msg' => 'phone or code missing']);
+    }
+
+    public function withdrawTakonsFromUsersCard(Request $request){
+        $token = $request->token;
+        $id = $request->takon_id;
+        $user_id = $request->user_id;
+        $amount = $request->amount;
+
+        $cashier = User::where('token', $token)->first();
+
+        $user = MobileUser::where('id', $user_id)->first();
+        if ($user) {
+
+            $us = UsersService::where('id', $id)->first();
+
+            if ($us->amount < $amount){
+                return $this->makeResponse(400, false, ['msg' => 'Недостаточно таконов']);
+            }
+
+            DB::beginTransaction();
+            try {
+                $us->amount = number_format($us->amount - $amount, 2);
+
+                $service = Service::where('id', $us->service_id)->first();
+                if ($us->save()) {
+
+                    $stat = new Transaction();
+                    $parent = Transaction::where('service_id', $service->id)
+                        ->where('u_r_id', $us->mobile_user_id)
+                        ->where('users_service_id', $us->id)
+                        ->where('cs_id', $us->cs_id)
+                        ->where('type', '<>', 3)
+                        ->orderBy('created_at', 'desc')->first();
+
+                    if ($parent) {
+                        $stat->parent_id = $parent->id;
+                    } else {
+                        $parent = Transaction::where('service_id', $service->id)
+                            ->where('u_r_id', $us->mobile_user_id)
+                            ->where('cs_id', $us->cs_id)
+                            ->where('type', '<>', 3)
+                            ->orderBy('created_at', 'desc')->first();
+                        if ($parent->parent_id) {
+                            $stat->parent_id = $parent->parent_id;
+                        } elseif ($parent->id) {
+                            $stat->parent_id = $parent->id;
+                        }
+
+                    }
+
+                    $stat->type = 3;
+                    $stat->balance = $us->amount;
+                    $stat->service_id = $us->service_id;
+                    $stat->u_s_id = $us->mobile_user_id;
+                    $stat->u_r_id = $cashier->_id;
+                    $stat->cs_id = $parent->cs_id;
+                    $stat->price = $service->price;
+                    $stat->amount = $amount;
+                    $stat->save();
+                }
+                DB::commit();
+            } catch (\Exception $exception) {
+                DB::rollBack();
+                return $this->makeResponse(400, false, [
+                    'message' => 'Ошибка! Обратитесь к администратору!',
+                    'error' => $exception->getMessage()
+                ]);
+            }
+            return $this->makeResponse(200, true, ['msg' => 'Таконы успешно переданы']);
+
+        }
+        return $this->makeResponse(401, false, ['msg' => 'phone or code missing']);
+
+    }
 
     public function scan(Request $request)
     {
@@ -590,9 +710,7 @@ class ApiController extends Controller
             DB::beginTransaction();
             try {
                 $us->amount = number_format($us->amount - $amount, 2);
-                if($us->amount < 1){
-                    $us->amount = 0;
-                }
+
                 $service = Service::where('id', $us->service_id)->first();
                 if ($us->save()) {
 
@@ -630,17 +748,8 @@ class ApiController extends Controller
                     $stat->amount = $amount;
                     $stat->save();
 
-
-//                $Talgat = MobileUser::where('phone', '77089995055')->first();
-//                $Tair = MobileUser::where('phone', '77005554797')->first();
-//                $management = new ManagementNotification($user->phone, $amount, $Talgat->push_id, $service->name, $Talgat->platform);
-//                $management->send();
-//                $management = new ManagementNotification($user->phone, $amount, $Tair->push_id, $service->name, $Tair->platform);
-//                $management->send();
-
                     $cashier = User::where('id', $user_id)->first();
                     if ($cashier) {
-//                    $message = new CloudMessage("Вам были переведены " . $amount . " таконов", $user->id, "Произведена оплата", "", "");
                         if ($cashier->push_id) {
                             $c = new CloudMessage();
                             $c->sendSilentThroughNode($cashier->push_id, $cashier->platform, "Вам были переведены " . $amount . " таконов", '', 'Произведена оплата');

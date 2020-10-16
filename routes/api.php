@@ -53,6 +53,9 @@ Route::group(['middleware' => ['token']], function () {
     Route::post('/create-wallet-order', ['uses' => 'ApiController@createWalletOrder']);
     Route::post('/wallet-success', ['uses' => 'ApiController@handleSuccededWalletPayment']);
     Route::post('/wallet-fail', ['uses' => 'ApiController@handleFailedWalletPayment']);
+    // Pay by real card
+    Route::post('/get-services-by-card', ['uses' => 'ApiController@getUsersServicesForCashier']);
+    Route::post('/withdraw-by-card', ['uses' => 'ApiController@withdrawTakonsFromUsersCard']);
 
 });
 

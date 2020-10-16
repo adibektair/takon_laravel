@@ -14,6 +14,7 @@ use App\UsersService;
 use App\UsersSubscriptions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Yajra\DataTables\DataTables;
 
 class MobileUserController extends Controller
@@ -343,7 +344,35 @@ class MobileUserController extends Controller
             ->addColumn('name', function ($user) {
                 return '<input type="text" id="' . $user->id . '" class="name"  value="' . $user->name . '" placeholder="Введите имя">';
             })
-            ->rawColumns(['name', 'checkbox'])->make();
+            ->addColumn('card', function ($user) {
+                return '<a href="/card/'. $user->id .'"><button class="btn btn-default">Карта оплаты</button></a>';
+            })
+            ->rawColumns(['name', 'checkbox', 'card'])->make();
         return $s;
+    }
+
+    public function cardIndex($id){
+        $user = MobileUser::where('id', $id)->first();
+        if ($user->card_hash == NULL){
+            $str = Str::random(45);
+            $user->card_hash = $str;
+            $user->passcode = 0000;
+            $user->save();
+        }
+        return view('mobile_users/card')->with(['user' => $user]);
+    }
+    public function setPasscode(Request $request, $id){
+        $user = MobileUser::where('id', $id)->first();
+        $user->passcode = $request->passcode;
+        $user->save();
+        toastSuccess('Сохранено');
+        return redirect()->back();
+    }
+    public function lockCard(Request $request, $id){
+        $user = MobileUser::where('id', $id)->first();
+        $user->is_enabled = !$user->is_enabled;
+        $user->save();
+        toastSuccess('Сохранено');
+        return redirect()->back();
     }
 }

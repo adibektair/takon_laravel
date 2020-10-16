@@ -57,6 +57,7 @@
                 <th class="table__title"></th>
                 <th class="table__title">Имя</th>
                 <th class="table__title">Телефон</th>
+                <th class="table__title">Карта для оплаты</th>
                 <th class="table__title">Создан</th>
             </tr>
             </thead>
@@ -95,6 +96,7 @@
                     { data: 'checkbox', name: 'checkbox' },
                     { data: 'name', name: 'name' },
                     { data: 'phone', name: 'phone' },
+                    { data: 'card', name: 'card' },
                     { data: 'created_at', name: 'created_at'},
 
                 ],

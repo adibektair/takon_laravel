@@ -64,6 +64,9 @@ Route::get('email/resend', 'Auth\VerificationController@resend')->name('verifica
 
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/card/{id}', ['as' => 'card', 'uses' => 'MobileUserController@cardIndex']);
+Route::post('/card/set-passcode/{id}', ['as' => 'card.set.passcode', 'uses' => 'MobileUserController@setPasscode']);
+Route::post('/card/lock/{id}', ['as' => 'card.lock', 'uses' => 'MobileUserController@lockCard']);
 
 
 Route::group(['middleware' => ['authenticated']], function () {
@@ -101,6 +104,8 @@ Route::group(['middleware' => ['authenticated']], function () {
         Route::get('/return', function () {
             return view('companies/return');
         });
+
+
 
 
         Route::get('/partner-share-services', ['as' => 'share.services', 'uses' => 'PartnerController@shareServices']);
@@ -262,6 +267,7 @@ Route::group(['middleware' => ['authenticated']], function () {
             Route::post('/add-users-group', ['as' => 'add.users.group', 'uses' => 'MobileUserController@addUserGroup']);
             Route::post('/remove-group', ['as' => 'remove.group', 'uses' => 'MobileUserController@removeGroup']);
             Route::get('/create-group', ['as' => 'create.group', 'uses' => 'MobileUserController@createGroup']);
+//            Route::get('/card/{id}', ['as' => 'card', 'uses' => 'MobileUserController@cardIndex']);
             Route::post('/search-user', ['as' => 'search.user', 'uses' => 'MobileUserController@searchUser']);
             Route::post('/store-group', ['as' => 'store.group', 'uses' => 'MobileUserController@storeGroup']);
             Route::post('/set-name', ['as' => 'set.name', 'uses' => 'MobileUserController@setName']);
