@@ -670,7 +670,7 @@ class ApiController extends Controller
                     $stat->balance = $us->amount;
                     $stat->service_id = $us->service_id;
                     $stat->u_s_id = $us->mobile_user_id;
-                    $stat->u_r_id = $cashier->_id;
+                    $stat->u_r_id = $cashier->id;
                     $stat->cs_id = $parent->cs_id;
                     $stat->price = $service->price;
                     $stat->amount = $amount;
