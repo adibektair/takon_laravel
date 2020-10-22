@@ -709,7 +709,7 @@ class ApiController extends Controller
 
             DB::beginTransaction();
             try {
-                $us->amount = number_format($us->amount - $amount, 2);
+                $us->amount = $us->amount - $amount;
 
                 $service = Service::where('id', $us->service_id)->first();
                 if ($us->save()) {
