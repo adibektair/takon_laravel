@@ -59,6 +59,17 @@
     </div>
     <br>
     <br>
+    <div class="col-md-6">
+        <form action="{{ route('card.reset', $user->id) }}" method="post">
+
+                <button class="btn btn-danger" type="submit">Сбросить карту</button>
+
+            @csrf
+            <br>
+        </form>
+    </div>
+    <br>
+    <br>
 
     <script>
 

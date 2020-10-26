@@ -380,4 +380,13 @@ class MobileUserController extends Controller
         toastSuccess('Сохранено');
         return redirect()->back();
     }
+    public function resetCard($id){
+        $user = MobileUser::where('id', $id)->first();
+        $str = Str::random(45);
+        $user->card_hash = $str;
+        $user->passcode = 0000;
+        $user->save();
+        toastSuccess('Сохранено');
+        return redirect()->back();
+    }
 }

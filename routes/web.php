@@ -67,6 +67,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/card/{id}', ['as' => 'card', 'uses' => 'MobileUserController@cardIndex']);
 Route::post('/card/set-passcode/{id}', ['as' => 'card.set.passcode', 'uses' => 'MobileUserController@setPasscode']);
 Route::post('/card/lock/{id}', ['as' => 'card.lock', 'uses' => 'MobileUserController@lockCard']);
+Route::post('/card/reset/{id}', ['as' => 'card.reset', 'uses' => 'MobileUserController@lockCard']);
 
 
 Route::group(['middleware' => ['authenticated']], function () {
