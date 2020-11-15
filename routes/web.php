@@ -180,6 +180,13 @@ Route::group(['middleware' => ['authenticated']], function () {
 
         Route::group(['middleware' => ['is_superadmin']], function () {
 
+            //Conversions
+            Route::get('/conversion', ['as' => 'conversion.index', 'uses' => 'ConversionController@index']);
+            Route::get('/new-conversion', ['as' => 'conversion.create', 'uses' => 'ConversionController@create']);
+            Route::get('/edit-conversion/{id}', ['as' => 'conversion.edit', 'uses' => 'ConversionController@edit']);
+            Route::get('/all-conversions', ['as' => 'conversion.all', 'uses' => 'ConversionController@all']);
+            Route::post('/store-conversion', ['as' => 'conversion.store', 'uses' => 'ConversionController@store']);
+            Route::post('/save-conversion', ['as' => 'conversion.save', 'uses' => 'ConversionController@save']);
 
             //SERVICES
             Route::get('/services/moderation', function () {

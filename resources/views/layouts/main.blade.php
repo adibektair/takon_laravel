@@ -172,6 +172,13 @@
 
                     </li>
                     <li>
+                        <a href="{{ route('conversion.index') }}">
+                            <i class="fa fa-handshake-o"></i>
+                            <span>Конвертация</span>
+                        </a>
+
+                    </li>
+                    <li>
                         <a href="/companies">
                             <i class="fa fa-suitcase"></i>
                             <span>
