@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/paymenthandle', ['uses' => 'ApiController@paymentHandle']);
 Route::post('/test', ['uses' => 'ApiController@sendTest']);
 Route::get('/get-companies', ['uses' => 'ApiController@getAllPartners']);
+Route::post('/get-conversion', ['uses' => 'ConversionController@getConversionsByServiceId']);
 
 Route::post('/m_register', ['uses' => 'ApiController@auth']);
 Route::post('/m_login', ['uses' => 'ApiController@checkCode']);
@@ -44,6 +45,7 @@ Route::group(['middleware' => ['token']], function () {
     Route::post('/paymentcomplete', ['uses' => 'ApiController@paymentHandle']);
     Route::post('/buyTakonByCard', ['uses' => 'ApiController@payByToken']);
     Route::post('/transaction-history', ['uses' => 'ApiController@transactionHistory']);
+    Route::post('/make-conversion', ['uses' => 'ConversionController@makeConversion']);
     Route::get('/getCards', ['uses' => 'ApiController@getCards']);
     Route::post('/get-profile', ['uses' => 'ApiController@getProfile']);
     Route::post('/remove-card', ['uses' => 'ApiController@removeCardById']);
