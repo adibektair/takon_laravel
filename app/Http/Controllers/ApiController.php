@@ -199,7 +199,7 @@ class ApiController extends Controller
         if ($user) {
             $partner = DB::table('services')
                 ->where('partner_id', $request->partner_id)
-                ->leftJoin('users_services', function ($leftJoin) use ($user) {
+                ->join('users_services', function ($leftJoin) use ($user) {
                     $leftJoin->on('users_services.service_id', '=', 'services.id')
                         ->where('users_services.mobile_user_id', $user->id);
                 })
