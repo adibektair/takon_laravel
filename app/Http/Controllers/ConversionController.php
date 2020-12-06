@@ -147,8 +147,17 @@ class ConversionController extends Controller
         $transaction->u_r_id = $user->id;
         $transaction->type = Transaction::CONVERSION_TYPE;
         $transaction->service_id = $us->service_id;
-        $transaction->second_service_id = $us_new->service_id;
+        $transaction->amount = -1 * $request->amount;
         $transaction->save();
+
+        $transaction = new Transaction();
+        $transaction->u_s_id = $user->id;
+        $transaction->u_r_id = $user->id;
+        $transaction->type = Transaction::CONVERSION_TYPE;
+        $transaction->service_id = $us_new->service_id;
+        $transaction->amount = $request->amount;
+        $transaction->save();
+
 
         return  $utils->makeResponse(200, true, []);
     }
