@@ -770,8 +770,6 @@ class ApiController extends Controller
         $token = $request->token;
         $user = MobileUser::where('token', $token)->first();
         if ($user) {
-
-
                 $model = DB::table('transactions')
                     ->where('u_s_id', $user->id)
                     ->orWhere('u_r_id', $user->id)
@@ -793,10 +791,7 @@ class ApiController extends Controller
                 $result = [];
                 foreach ($model as $value) {
 
-//                    if($value->id == 51){
-//                        dd($value);
-//                    }
-                    if ($value->ttype == 3 AND $user->phone == $value->r_user_phone) {
+                    if ($value->ttype == 3) {
 
                     } else {
                         $el["service"] = $value->service;
