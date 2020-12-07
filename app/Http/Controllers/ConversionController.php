@@ -130,7 +130,7 @@ class ConversionController extends Controller
         $us_new = new UsersService();
         $us_new->mobile_user_id = $user->id;
         if($us->service_id == $conversion->first_service_id){
-            $us_new->amount = $conversion->coefficient / $request->amount;
+            $us_new->amount = $request->amount / $conversion->coefficient;
             $us_new->service_id = $conversion->second_service_id;
         }else{
             $us_new->amount = $request->amount * $conversion->coefficient;
