@@ -134,7 +134,7 @@ class ConversionController extends Controller
             $us_new->service_id = $conversion->second_service_id;
         }else{
             $us_new->amount = $request->amount / $conversion->coefficient;
-            $us_new->service_id = $conversion->second_service_id;
+            $us_new->service_id = $conversion->first_service_id;
         }
         $us_new->cs_id = 0;
 
