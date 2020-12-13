@@ -791,7 +791,7 @@ class ApiController extends Controller
                 $result = [];
                 foreach ($model as $value) {
 
-                    if ($value->ttype == 3) {
+                    if ($value->ttype == 3  AND $user->phone == $value->r_user_phone) {
 
                     } else {
                         $el["service"] = $value->service;
