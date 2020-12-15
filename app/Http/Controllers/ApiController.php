@@ -203,11 +203,11 @@ class ApiController extends Controller
                     $leftJoin->on('users_services.service_id', '=', 'services.id')
                         ->where('users_services.mobile_user_id', $user->id);
                 })
-                ->leftJoin("conversions as c", "c.first_service_id", "=", "services.id")
-                ->leftJoin("conversions as c1", "c1.second_service_id", "=", "services.id")
+//                ->leftJoin("conversions as c", "c.first_service_id", "=", "services.id")
+//                ->leftJoin("conversions as c1", "c1.second_service_id", "=", "services.id")
                 ->where('services.status', 3)
                 ->select('services.id', 'services.price', 'services.name', 'services.created_at', 'services.description', 'services.payment_enabled', 'services.payment_price')
-                ->selectRaw('SUM(users_services.amount) AS usersAmount, IFNULL(c.id, null) as is_conv, IFNULL(c1.id, null) as is_conv1')
+                ->selectRaw('SUM(users_services.amount) AS usersAmount')//, IFNULL(c.id, null) as is_conv, IFNULL(c1.id, null) as is_conv1')
                 ->groupBy('services.id', 'services.price', 'services.name', 'services.created_at', 'services.description', 'services.payment_enabled', 'services.payment_price')
                 ->get();
 
