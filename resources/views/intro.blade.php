@@ -32,7 +32,7 @@
     <div class="container">
         <div class="header__inner">
             <a href="{{ url('/') }}" class="header__item" data-scroll="#intro">
-                <img src="img/Takon.png" alt="" class="companyLogo">
+                <img src="img/TakonNewYear.png" alt="" class="companyLogo companyLogoNewYear">
                 <div class="header__logo">Takon</div>
             </a>
             <nav class="nav" id="nav">

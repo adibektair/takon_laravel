@@ -130,12 +130,18 @@ hr {
 }
 
 .companyLogo {
+    position: absolute;
     width: 50px;
     height: 50px;
-    margin-right: 10px;
+}
+
+.companyLogoNewYear {
+    width: 75px;
+    height: 75px;
 }
 
 .header__logo {
+    margin-left: 70px;
     font-size: 30px;
     font-weight: 700;
     color: #fff;
