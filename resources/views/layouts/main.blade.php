@@ -83,8 +83,8 @@
 
     <header class="main-header">
         <a class="logo" href="{{ url('/') }}">
-            <span class="logo-mini"><b>T</b>ORG</span>
-            <span class="logo-lg"><b>TAKON.</b>ORG</span>
+            <span class="logo-mini"><b>T</b>KZ</span>
+            <span class="logo-lg"><b>TAKON.</b>KZ</span>
         </a>
 
         <nav class="navbar navbar-static-top">
